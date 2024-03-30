@@ -116,11 +116,11 @@ def delete_recruiters_and_chats():
 
 
 if __name__ == "__main__":
-    delete_seekers_and_applied_jobs() # Delete all 'seekers' and their applied jobs
-    delete_collection(db.collection('jobs')) # Delete the entire 'jobs' collection
-    delete_collection(db.collection('admins')) # Delete the entire 'admins' collection
-    delete_recruiters_and_chats() # Delete the entire 'recruiters' and their chats
-    add_jobs(jobs)
+    # delete_seekers_and_applied_jobs() # Delete all 'seekers' and their applied jobs
+    # delete_collection(db.collection('jobs')) # Delete the entire 'jobs' collection
+    # delete_collection(db.collection('admins')) # Delete the entire 'admins' collection
+    # delete_recruiters_and_chats() # Delete the entire 'recruiters' and their chats
+    # add_jobs(jobs)
     add_seekers(seekers)
-    add_admins(admins)
-    add_recruiters(recruiters)
+    # add_admins(admins)
+    # add_recruiters(recruiters)

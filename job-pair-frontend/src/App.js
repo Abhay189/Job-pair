@@ -11,8 +11,25 @@ import CreateJobPage from './Pages/CreateJobPage.jsx';
 import TrackingPage from './Pages/TrackingPage.jsx';
 import Jobpage from './Pages/Jobpage.jsx';
 import ApplicationReviewPage from './Pages/ApplicationReviewPage.jsx';
+import LoginPage from './Pages/LoginPage.jsx'
+import SignupPage from './Pages/SignupPage.jsx';
 
 function App() {
+  // MainLayout includes Navbar
+  function MainLayout({ children }) {
+    return (
+      <>
+        <Navbar />
+        <main>{children}</main>
+      </>
+    );
+  }
+
+  // LoginLayout is a plain layout without Navbar
+  function LoginLayout({ children }) {
+    return <main>{children}</main>;
+  }
+
   return (
     <div className="App">
       <Navbar />
@@ -29,12 +46,12 @@ function App() {
       <Route path="/tracking" element={<TrackingPage/>} />
        <Route path= "/viewJobs" element={<Jobpage />}/>
        <Route path = "/editJob/:id" element={<CreateJobPage/>} />
- 
+       <Route path="*" element={<MainLayout><h1 style={{marginTop: `5%`, fontFamily:`Ubuntu`}}>Sorry, this page doesn't exist!</h1></MainLayout>} />
 
-
-      <Route path="*" element={<h1 style={{marginTop: `5%`, fontFamily:`Ubuntu`}}>Sorry, this page doesn't exist!</h1>} />
-    </Routes>
+      </Routes>
     </div>
+
+ 
   );
 }
 

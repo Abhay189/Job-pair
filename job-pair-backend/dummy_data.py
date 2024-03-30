@@ -243,6 +243,72 @@ jobs = [
 
 seekers = [
     {
+        "name": "zeeshan",
+        "email": "zeeshan.chougle@ucalgary.ca",
+        "age": 22,
+        "race": "Asian",
+        "gender": "Male",
+        "GPA": 3.99,
+        "institution": "University of Calgary",
+        "major": "Software Engineer",
+        "year_of_study": "Senior",
+        "extracurricular_activities": ["Programming Club", "Debate Team"],
+        "internship_experience": [
+            {
+                "company": "Activision",
+                "position": "Software Engineering Intern",
+                "duration": "Summer 2022"
+            }
+        ],
+        "research_projects": [
+            {
+                "title": "Natural Language Processing in Chatbots",
+                "description": "Explored advanced techniques for improving chatbot interactions using NLP."
+            }
+        ],
+        "awards_and_honors": ["Dean's List", "Outstanding Volunteer Award"],
+        "languages_spoken": ["English", "Mandarin"],
+        "career_aspirations": "I aspire to become a computer scientist specializing in artificial intelligence. My goal is to contribute to advancements in machine learning and create innovative solutions.",
+        "community_involvement": "I have been actively involved in my community by volunteering at a local shelter, organizing charity events, and participating in environmental conservation projects. I believe in making a positive impact and fostering community well-being.",
+        "challenges_and_achievements": "One significant challenge I faced was overcoming language barriers when I moved to a new country. Despite the initial struggles, I not only learned a new language but also excelled academically. My proudest achievement is winning the 'Outstanding Volunteer' award for my contributions to a youth mentorship program.",
+        "applied_jobs": [
+            {
+                "job_id": "11",
+                "job_title": "Cybersecurity Analyst",
+                "company": "Microsoft",
+                "application_status": "in_progress",
+                "application_response": [
+                    "I detected and neutralized a ransomware attack before it could encrypt sensitive data.",
+                    "I regularly participate in cybersecurity forums and undergo continuous training.",
+                    "I conduct regular audits and implement encryption techniques to safeguard data privacy."
+                ],
+                "application_date": "2023-03-15"
+            },
+            {
+                "job_id": "12",
+                "job_title": "UI/UX Designer",
+                "company": "Adobe",
+                "application_status": "rejected",
+                "application_response": [
+                    "Unfortunately, your portfolio did not meet our current needs.",
+                    "We appreciate your interest and encourage you to apply again in the future."
+                ],
+                "application_date": "2023-03-16"
+            },
+            {
+                "job_id": "13",
+                "job_title": "Cloud Solutions Architect",
+                "company": "Amazon Web Services (AWS)",
+                "application_status": "accepted",
+                "application_response": [
+                    "Congratulations! We are pleased to offer you the position.",
+                    "Please let us know your availability for an onboarding session."
+                ],
+                "application_date": "2023-03-17"
+            }
+        ]
+    },
+    {
         "name": "Zeeshan Chougle",
         "email": "zeeshan.chougle@ucalgary.ca",
         "age": 22,

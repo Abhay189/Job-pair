@@ -3,6 +3,7 @@ import threading
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import os
+import traceback
 # from speechToText import transcribe_audio
 # from recordAudio import record_audio
 # from recordVideo import record_video   
@@ -14,6 +15,7 @@ import firebase_admin
 from firebase_admin import auth, credentials, firestore
 from openai import OpenAI
 from google.cloud.firestore_v1 import ArrayUnion
+import bcrypt
 
 # from speechToText import extract_audio, transcribe_audio
 app = Flask(__name__)
@@ -33,59 +35,72 @@ db=firestore.client()
 
 # client = OpenAI()
 
-
 @app.route('/signup', methods=['POST'])
 def signup():
     try:
-        # Get user data from the request
-        data = request.json
-        email = data.get('email')
-        password = data.get('password')
-        phone_number = data.get('phone_number')
-        username = data.get('username')
-        first_name = data.get('first_name')
-        last_name = data.get('last_name')
+        # Parse the incoming data from the signup form
+        signup_data = request.json
+        username = signup_data['username']
+        email = signup_data['email']
+        full_name = signup_data['fullName']
+        password = signup_data['password']
+        user_type = signup_data['user_type']
 
-        # Create a new user account with the provided email and password
-        user = auth.create_user(
-            email=email,
-            password=password
-        )
+        # Create a reference to the Firestore document
+        user_ref = db.collection(user_type).document(username)
 
-        data_to_store = {
-            "email": email,
-            "password": password,
-            "phone_number": phone_number,
-            "username": username,
-            "first_name": first_name,
-            "last_name": last_name
-        }
+        # Create a new document with the provided data
+        user_ref.set({
+            'email': email,
+            'fullName': full_name,
+            'username': username,
+            'password': password,  # Store hashed password as a string
+        })
 
-        # Update user profile in the database
-        db.collection('users').document(username).collection('personal_info').document('my_info').set(data_to_store)
+        user_data = user_ref.get().to_dict()
 
-        return jsonify({'success': True}), 201  # Corrected closing parenthesis
+        return jsonify({"success": True, "message": "User created successfully", 'user_data': user_data}), 201
 
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        # Handle exceptions
+        return jsonify({"success": False, "message": str(e)}), 500
+    
 
-# Endpoint for user login
-@app.route('/login', methods=['POST'])
-def login():
+@app.route('/signin', methods=['POST'])
+def signin():
     try:
-        # Get user data from the request
-        data = request.json
-        email = data.get('email')
-        password = data.get('password')
+        # Parse the incoming data from the sign-in form
+        signin_data = request.json
+        email = signin_data['email']
+        password = signin_data['password']
+        userType = signin_data['userType']
 
-        # Sign in the user with the provided email and password
-        user = auth.get_user_by_email(email)
-        user_token = auth.create_custom_token(user.uid)
+        # Reference to the Firestore document of the user
+        user_query_ref = db.collection(userType).where('email', '==', email).limit[1]
+        user_query_ref.get()
 
-        return jsonify({'success': True, 'uid': user.uid, 'token': user_token}), 200
+        if user_query_ref:
+            print(user_query_ref[0].to_dict())
+
+        # Check if the document exists and if the password matches
+        # if user_doc.exists:
+        #     user_data = user_doc.to_dict()
+        #     stored_password = user_data['password'].encode('utf-8')  # Encode the stored password
+
+        #     # Compare the entered password with the stored hash
+        #     if (password == stored_password):
+        #         # Authentication successful
+        return jsonify({"success": True, "message": "User signed in successfully", "user_data": 'pink'}), 200
+        #     else:
+        #         # Authentication failed
+        #         return jsonify({"success": False, "message": "Incorrect password"}), 401
+        # else:
+        #     # User not found
+        #     return jsonify({"success": False, "message": "User not found"}), 404
 
     except Exception as e:
-        return jsonify({'error': str(e)}), 401
+        # Handle exceptions
+        return jsonify({"success": False, "message": str(e)}), 500
 
 @app.route('/create_job', methods=['POST'])
 def create_job():
@@ -166,27 +181,21 @@ def get_all_resources():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-
+#Fixed for job-pair
 @app.route('/get_all_jobs_brief', methods=['GET'])
 def get_all_jobs_brief():
-    username = request.args.get('username')
 
-    # Validate that username is present
-    if not username:
-        return jsonify({'error': 'Invalid request. Missing username.'}), 400
-
-    docs = db.collection('users').document(username).collection('jobs').get()
+    docs = db.collection('jobs').get()
     result = []
     for doc in docs:
         job_data = doc.to_dict()
-        # Remove "Questions" and "Answers" fields if they exist, and "Description"
         job_data.pop('Questions', None)
-        job_data.pop('Answers', None)
-        job_data.pop('Description', None)  # Assuming jobs also have descriptions that are not needed in brief
+        job_data.pop('Requirements', None)  # Assuming jobs also have descriptions that are not needed in brief
         result.append(job_data)
 
     return jsonify(result)
 
+#TODO: Change this api so that it uses user_id rather than username for filtering the users. 
 @app.route('/get_all_jobs', methods=['GET'])
 def get_all_jobs():
     username = request.args.get('username')
@@ -195,36 +204,85 @@ def get_all_jobs():
     if not username:
         return jsonify({'error': 'Invalid request. Missing username.'}), 400
 
-    docs = db.collection('users').document(username).collection('jobs').get()
+    docs = db.collection('seekers').document(username).collection('applied_jobs').get()
     result = [doc.to_dict() for doc in docs]
 
     return jsonify(result)
+
+
+@app.route('/get_all_applied_jobs', methods=['GET'])
+def get_all_applied_jobs():
+    seeker_id = request.args.get('id')
+
+    # Validate that seeker ID is present
+    if not seeker_id:
+        return jsonify({'error': 'Invalid request. Missing user ID.'}), 400
+    
+    try:
+        seeker_id = int(seeker_id)  # Convert to int, assuming ID is numeric
+    except ValueError:
+        return jsonify({'error': 'Invalid ID format. ID must be numeric.'}), 400
+
+    seekers_query = db.collection('seekers').where('id', '==', seeker_id).limit(1)
+    seekers_docs = seekers_query.get()
+
+    applied_jobs = []
+
+    if seekers_docs:
+        seeker_doc_ref = seekers_docs[0].reference  # Get the document reference
+        # Fetch all documents in the 'applied_jobs' subcollection
+        applied_jobs_docs = seeker_doc_ref.collection('applied_jobs').get()
+        # Iterate through the applied jobs and add their data to the list
+        for job_doc in applied_jobs_docs:
+            job_data = job_doc.to_dict()
+            job_data['job_id'] = job_doc.id  # Include the job document ID
+            applied_jobs.append(job_data)
+
+    if applied_jobs:
+        return jsonify({'applied_jobs': applied_jobs})
+    else:
+        # Return a message if no applied jobs were found
+        return jsonify({'message': 'No applied jobs found for the given user ID.'}), 404
 
 @app.route('/update_job_answer', methods=['POST'])  # Assuming this relates to updating a job application answer
 def update_job_answer():
     try:
         # Get data from the request
         data = request.json
-        username = data.get('username')
-        job_title = data.get('title')
+        seeker_id = data.get('user_id')
+        job_id = data.get('job_id')
         index = data.get('index')
         updated_answer = data.get('updated_answer')
 
         # Validate required fields
-        if not username or not job_title or index is None or updated_answer is None:
-            return jsonify({'error': 'Invalid request. Missing required fields.'}), 400
+        # if not seeker_id or not job_title or index is None or updated_answer is None:
+        #     return jsonify({'error': 'Invalid request. Missing required fields.'}), 400
 
-        # Retrieve the job document
-        job_ref = db.collection('users').document(username).collection('jobs').document(job_title)
-        job_doc = job_ref.get().to_dict()
+        # Start by querying the 'seekers' collection for the document with the matching 'id'
+        seeker_query = db.collection('seekers').where('id', '==', seeker_id).limit(1)
+        seeker_docs = seeker_query.get()
 
-        # Update the 'Answers' field at the specified index
-        current_answers = job_doc.get('Answers')
+        # Check if we got any results back
+        if not seeker_docs:
+            return jsonify({'message': 'No applied jobs found for the given user ID, job ID.'}), 404
+
+        # Assuming the seeker exists, we retrieve the first document
+        seeker_doc_ref = seeker_docs[0].reference  # Get the reference to the document
+
+        # Now, use the reference to access the 'applied_jobs' subcollection
+        applied_jobs_query = seeker_doc_ref.collection('applied_jobs').where('job_id', '==', job_id).limit(1)
+        applied_job = applied_jobs_query.get()
+
+        if not applied_job :
+            return jsonify({'message': 'No applied jobs found for the given user ID, job ID.'}), 404
+
+        applied_job_ref = applied_job[0].reference
+        applied_job_doc = applied_job_ref.get()
+        current_answers = applied_job_doc.to_dict().get('application_response', [])
 
         if 0 <= index < len(current_answers):
-            print(index)
             current_answers[index] = updated_answer
-            job_ref.update({'Answers': current_answers})
+            applied_job_ref.update({'application_response': current_answers})
             return jsonify({'success': True})
 
         return jsonify({'error': 'Invalid index.'}), 400
@@ -257,10 +315,10 @@ def submit_application():
 #         answer = request.json.get('answer')
 
 #         # Define the initial conversation
-#         conversations = [{"role": "system", "content": "You are a helpful assistant who specializes in enhancing users' scholarship essays"}]
+#         conversations = [{"role": "system", "content": "You are a helpful assistant who specializes in enhancing users' job essays"}]
 
 #         # Format user's request message
-#         request_message = f"The question asked in my scholarship application is this: {question} My Response is: {answer} Provide just the improved essay in about 100 words)"
+#         request_message = f"The question asked in my job application is this: {question} My Response is: {answer} Provide just the improved essay in about 100 words)"
 #         request_message_formatted = {'content': request_message, 'role': 'user'}
 
 #         # Add user's request to the conversation
@@ -330,13 +388,26 @@ def update_job_status():
     try:
         # Get data from the request
         data = request.json
-        username = data.get('username')
-        job_title = data.get('title')
+        seeker_id = data.get('user_id')
+        job_id = data.get('job_id')
         new_status = data.get('new_status')
 
-        # Update user profile in the database
-        db.collection('users').document(username).collection('jobs').document(job_title).update({'Status': new_status})
+        seeker_query = db.collection('seekers').where('id', '==', seeker_id).limit(1)
+        seeker_docs = seeker_query.get()
 
+        if not seeker_docs:  
+            return jsonify({'message': 'No applied jobs found for the given user ID, job ID.'}), 404
+
+        seeker_doc_ref = seeker_docs[0].reference  
+
+        applied_jobs_ref  = seeker_doc_ref.collection('applied_jobs').document(job_id)
+        applied_job = applied_jobs_ref.get()
+
+        if not applied_job.exists:
+            return jsonify({'message': 'Applied job not found for the given job ID.'}), 404
+
+        applied_jobs_ref.update({'application_status': new_status})
+        
         return jsonify({'success': True, 'message': 'Job status updated successfully'}), 200
 
     except Exception as e:

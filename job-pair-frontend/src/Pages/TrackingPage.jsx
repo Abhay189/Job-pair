@@ -1,21 +1,8 @@
-// TrackingPage.js
-
 import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import axios from 'axios';
 import '../Styles/TrackingPage.css';
-import {
-  Container,
-  DropdownButton,
-  Dropdown,
-  Row,
-  Form,
-  FormLabel,
-  Button,
-  Card,
-  Modal,
-  Col,
-} from "react-bootstrap";
+import {  Container } from "react-bootstrap";
 import { styles } from "../Styles/Trackingpagestyles"
 
 const API_BASE_URL = 'http://127.0.0.1:5000';
@@ -56,7 +43,11 @@ const TrackingPage = () => {
 
   useEffect(() => {
     // Fetch scholarship applications from the backend
-    axios.get(`${API_BASE_URL}/get_all_scholarships?username=zeeshan`)
+    axios.get(`${API_BASE_URL}/get_all_applied_jobs`, {
+      params: {
+        'id' : 1
+      }
+    })
       .then((response) => {
         const categorizedApplications = {
           applied: [],
@@ -66,12 +57,11 @@ const TrackingPage = () => {
           rejected: [],
         };
 
-        // console.log(response);
+        console.log( response.data);
 
         // Categorize applications based on the 'status' key in the response
-        response.data.forEach((application) => {
-          const Status  = application.Status;
-        //   console.log(Status);
+        response.data['applied_jobs'].forEach((application) => {
+          const Status  = application.application_status;
           categorizedApplications[Status].push(application);
         });
 
@@ -79,42 +69,40 @@ const TrackingPage = () => {
         setApplications(categorizedApplications);
       })
       .catch((error) => {
-        console.error('Error fetching scholarship applications:', error);
+        console.error('Error fetching Job applications:', error);
       });
   }, []);
 
   const onDragEnd = async (result) => {
     const { destination, source, draggableId } = result;
 
-    // Check if the item was dropped outside any valid droppable area
     if (!destination) {
       return;
     }
 
-    // If the item was dropped in a different column
     if (destination.droppableId !== source.droppableId) {
       const updatedApplications = { ...applications };
       const sourceColumn = updatedApplications[source.droppableId];
       const destinationColumn = updatedApplications[destination.droppableId];
       const movedApplication = sourceColumn.find(
-        (app) => app.id === draggableId
+        (app) => app.job_id === draggableId
       );
 
-      // Remove from the source column
       sourceColumn.splice(source.index, 1);
-
-      // Add to the destination column
       destinationColumn.splice(destination.index, 0, movedApplication);
-
-      // Update the state
       setApplications(updatedApplications);
 
-      // Update the backend
-      await axios.post(`${API_BASE_URL}/update_status`, {
-        username: 'zeeshan',
-        title: movedApplication.Title,
-        new_status: destination.droppableId,
-      });
+      try {
+        console.log(destination);
+        await axios.post(`${API_BASE_URL}/update_job_status`, {
+          user_id: 1,
+          job_id: movedApplication.job_id,
+          new_status: destination.droppableId,
+        });
+      }
+      catch (error){
+        console.error("Error occoured while updating database, ", error);
+      }
     }
   };
 
@@ -124,6 +112,7 @@ const TrackingPage = () => {
         <div className="TrackingPage">
           <div className="columns-container ">
             {Object.keys(applications).map((column) => (
+              
               <Droppable droppableId={column} key={column}>
                 {(provided) => (
                   <div
@@ -134,8 +123,8 @@ const TrackingPage = () => {
                     <h2 className={`${styles.SubHeader}`} style={{ fontWeight: 'bold', fontSize: '28px', textAlign: 'center', paddingTop: `15px`, paddingBottom:`10px`, fontWeight:`bolder`, color:`#7F95D1`}}>{Get_Title_Name(column)}</h2>
                     {applications[column].map((application, index) => (
                       <Draggable
-                        key={application.id}
-                        draggableId={application.id}
+                        key={application.job_id}
+                        draggableId={application.job_id}
                         index={index}
                       >
                         {(provided) => (
@@ -146,8 +135,7 @@ const TrackingPage = () => {
                             className="card"
                             onClick={() => redirectToApplicationReview(application.Title)}
                           >
-                            <p>{application.Title}</p>
-                            {/* Add more details if needed */}
+                            <p>{application.job_title}</p>
                           </div>
                         )}
                       </Draggable>

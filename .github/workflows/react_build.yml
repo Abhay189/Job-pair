@@ -1,0 +1,27 @@
+name: React App Build Test
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: Change to React app directory
+      run: cd job-pair-frontend
+    - name: Install dependencies
+      run: cd job-pair-frontend && npm install
+    - name: Build React app
+      # Set CI to false to avoid treating warnings as errors
+      run: cd job-pair-frontend && CI=false npm run build
