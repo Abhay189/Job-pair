@@ -2,8 +2,10 @@ import React, { useState,useEffect } from 'react';
 import '../Styles/CreateJobPage.css';
 import { useParams } from 'react-router-dom';
 import Axios from "axios";
-
+import { Alert } from 'react-bootstrap';
 function CreateJobPage() {
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState(false);
   const [jobDetails, setJobDetails] = useState({
     jobTitle: '',
     jobLocation: '',
@@ -23,6 +25,9 @@ function CreateJobPage() {
   useEffect(() => {
     const fetchJob = async () => {
       try {
+        if (!id) {
+          return;
+        }
         const response = await Axios.post('http://127.0.0.1:5000/get-job', { id: id});
         const responseObject = response.data;
         setJobDetails( {
@@ -36,6 +41,7 @@ function CreateJobPage() {
         });
       } catch (error) {
         console.error(error);
+        setError(true);
       }
     };
     fetchJob();
@@ -46,6 +52,8 @@ function CreateJobPage() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setSuccess(false);
+    setError(false);
     try{
     const formObj = {
       
@@ -70,24 +78,50 @@ function CreateJobPage() {
         
 
       });
+      setSuccess(true);
+      setJobDetails({
+        jobTitle: '',
+        jobLocation: '',
+        salary: '',
+        company: '',
+        technicalSkills: '',
+        deadline: '',
+        jobDescription: ''
+      });
     } else {
-      const response = await Axios.put('http://127.0.0.1:5000/create-job', ...formObj,  {
+      const response = await Axios.post('http://127.0.0.1:5000/create_job', {...formObj},  {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
         
 
       });
+      setSuccess(true);
+      setJobDetails({
+        jobTitle: '',
+        jobLocation: '',
+        salary: '',
+        company: '',
+        technicalSkills: '',
+        deadline: '',
+        jobDescription: ''
+      });
     }}
     catch (error) {
       console.error(error);
+      setSuccess(false);
+      setError(true);
     }
   };
 
   return (
+    <>
+    
     <div className="ce-job-form-container-upper">
       <h1>Create/Edit Job</h1>
     <div className="ce-job-form-container">
+    {success && <Alert variant="success">Create/Edit successful!</Alert>}
+    {error && <Alert variant="danger">An error occurred!</Alert>}
       
       <form onSubmit={handleSubmit}>
 
@@ -129,6 +163,8 @@ function CreateJobPage() {
       </form>
     </div>
     </div>
+   
+    </>
   );
 }
 
