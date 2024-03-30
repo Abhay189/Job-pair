@@ -71,7 +71,17 @@ export default function Jobpage() {
 
     }, [])
 
-   
+   const deleteJobFunction = async (jobId) => {
+        try {
+            const response = await Axios.delete("http://localhost:3000/delete_job/" + jobId, {
+            })
+            const newJobs = jobs.filter(job => job.id !== jobId);
+            setJobs(newJobs);
+
+        } catch (error) {
+            console.error("Error in getting resources for job page", error);
+        }
+    }
 
 
 
@@ -92,7 +102,7 @@ export default function Jobpage() {
                     <div className="jobs-body">
                         {jobs?.map((job) => {
                             return (
-                                <JobCard job={job} userType={"recruiter"}></JobCard>
+                                <JobCard job={job} userType={"recruiter"} deleteJobFunction={deleteJobFunction}></JobCard>
 
                             );
                         })}

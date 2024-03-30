@@ -440,16 +440,38 @@ def update_job():
             doc.reference.update(update_data)
             return jsonify({"success": "Job updated successfully"}), 200
         else:
-            return jsonify({"error": "No records found matching id"}), 404
+            return jsonify({"error": "No  jobs found matching id"}), 404
         
        
         
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
+
+@app.route('/delete-job/<job_id>', methods=['DELETE'])
+def delete_job(job_id):
+    data = request.json
+    
+    
+    if job_id is None:
+        return jsonify({"error": "Missing id"}), 400
+
+    try:
+        query_ref = db.collection('jobs').where('id', '==', job_id)
+        docs = query_ref.stream()
+
+        if docs is not None:
+            doc = docs[0]
+            doc.reference.delete()
+            return jsonify({"success": "Job deleted successfully"}), 200
+
+        return jsonify({"error": "No matching jobs found"}), 404
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 # @app.route('/test', methods=['GET'])
 # def test():
-#     conversations = [{"role": "system", "content": "You are a helpful assistant who specilaizes in enhancing users scholarship essays"}]
+#     conversations = [{"role": "system", "content": "You are a helpful assistant "}]
 
 #     response = client.chat.completions.create(
 #         model="gpt-3.5-turbo",

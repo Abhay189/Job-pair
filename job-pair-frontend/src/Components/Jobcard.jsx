@@ -3,18 +3,19 @@ import '../Styles/jobpage.css';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { Button } from 'react-bootstrap';
-function JobCard({ job, userType }) {
+function JobCard({ job, userType,deleteJobFunction }) {
   const navigate = useNavigate();
   
   const sendToApplication = () => {
     navigate('/')
   }
 
-  const deleteJob = () => {
-
+  const closeJob = () => {
+    deleteJobFunction(job.id)
   }
 
   const editJob = () => {
+    navigate('/editJob/' + job.id)
 
   }
   return (
@@ -24,7 +25,7 @@ function JobCard({ job, userType }) {
       <div className="job-card-body">
         {(userType === 'recruiter' || userType === 'admin') &&
           <div className='job-card-buttons'>
-            <Button size="lg" variant="primary" onClick={deleteJob} >
+            <Button size="lg" variant="primary" onClick={closeJob} >
               Close
             </Button>
             <img src={job.logoUrl} alt="Company Logo" className="company-logo" />
