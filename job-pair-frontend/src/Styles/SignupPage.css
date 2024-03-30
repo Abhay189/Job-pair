@@ -1,8 +1,10 @@
 /* Container for the entire page */
+
 .signup-page-container {
   display: flex;
   height: 100vh;
   background-color: #051622;
+  overflow: hidden;
 }
 
 /* Container for the image section, taking up the left 50% */
@@ -40,7 +42,7 @@
   display: flex;
   justify-content: center; /* Center the form in the middle of the right half */
   align-items: center;
-  padding: 40px; /* Add padding as needed */
+  padding: 20px; /* Add padding as needed */
   background-color: rgba(87, 93, 251, 0.5);
 
 }
@@ -50,7 +52,7 @@
   background: rgba(87, 93, 251, 0.5);
   border-radius: 10px;
   width: 80%; /* Form should fill the container */
-  padding: 40px; /* Padding inside the form */
+  padding: 20px; /* Padding inside the form */
   margin: 0; /* Override any default margins */
   max-width: 600px;
 }
