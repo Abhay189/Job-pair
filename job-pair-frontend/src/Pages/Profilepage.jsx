@@ -11,6 +11,7 @@ export default function Profilepage() {
     name: '',
     emailAddress: '',
     preferredJobTitle: '',
+    university: '',
 
   });
   useEffect(() => {
@@ -22,6 +23,7 @@ export default function Profilepage() {
       emailAddress: 'john@email.com',
       preferredJobTitle: 'Software Engineer',
       password: '',
+      university: 'University of Waterloo',
       
     });
   }, [id]);

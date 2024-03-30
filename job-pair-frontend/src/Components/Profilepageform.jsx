@@ -24,6 +24,7 @@ const defaultImageUrl = process.env.PUBLIC_URL + '/defaultprofile.jpg';
       emailAddress: user.emailAddress || '',
       password: '',
       preferredJobTitle: user.preferredJobTitle || '',
+      university: user.university || '',
     });
   };
   fetchData();
@@ -36,6 +37,7 @@ const defaultImageUrl = process.env.PUBLIC_URL + '/defaultprofile.jpg';
       emailAddress: user.emailAddress || '',
       password: '',
       preferredJobTitle: user.preferredJobTitle || '',
+      university: user.university || '',
     });
 
 
@@ -167,6 +169,19 @@ const defaultImageUrl = process.env.PUBLIC_URL + '/defaultprofile.jpg';
             name="multiSelect"
           />
         </Form.Group>
+
+        <Form.Group className='mb-2' controlId="formName">
+          <div><Form.Label>University</Form.Label></div>
+          <Form.Control
+            type="text"
+            name="university"
+            value={formInput.university}
+            onChange={handleChange}
+            placeholder="university"
+          />
+        </Form.Group>
+
+        
   
         <Form.Group className='mb-2' controlId="formMoneyInput">
         <div> <Form.Label>Expected Salary($)</Form.Label> </div> 
