@@ -28,6 +28,7 @@ function App() {
       <Route path="/createjob" element={<CreateJobPage/>} />
       <Route path="/tracking" element={<TrackingPage/>} />
        <Route path= "/viewJobs" element={<Jobpage />}/>
+       <Route path = "/editJob/:id" element={<CreateJobPage/>} />
  
 
 

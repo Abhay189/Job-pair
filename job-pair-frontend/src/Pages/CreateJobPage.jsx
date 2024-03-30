@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import '../Styles/CreateJobPage.css';
+import { useParams } from 'react-router-dom';
+import Axios from "axios";
 
 function CreateJobPage() {
   const [jobDetails, setJobDetails] = useState({
@@ -11,15 +13,75 @@ function CreateJobPage() {
     deadline: '',
     jobDescription: ''
   });
+  const { id } = useParams();
 
   const handleChange = (event) => {
     const { name, value } = event.target;
     setJobDetails({ ...jobDetails, [name]: value });
   };
 
-  const handleSubmit = (event) => {
+  useEffect(() => {
+    const fetchJob = async () => {
+      try {
+        const response = await Axios.post('http://127.0.0.1:5000/get-job', { id: id});
+        const responseObject = response.data;
+        setJobDetails( {
+          jobTitle: responseObject.job_title,
+          jobLocation: responseObject.job_location,
+          salary: responseObject.salary,
+          company: responseObject.company,
+          technicalSkills: responseObject.technical_skills,
+          deadline: responseObject.deadline,
+          jobDescription: responseObject.job_description
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchJob();
+  }, [id]);
+
+
+
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log('Form submitted:', jobDetails);
+    try{
+    const formObj = {
+      
+      job_title: jobDetails.jobTitle,
+    job_location: jobDetails.jobLocation,
+    salary: jobDetails.salary,
+    company: jobDetails.company,
+    technical_skills: jobDetails.technicalSkills,
+    deadline: jobDetails.deadline,
+    job_description: jobDetails.jobDescription}
+    if(id) {
+      const response = await Axios.put('http://127.0.0.1:5000/update-job', {
+        
+    ...formObj
+        
+      
+      
+      , id: id }, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        
+
+      });
+    } else {
+      const response = await Axios.put('http://127.0.0.1:5000/create-job', ...formObj,  {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        
+
+      });
+    }}
+    catch (error) {
+      console.error(error);
+    }
   };
 
   return (

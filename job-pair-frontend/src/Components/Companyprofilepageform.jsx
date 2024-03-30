@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { useState } from 'react';
 import { Form, Button, Modal } from 'react-bootstrap';
 import '../Styles/profilepage.css';
+import axios from 'axios';
 export function Companyprofilepageform({company}) {
 
 const defaultImageUrl = process.env.PUBLIC_URL + '/defaultprofile.jpg';
@@ -48,10 +49,25 @@ const defaultImageUrl = process.env.PUBLIC_URL + '/defaultprofile.jpg';
       });
     };
   
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
+      
       e.preventDefault();
-      console.log(formInput);
-    };
+      try {
+        const formData = {
+          id: localStorage.getItem('id'),
+          ...formInput
+        }
+        const response = await axios.post('/update_user_profile', formData, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+    
+        console.log(response.data); 
+      } catch (error) {
+        console.error(error.response ? error.response.data : error.message); 
+      }
+    }
 
   const [showFileSelect, setShowFileSelect] = useState(false);
 

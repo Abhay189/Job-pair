@@ -146,6 +146,9 @@ def create_job():
     except Exception as e:
         # Catch all exceptions and return an error message
         return jsonify({'error': str(e)}), 500
+
+
+
 @app.route('/get_all_resources', methods=['GET'])
 def get_all_resources():
     try:
@@ -238,7 +241,7 @@ def submit_application():
         title = data.get('title')
 
         # Update the 'Submitted' field to True
-        db.collection('users').document(username).collection('scholarship').document(title).update({'Submitted': True})
+        db.collection('users').document(username).collection('job').document(title).update({'Submitted': True})
 
         return jsonify({'success': True, 'message': 'Application submitted successfully.'})
 
@@ -378,6 +381,72 @@ def get_my_job_applicants():
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+    
+
+@app.route('/get-job', methods=['GET', 'POST'])
+def get_job():
+    data = request.json
+    id  = data.get('id')
+    
+    if id is None:
+        return jsonify({"error": "Missing id"}), 400
+
+    try:
+        query_ref = db.collection('jobs').where('id', '==', id)
+        docs = query_ref.stream()
+
+        results = [doc.to_dict() for doc in docs]
+        
+        if results:
+            return jsonify(results[0]), 200
+        else:
+            return jsonify({"error": "No records found matching id"}), 404
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+
+
+@app.route('/update-job', methods=['GET','PUT'])
+def update_job():
+    job_id = request.form.get('id')
+    job_title = request.form.get('job_title')
+    job_location = request.form.get('job_location')
+    salary = request.form.get('salary')
+    technical_skills = request.form.get('technical_skills')
+    company = request.form.get('company')
+    deadline = request.form.get('deadline')
+    job_description = request.form.get('job_description')
+    questions_csv = request.form.get('questions')
+
+    if not job_id:
+        return jsonify({"error": "Missing job ID"}), 400
+
+    update_data = {}
+    if job_title: update_data['job_title'] = job_title
+    if job_location: update_data['job_location'] = job_location
+    if salary: update_data['salary'] = salary
+    if technical_skills: update_data['technical_skills'] = technical_skills
+    if company: update_data['company'] = company
+    if deadline: update_data['deadline'] = deadline
+    if job_description: update_data['job_description'] = job_description
+    if questions_csv: update_data['questions_csv'] = questions_csv
+    update_data['id'] = job_id
+
+    try:
+        query_ref = db.collection('jobs').where('id', '==', job_id)
+        docs = list(query_ref.stream())
+        if docs is not None:
+            doc = docs[0]
+            doc.reference.update(update_data)
+            return jsonify({"success": "Job updated successfully"}), 200
+        else:
+            return jsonify({"error": "No records found matching id"}), 404
+        
+       
+        
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 # @app.route('/test', methods=['GET'])
 # def test():
 #     conversations = [{"role": "system", "content": "You are a helpful assistant who specilaizes in enhancing users scholarship essays"}]

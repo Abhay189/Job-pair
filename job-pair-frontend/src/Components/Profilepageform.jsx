@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { Form, Button, Col,Modal } from 'react-bootstrap';
 import Select from 'react-select';
 import '../Styles/profilepage.css';
+import axios from 'axios';
 export function Profilepageform({user}) {
 // default profile picure taken from https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg
 const defaultImageUrl = process.env.PUBLIC_URL + '/defaultprofile.jpg';
@@ -64,10 +65,25 @@ const defaultImageUrl = process.env.PUBLIC_URL + '/defaultprofile.jpg';
       });
     };
   
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
+      
       e.preventDefault();
-      console.log(formInput);
-    };
+      try {
+        const formData = {
+          id: localStorage.getItem('id'),
+          ...formInput
+        }
+        const response = await axios.post('/update_user_profile', formData, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+    
+        console.log(response.data); 
+      } catch (error) {
+        console.error(error.response ? error.response.data : error.message); 
+      }
+    }
 
   const [showFileSelect, setShowFileSelect] = useState(false);
 

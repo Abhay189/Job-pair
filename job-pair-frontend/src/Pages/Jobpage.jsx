@@ -16,14 +16,15 @@ import {
 
 import JobCard from "../Components/Jobcard";
 import Filter from "../Components/JobFilter";
-
+import { useNavigate } from "react-router-dom";
 
 export default function Jobpage() {
     const [jobs, setJobs] = useState([]);
     const [userType, setUserType] = useState("recruiter")
+    const navigate = useNavigate();
 
     const createJob = () => {
-
+        navigate('/createJob');
     }
 
 
@@ -66,6 +67,7 @@ export default function Jobpage() {
         };
 
         fetchData();
+        setUserType(localStorage.getItem('userType') || 'recruiter');
 
     }, [])
 
