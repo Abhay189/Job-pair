@@ -35,6 +35,8 @@ const defaultImageUrl = process.env.PUBLIC_URL + '/defaultprofile.jpg';
       emailAddress: user.emailAddress || '',
       password: '',
       preferredJobTitle: user.preferredJobTitle || '',
+      pronouns: [],
+      gender: ''
     });
 
 
@@ -48,6 +50,28 @@ const defaultImageUrl = process.env.PUBLIC_URL + '/defaultprofile.jpg';
       { value: 'CSS', label: 'CSS' },
       { value: 'HTML', label: 'HTML' },
     ];
+
+    const pronounOptions = [
+      { value: 'he/him', label: 'he/him' },
+      { value: 'she/her', label: 'she/her' },
+      { value: 'they/them', label: 'they/them' },
+      { value: 'other', label: 'Other' },
+    ];
+
+    const genderOptions = [
+      "Male",
+      "Female",
+      "Non-binary",
+      "Prefer not to say",
+      "Other"
+    ];
+
+    const handlePronounsChange = (selectedOptions) => {
+      setFormInput({
+        ...formInput,
+        pronouns: selectedOptions || []
+      });
+    };
   
     const handleTechSkillChange = (selectedOptions) => {
       setFormInput({
@@ -115,6 +139,29 @@ const defaultImageUrl = process.env.PUBLIC_URL + '/defaultprofile.jpg';
             onChange={handleChange}
             placeholder="Name"
           />
+        </Form.Group>
+
+        <Form.Group className='mb-2' controlId="formPronouns">
+            <div><Form.Label>Pronouns</Form.Label></div>
+            <Select
+              isMulti
+              value={formInput.pronouns}
+              styles={selectStyles}
+              options={pronounOptions}
+              className="basic-multi-select"
+              classNamePrefix="select"
+              onChange={handlePronounsChange}
+              name="pronouns"
+            />
+        </Form.Group>
+
+        <Form.Group className='mb-2' controlId="formGender">
+            <div><Form.Label>Gender</Form.Label></div>
+            <Form.Control as="select" name="gender" value={formInput.gender} onChange={handleChange}>
+              {genderOptions.map(gender => (
+                <option key={gender} value={gender}>{gender}</option>
+              ))}
+            </Form.Control>
         </Form.Group>
 
         <Form.Group className='mb-2' controlId="formEmail">
