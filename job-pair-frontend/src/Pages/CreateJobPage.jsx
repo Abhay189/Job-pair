@@ -9,12 +9,28 @@ function CreateJobPage() {
     company: '',
     technicalSkills: '',
     deadline: '',
-    jobDescription: ''
+    jobDescription: '',
+    questionsCount: '1'
   });
+
+  const [additionalQuestions, setAdditionalQuestions] = useState(['']);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setJobDetails({ ...jobDetails, [name]: value });
+    if (name === "questionsCount") {
+      const newQuestionsCount = parseInt(value);
+      const newAdditionalQuestions = Array(newQuestionsCount).fill('');
+      setAdditionalQuestions(newAdditionalQuestions);
+      setJobDetails({ ...jobDetails, [name]: value });
+    } else {
+      setJobDetails({ ...jobDetails, [name]: value });
+    }
+  };
+
+  const handleQuestionChange = (value, index) => {
+    const updatedQuestions = [...additionalQuestions];
+    updatedQuestions[index] = value;
+    setAdditionalQuestions(updatedQuestions);
   };
 
   const handleSubmit = async (event) => {
@@ -95,6 +111,27 @@ function CreateJobPage() {
         <label className='jobdesc'> Job Description
           <textarea name="jobDescription" value={jobDetails.jobDescription} onChange={handleChange} />
         </label>
+
+        {/* Field for selecting the number of questions */}
+        <label>How many questions do you want to ask?
+            <select name="questionsCount" value={jobDetails.questionsCount} onChange={handleChange}>
+              {Array.from({ length: 5 }, (_, i) => (
+                <option key={i} value={i + 1}>{i + 1}</option>
+              ))}
+            </select>
+          </label>
+
+          {/* Dynamically generated question fields */}
+          {additionalQuestions.map((question, index) => (
+            <input
+              key={index}
+              type="text"
+              name={`question${index + 1}`}
+              value={question}
+              placeholder={`Question ${index + 1}`}
+              onChange={(e) => handleQuestionChange(e.target.value, index)}
+            />
+          ))}
 
         <button type="submit">Submit</button>
       </form>
