@@ -257,3 +257,42 @@
   transition: color 0.3s ease-in-out; /* Add a smooth color transition on hover */
   box-shadow: 0 0 5pxwhite;
 }
+
+@media (max-width: 768px) {
+  .signup-page-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .signup-image-section, .signup-form-container {
+    width: 100%;
+    padding: 20px; 
+  }
+
+  .signup-form {
+    width: 100%;
+    max-width: 100%;
+    padding: 20px;
+  }
+
+  .social-signup button {
+    margin-right: 5px;
+    padding: 10px; 
+  }
+
+  .signup-form input, .dropdown-container select {
+    padding: 10px; 
+  }
+
+  .signup-form h1 {
+    font-size: 2rem;
+  }
+
+  .dropdown-container .dropdown-arrow {
+    right: 15px;
+  }
+
+  .signup-footer p {
+    padding-top: 1rem; 
+  }
+}
