@@ -20,7 +20,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function Jobpage() {
     const [jobs, setJobs] = useState([]);
-    const [userType, setUserType] = useState("recruiter")
+    const [userType, setUserType] = useState("")
     const navigate = useNavigate();
 
     const createJob = () => {
@@ -67,7 +67,10 @@ export default function Jobpage() {
         };
 
         fetchData();
-        setUserType(localStorage.getItem('userType') || 'recruiter');
+        debugger;
+        const localStoragetype = localStorage.getItem('userType');
+        console.log(localStoragetype);
+        setUserType(localStoragetype);
 
     }, [])
 
@@ -102,7 +105,7 @@ export default function Jobpage() {
                     <div className="jobs-body">
                         {jobs?.map((job) => {
                             return (
-                                <JobCard job={job} userType={"recruiter"} deleteJobFunction={deleteJobFunction}></JobCard>
+                                <JobCard job={job} userType={userType} deleteJobFunction={deleteJobFunction}></JobCard>
 
                             );
                         })}
@@ -131,7 +134,7 @@ export default function Jobpage() {
         <div className="jobs-body-mobile">
             {jobs?.map((job) => {
                 return (
-                    <JobCard job={job} userType={"recruiter"}></JobCard>
+                    <JobCard job={job} userType={userType}></JobCard>
 
                 );
             })}

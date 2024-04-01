@@ -367,21 +367,49 @@ def submit_application():
 #     except Exception as e:
 #         return jsonify({'error': str(e)}), 500
 
-@app.route('/update_user_profile', methods=['POST'])
-def update_user_profile():
+
+    
+   
+
+
+
+@app.route('/get_seeker', methods=['GET'])
+def get_seeker():
+    id_value = request.args.get('id')
+    
     try:
-        # Get data from the request
-        data = request.json
-        username = data.get('username')
-        user_response = data.get('user_response')
+        if not id_value:
+            return {'message': 'Missing id parameter'}, 400
+    
+        query_ref = db.collection('seekers').where('id', '==', id)
+        docs = list(query_ref.stream())
+    
+        if docs is not None:
+            doc = docs[0]
+            data = doc.to_dict()
 
-        # Update user profile in the database
-        db.collection('users').document(username).set(user_response)
-
-        return jsonify({'success': True, 'message': 'User profile updated successfully'}), 200
-
+            seeker_data = {
+            'techSkills': data.get('techSkills', []),
+            'expectedsalary': data.get('expectedsalary', ''),
+            'phoneNumber': data.get('phoneNumber', ''),
+            'name': data.get('name', ''),
+            'email': data.get('emailAddress', ''),
+            'preferredJobTitle': data.get('preferredJobTitle', ''),
+            'university': data.get('university', ''),
+            'id': data.get('id', '')
+            }
+            return jsonify(seeker_data), 200
+        else:
+            return jsonify({"error": "No seekers found matching id"}), 404
+    
+        
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+    
+
+
+    
+
 
 @app.route('/update_job_status', methods=['POST'])
 def update_job_status():

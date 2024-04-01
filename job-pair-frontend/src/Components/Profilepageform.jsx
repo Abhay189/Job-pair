@@ -7,38 +7,35 @@ import axios from 'axios';
 export function Profilepageform({user}) {
 // default profile picure taken from https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg
 const defaultImageUrl = process.env.PUBLIC_URL + '/defaultprofile.jpg';
+const [formInput, setFormInput] = useState({
+  techSkills: user.techSkills.map(item => ({ value: item, label: item })) || [],
+  expectedsalary: user.expectedsalary || '',
+  phoneNumber: user.phoneNumber || '',
+  name: user.name || '',
+  emailAddress: user.emailAddress || '',
+  password: '',
+  preferredJobTitle: user.preferredJobTitle || '',
+  university: user.university || '',
+});
   const selectStyles = {
     control: (provided) => ({
       ...provided,
       backgroundColor: '#D9D9D9',
     }),
   };
-  useEffect(() => {
 
-    const fetchData = async () => {
-    setFormInput({
-      techSkills: user.techSkills.map(item => ({ value: item, label: item })) || [],
-      expectedsalary: user.expectedsalary || '',
-      phoneNumber: user.phoneNumber || '',
-      name: user.name || '',
-      emailAddress: user.emailAddress || '',
-      password: '',
-      preferredJobTitle: user.preferredJobTitle || '',
-      university: user.university || '',
-    });
-  };
-  fetchData();
-  }, [user]);
-    const [formInput, setFormInput] = useState({
-      techSkills: user.techSkills.map(item => ({ value: item, label: item })) || [],
-      expectedsalary: user.expectedsalary || '',
-      phoneNumber: user.phoneNumber || '',
-      name: user.name || '',
-      emailAddress: user.emailAddress || '',
-      password: '',
-      preferredJobTitle: user.preferredJobTitle || '',
-      university: user.university || '',
-    });
+
+  useEffect(() => {
+    const id = localStorage.getItem('id');
+    axios.get('/get_seeker', { params: { id } })
+      .then(response => {
+        setFormInput(response.data);
+      })
+      .catch(error => {
+        console.error('There was an error fetching the seeker data:', error);
+      });
+  }, []);
+    
 
 
     
@@ -75,7 +72,7 @@ const defaultImageUrl = process.env.PUBLIC_URL + '/defaultprofile.jpg';
           id: localStorage.getItem('id'),
           ...formInput
         }
-        const response = await axios.post('/update_user_profile', formData, {
+        const response = await axios.post('/update_seeker', formData, {
           headers: {
             'Content-Type': 'application/json'
           }

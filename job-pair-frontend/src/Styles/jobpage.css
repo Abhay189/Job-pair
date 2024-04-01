@@ -19,12 +19,19 @@
   max-height: 16em;
 }
 
+.job-card-body img {
+  width: 8%;
+  height: 8%;
+  object-fit: cover;
+}
+
 .jobs-body {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 1em;
  
   padding:1em;
+  cursor: pointer;
 
 
 }
