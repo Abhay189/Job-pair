@@ -16,6 +16,11 @@
   justify-content: center; /* Horizontally centers the content for flexbox */
   align-items: center; /* Vertically centers the content for flexbox */
   overflow: hidden; /* Prevent text from spilling over */
+  transition: background-color 0.3s ease;
+}
+
+.job-card-buttons button:hover {
+  background-color: #0056b3; /* Darker shade when hovering over the button */
 }
 
 .job-card {
@@ -26,6 +31,12 @@
   width: 100%;
   max-width: 400px;
   border-radius: 10px;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.job-card:hover {
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); /* Shadow effect on hover */
+  transform: translateY(-5px); /* Slight lift effect on hover */
 }
 
 .jobs-body {

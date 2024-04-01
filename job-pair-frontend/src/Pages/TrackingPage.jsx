@@ -107,7 +107,7 @@ const TrackingPage = () => {
   };
 
   return (
-    <Container style={{ minHeight: `100vh`, minWidth:`100vh` }}>
+
       <DragDropContext onDragEnd={onDragEnd}>
         <div className="TrackingPage">
           <div className="columns-container ">
@@ -120,7 +120,7 @@ const TrackingPage = () => {
                     ref={provided.innerRef}
                     className="column"
                   >
-                    <h2 className={`${styles.SubHeader}`} style={{ fontWeight: 'bold', fontSize: '28px', textAlign: 'center', paddingTop: `15px`, paddingBottom:`10px`, fontWeight:`bolder`, color:`#7F95D1`}}>{Get_Title_Name(column)}</h2>
+                    <h2 className={`${styles.SubHeader}`} style={{ fontSize: '3em', textAlign: 'center', paddingTop: `15px`, paddingBottom:`10px`, fontWeight:`bolder`, color:`white`}}>{Get_Title_Name(column)}</h2>
                     {applications[column].map((application, index) => (
                       <Draggable
                         key={application.job_id}
@@ -148,7 +148,7 @@ const TrackingPage = () => {
           </div>
         </div>
       </DragDropContext>
-    </Container>
+
   );
   
 };

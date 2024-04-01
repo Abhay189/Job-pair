@@ -1,0 +1,98 @@
+/* InterviewPageStyles.css */
+
+.interview-container {
+    padding-left: 50px;
+    margin-top: 60px;
+    margin-bottom: 90px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+  }
+  
+  .interview-section {
+    margin-right: 30px;
+    flex: 1.375;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .heroHeadText {
+    font-weight: bold;
+    font-size: 50px;
+    text-align: center;
+    margin-bottom: 35px;
+    padding-top: 30px;
+  }
+  
+  .sectionHeadText {
+    font-size: 20px;
+    text-align: center;
+    margin-top: 45px;
+  }
+  
+  .question-box {
+    width: 22rem;
+    height: 100px;
+    font-weight: bolder;
+    color: black;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background: #FFC0BE;
+    margin: 1% 0;
+    border-radius: 15px;
+    border: solid;
+    border-width: 5px;
+    border-color: #FF82A9;
+    text-align: center;
+    padding: 19px;
+    margin-top: 20px;
+  }
+  
+  .answer-section {
+    width: 22rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background: #FFEBE7;
+    margin: 1% 0;
+    border: solid;
+    border-width: 5px;
+    border-color: #FF82A9;
+    border-radius: 15px;
+    padding: 15px;
+  }
+  
+  .video-container {
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    height: 550px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .video-box {
+    border-radius: 20px;
+    height: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .video-button {
+    margin-top: 20px;
+    text-align: center;
+    margin-right: 10px;
+    width: 200px;
+    font-weight: bold;
+    color: black;
+  }
+  
+  .timer {
+    font-size: 15px;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 15px;
+  }
+  

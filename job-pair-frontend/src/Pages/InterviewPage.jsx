@@ -1,6 +1,6 @@
 import React from 'react';
 import { styles } from "../Styles/InterviewPage"
-// import "../Styles/InterviewPageStyles.css";
+import "../Styles/interviewPage.css";
 
 class InterviewPage extends React.Component {
   constructor(props) {
@@ -214,65 +214,62 @@ uploadVideo = () => {
 };
 
 render() {
-  const { isRecording, isUploadButtonVisible, aiFeedback, showAiFeedback, remainingTime, timerActive } = this.state;
-  const minutes = Math.floor(remainingTime / 60);
-  const seconds = remainingTime % 60;
+    const { isRecording, isUploadButtonVisible, aiFeedback, showAiFeedback, remainingTime, timerActive } = this.state;
+    const minutes = Math.floor(remainingTime / 60);
+    const seconds = remainingTime % 60;
 
-  return (
-    <div className="container" style={{ paddingLeft: '50px', marginTop:'60px', marginBottom: '90px', display: 'flex', justifyContent: 'center', alignItems: 'flex-start' }}>
+    return (
+      <div className="interview-container">
         {/* Left Section: Question Pane and Answer Section */}
-        <div style={{ marginRight: '30px', flex: 1.375, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <h1 className={`${styles.heroHeadText}`} style={{ fontWeight: 'bold', fontSize: '50px', textAlign: 'center', marginBottom: '35px', paddingTop: '30px' }}>Interview Prep</h1>
-            <p className={`${styles.sectionHeadText}`} style={{ fontSize: '20px', textAlign: 'center', marginTop: '45px' }}>Here is your interview question!</p>
-            <div style={{ width: "22rem", height: "100px", fontWeight:'bolder', color:'black', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)', background: '#FFC0BE', margin: `1% 0`, borderRadius: '15px', border:'solid', borderWidth:'5px', borderColor:'#FF82A9', textAlign: 'center', padding: '19px', position: 'relative', alignText: 'center', justifyContent: 'space-between', marginTop:'20px'  }}>
-                <p><strong>Question: Tell us about the biggest challenge you've ever faced</strong></p>
+        <div className="interview-section">
+          <h1 className="heroHeadText">Interview Prep</h1>
+          <p className="sectionHeadText">Here is your interview question!</p>
+          <div className="question-box">
+            <p><strong>Question: Tell us about the biggest challenge you've ever faced</strong></p>
+          </div>
+          {showAiFeedback && (
+            <div className="answer-section">
+              <p><strong>AI Feedback:</strong></p>
+              <div dangerouslySetInnerHTML={{ __html: aiFeedback }} />
             </div>
-            {showAiFeedback && (
-                <div className="answer-section" id="aiFeedback" style={{ width: "22rem", height: "100%", boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)', background: '#FFEBE7', margin: `1% 0`, border:'solid', borderWidth:'5px', borderColor:'#FF82A9', borderRadius: '15px', padding: '15px', position: 'relative', alignText: 'center', justifyContent: 'space-between'  }}>
-                <p><strong>AI Feedback:</strong></p>
-                <div dangerouslySetInnerHTML={{ __html: aiFeedback }} />
-            </div>
-            )}
+          )}
         </div>
 
-        <div style={{ marginRight: '30px', flex: 1.375, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            {/* Right Section: Video Container and Time Indicator */}
-            <div style={{ borderRadius: '20px', overflow: 'hidden', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)', width: '100%', height: '550px', padding: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between' }}>
-                <div style={{ borderRadius: '20px', overflow: 'hidden', height: '90%', display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '0' }}>
-                    <video style={{ borderRadius: '20px', overflow: 'hidden' }} autoPlay muted playsInline ref={this.videoLive}></video>
-                    <video style={{ display: 'none', borderRadius: '20px', overflow: 'hidden' }} controls playsInline ref={this.videoRecorded}></video>
-                </div>
-
-                {/* Controls */}
-                <div style={{ marginTop: '20px', textAlign: 'center' }}>
-                    {!isRecording && (
-                    <button className="video-button" type="video-button" style={{ marginRight: '10px', width:'200px', fontWeight:'bold', color:'black' }} onClick={this.startRecording}>
-                        Start Recording
-                    </button>
-                    )}
-                    {isRecording && (
-                    <button className="video-button" type="video-button" style={{ marginRight: '10px', width:'200px', fontWeight:'bold', color:'black' }} onClick={this.stopRecording}>
-                        Stop Recording
-                    </button>
-                    )}
-                    {isUploadButtonVisible && (
-                    <button className="video-button" type="video-button" style={{ marginRight: '10px', width:'200px', fontWeight:'bold', color:'black' }} onClick={this.uploadVideo}>
-                        Submit Video
-                    </button>
-                    )}
-                </div>
+        {/* Right Section: Video Container and Time Indicator */}
+        <div className="interview-section">
+          <div className="video-container">
+            <div className="video-box">
+              <video autoPlay muted playsInline ref={this.videoLive}></video>
+              <video controls playsInline ref={this.videoRecorded} style={{ display: 'none' }}></video>
             </div>
 
+            {/* Controls */}
+            <div className="controls">
+              {!isRecording && (
+                <button className="video-button" onClick={this.startRecording}>
+                  Start Recording
+                </button>
+              )}
+              {isRecording && (
+                <button className="video-button" onClick={this.stopRecording}>
+                  Stop Recording
+                </button>
+              )}
+              {isUploadButtonVisible && (
+                <button className="video-button" onClick={this.uploadVideo}>
+                  Submit Video
+                </button>
+              )}
+            </div>
+          </div>
 
-            {/* Text Container */}
-            <div>
-            <p className={`${styles.sectionHeadText}`} style={{ fontSize: '15px', fontWeight: 'bold', textAlign: 'center', marginTop: '15px' }}>
+          <div className="timer">
             Time Limit: {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
-        </p>            </div>
+          </div>
         </div>
-    </div>
-  );
-  
+      </div>
+    );
+  }
 }
-}
+
 export default InterviewPage;
