@@ -69,12 +69,12 @@ export default function Jobpage() {
         <>
         <div className="jobs-container">
 
-            <h1 style={{ fontWeight: 'bold', fontSize: '50px', textAlign: 'center', marginBottom: '35px', paddingTop: `70px` }}>jobs</h1>
+            <h1 style={{ fontWeight: 'bold', fontSize: '50px', textAlign: 'center', marginBottom: '35px', paddingTop: `70px` }}>Jobs</h1>
             <div className="job-main-content-wrapper">
 
-                <div>
-                    <Filter></Filter>
-                </div>
+
+                <Filter />
+
                 <div className="job-right-div">
                     <div className="jobs-body">
                         {jobs?.map((job) => {

@@ -34,9 +34,6 @@ const Navbar = () => {
                 </Link>
             ))}
             </div>
-            <div className="search-bar">
-                <input type="text" placeholder="Search" />
-            </div>
             <a className="logout-button" href="/logout">Logout</a>
         </div>
         
