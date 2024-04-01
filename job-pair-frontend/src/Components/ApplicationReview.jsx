@@ -24,7 +24,8 @@ import "../Styles/LearningPageStyles.css";
 import { styles } from "../Styles/styles"
 
 export default function ApplicationReview() {
-  const param1 = localStorage.getItem("ApplicationReviewTitle");
+  // const param1 = localStorage.getItem("ApplicationReviewTitle");
+  const param1 = "Financial Analyst"
   const [jobName, setJobName] = useState(param1);
   const [jobDescription, setJobDescription] = useState("");
   const [questions, setQuestions] = useState([]);
@@ -39,7 +40,7 @@ export default function ApplicationReview() {
   };
 
   useEffect(() => {
-    Axios.get("http://127.0.0.1:5000/get_all_jobs?username=zeeshan", {})
+    Axios.get("http://127.0.0.1:5000/get_all_jobs?id=1&usertype=seekers", {})
       .then((res) => {
         const jsonData = res.data;
         if (jsonData.length > 0) {
@@ -146,10 +147,11 @@ export default function ApplicationReview() {
                       </div>
                     ) : (
                       <div className="answer-container" style={{ overflow: 'hidden' }}>
-                        <p style={{ whiteSpace: 'pre-wrap', overflow: 'hidden' }}>{responses[index]}</p>
+                        {/* <p style={{ whiteSpace: 'pre-wrap', overflow: 'hidden' }}>{responses[0]}</p> */}
+                        <p style={{ whiteSpace: 'pre-wrap', overflow: 'hidden' }}>{"Blah Blah"}</p>
                         <div className="buttonContainer" style={{ display: 'flex', flexDirection:'row', alignItems: 'center', justifyContent: 'center' }}>
                           <span style={{ padding: '0 8px' }}></span>
-                          <button className="invisiblePadding editButton" style={{ height:'58px', marginRight: '10px', fontWeight:'bold', color:'black'  }} onClick={() => handleEditClick(index)}>Edit</button>
+                          <button className="invisiblePadding editButton" style={{ height:'35px', marginRight: '10px', fontWeight:'bold', color:'black'  }} onClick={() => handleEditClick(index)}>Edit</button>
                           <span style={{ padding: '0 8px' }}></span>
                           <button className="invisiblePadding enhanceButton" style={{ width: '140px', marginRight: '10px', fontWeight:'bold', color:'black', display:'flex', flex:'wrap'}}  onClick={() => handleEnhanceClick(index)}> <img src={chatgpt} alt="ChatGPT Icon" style={{ marginRight: '5px', height: '30px', width: '30px' }} /> Enhance</button>
                           <span style={{ padding: '0 8px' }}></span>

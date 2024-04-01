@@ -15,7 +15,7 @@ import firebase_admin
 from firebase_admin import auth, credentials, firestore
 from openai import OpenAI
 from google.cloud.firestore_v1 import ArrayUnion
-import bcrypt
+# import bcrypt
 
 # from speechToText import extract_audio, transcribe_audio
 app = Flask(__name__)
