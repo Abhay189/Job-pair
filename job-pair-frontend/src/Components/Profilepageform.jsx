@@ -37,6 +37,34 @@ const [formInput, setFormInput] = useState({
   }, []);
     
 
+    const fetchData = async () => {
+    setFormInput({
+      techSkills: user.techSkills.map(item => ({ value: item, label: item })) || [],
+      expectedsalary: user.expectedsalary || '',
+      phoneNumber: user.phoneNumber || '',
+      name: user.name || '',
+      emailAddress: user.emailAddress || '',
+      password: '',
+      preferredJobTitle: user.preferredJobTitle || '',
+      location: user.location || '',
+      bio: user.bio || '',
+    });
+  };
+  fetchData();
+  }, [user]);
+    const [formInput, setFormInput] = useState({
+      techSkills: user.techSkills.map(item => ({ value: item, label: item })) || [],
+      expectedsalary: user.expectedsalary || '',
+      phoneNumber: user.phoneNumber || '',
+      name: user.name || '',
+      emailAddress: user.emailAddress || '',
+      password: '',
+      preferredJobTitle: user.preferredJobTitle || '',
+      pronouns: [],
+      gender: '',
+      location: user.location || '',
+      bio: user.bio || ''
+    });
 
     
   
@@ -48,6 +76,28 @@ const [formInput, setFormInput] = useState({
       { value: 'CSS', label: 'CSS' },
       { value: 'HTML', label: 'HTML' },
     ];
+
+    const pronounOptions = [
+      { value: 'he/him', label: 'he/him' },
+      { value: 'she/her', label: 'she/her' },
+      { value: 'they/them', label: 'they/them' },
+      { value: 'other', label: 'Other' },
+    ];
+
+    const genderOptions = [
+      "Male",
+      "Female",
+      "Non-binary",
+      "Prefer not to say",
+      "Other"
+    ];
+
+    const handlePronounsChange = (selectedOptions) => {
+      setFormInput({
+        ...formInput,
+        pronouns: selectedOptions || []
+      });
+    };
   
     const handleTechSkillChange = (selectedOptions) => {
       setFormInput({
@@ -132,6 +182,29 @@ const [formInput, setFormInput] = useState({
           />
         </Form.Group>
 
+        <Form.Group className='mb-2' controlId="formPronouns">
+            <div><Form.Label>Pronouns</Form.Label></div>
+            <Select
+              isMulti
+              value={formInput.pronouns}
+              styles={selectStyles}
+              options={pronounOptions}
+              className="basic-multi-select"
+              classNamePrefix="select"
+              onChange={handlePronounsChange}
+              name="pronouns"
+            />
+        </Form.Group>
+
+        <Form.Group className='mb-2' controlId="formGender">
+            <div><Form.Label>Gender</Form.Label></div>
+            <Form.Control as="select" name="gender" value={formInput.gender} onChange={handleChange}>
+              {genderOptions.map(gender => (
+                <option key={gender} value={gender}>{gender}</option>
+              ))}
+            </Form.Control>
+        </Form.Group>
+
         <Form.Group className='mb-2' controlId="formEmail">
         <div> <Form.Label>Email Address</Form.Label></div> 
           <Form.Control
@@ -200,6 +273,30 @@ const [formInput, setFormInput] = useState({
             value={formInput.phoneNumber}
             onChange={handleChange}
             placeholder="123-456-7890"
+          />
+        </Form.Group>
+
+        <Form.Group className='mb-2' controlId="formLocation">
+          <div><Form.Label>Current Location</Form.Label></div>
+          <Form.Control
+            type="text"
+            name="location"
+            value={formInput.location}
+            onChange={handleChange}
+            placeholder="Calgary, AB"
+          />
+        </Form.Group>
+
+        <Form.Group className='mb-3' controlId="formbio">
+          <div><Form.Label>Bio</Form.Label></div>
+          <Form.Control
+            as="textarea"
+            name="bio"
+            value={formInput.bio}
+            onChange={handleChange}
+            placeholder="Tell us about yourself..."
+            rows={4}
+            className='biotextarea' 
           />
         </Form.Group>
     

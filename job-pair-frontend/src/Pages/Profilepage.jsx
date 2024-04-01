@@ -11,9 +11,12 @@ export default function Profilepage() {
     name: '',
     emailAddress: '',
     preferredJobTitle: '',
+    pronouns: [],
+    gender: '',
     university: '',
 
   });
+  
   useEffect(() => {
     setUser({
       techSkills: ['Java', 'CSS'],
@@ -25,6 +28,9 @@ export default function Profilepage() {
       password: '',
       university: 'University of Waterloo',
       
+
+      pronouns: [{ value: 'he/him', label: 'he/him' }], // Assuming pronouns are stored in a similar format as techSkills
+      gender: 'Male', // Example gender
     });
   }, [id]);
   return (
