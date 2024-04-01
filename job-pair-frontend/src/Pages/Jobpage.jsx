@@ -32,8 +32,13 @@ export default function Jobpage() {
 
         const fetchData = async () => {
             try {
-                const response = await Axios.get("http://localhost:3000/get_all_jobs/", {
-                })
+                const id = localStorage.getItem('id');
+                const userType = localStorage.getItem('userType');
+                const response = await Axios.get("http://127.0.0.1:5000/get_all_jobs",{ 
+                    params:{
+                    id,userType
+                    }
+                  }  )
                 console.log(response);
                 setJobs(response.data);
 

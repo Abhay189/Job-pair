@@ -25,18 +25,17 @@ const SignupPage = () => {
             email: email,
             password: password,
             fullName: fullName,
-            user_type: userType,
+            userType: userType,
         });
 
         if (signupResponse.data.success) {
             console.log("Account created successfully");
 
-            const { patientID, role } = signupResponse.data.user_data;
+            const { id } = signupResponse.data.user_data;
 
-            // Store the username in local storage
-            localStorage.setItem('curr_username', username);
-            localStorage.setItem('patientID', patientID);
-            localStorage.setItem('userRole', role);
+            debugger
+            localStorage.setItem('userType',userType);
+            localStorage.setItem('id',id);
 
             navigate('/viewJobs');
         } else {
@@ -89,7 +88,7 @@ const SignupPage = () => {
             />
             <input
               type="email"
-              placeholder="Email Address"
+              placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />

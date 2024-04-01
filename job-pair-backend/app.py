@@ -59,7 +59,7 @@ def signup():
             user_ref = db.collection(user_type).document(username)
             user_ref.set({
                 'email': email,
-                'fullName': full_name,
+                'name': full_name,
                 'username': username,
                 'password': password,  
                 'id': new_user_id,  # Assign the unique userID
@@ -456,8 +456,8 @@ def update_user_profile():
             return jsonify({'error': 'User not found'}), 404
 
         # Define allowed fields based on userType
-        allowed_fields = {'seekers': {'name', 'password', 'username', 'emailAddress', 'phoneNumber', 'techSkills', 'expectedSalary', 'institution','gender','pronouns','location','preferredJobTitle'},
-                          'recruiters': {'fullName', 'password', 'username', 'email', 'location', 'companyDescription'}}
+        allowed_fields = {'seekers': {'name', 'password', 'username', 'email', 'phoneNumber', 'techSkills', 'expectedSalary', 'institution','gender','pronouns','location','preferredJobTitle'},
+                          'recruiters': {'name', 'password', 'username', 'email', 'location', 'companyDescription','phoneNumber'}}
         #if updated_data['password'] is not None and updated_data['password'] != '':
             #updated_data['password'] = bcrypt.hashpw(updated_data['password'].encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
         if updated_data['password'] is not None and updated_data['password'] == '':
@@ -502,7 +502,7 @@ def get_user():
             
             return jsonify(data), 200
         else:
-            return jsonify({"error": "No seekers found matching id"}), 404
+            return jsonify({"error": "No users found matching id"}), 404
     
         
     except Exception as e:

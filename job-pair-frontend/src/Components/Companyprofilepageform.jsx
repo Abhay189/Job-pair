@@ -1,9 +1,14 @@
 import React, { useEffect } from 'react'
 import { useState } from 'react';
+import { Alert } from 'react-bootstrap';
+
 import { Form, Button, Modal } from 'react-bootstrap';
 import '../Styles/profilepage.css';
 import axios from 'axios';
 export function Companyprofilepageform({company}) {
+
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState(false);
 
 const defaultImageUrl = process.env.PUBLIC_URL + '/defaultprofile.jpg';
   const selectStyles = {
@@ -18,7 +23,7 @@ const defaultImageUrl = process.env.PUBLIC_URL + '/defaultprofile.jpg';
     setFormInput({
       phoneNumber: company.phoneNumber || '',
       name: company.name || '',
-      emailAddress: company.emailAddress || '',
+      email: company.email || '',
       password: '',
       location: company.location || '',
       description: company.description || '',
@@ -28,10 +33,42 @@ const defaultImageUrl = process.env.PUBLIC_URL + '/defaultprofile.jpg';
   }, [company]);
 
 
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const userType = localStorage.getItem('userType');
+      const userId = localStorage.getItem('id');
+      const url = 'http://127.0.0.1:5000/get_user';
+
+      try {
+        setError (false);
+        setSuccess(false);
+        const response = await axios.post(url, { userType: userType, id: userId });
+        const user = response.data;
+        debugger
+        const mapData =  {
+          phoneNumber: user.phoneNumber || '',
+          name: user.name || '',
+          email: user.email|| '',
+          password: '',
+          location: user.location || '',
+          companyDescription: user.companyDescription || '',
+        }
+        setFormInput(mapData);
+     
+      } catch (error) {
+        console.log(error.response ? error.response.data : error.message)
+        setError(true);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
+
     const [formInput, setFormInput] = useState({
       phoneNumber: company.phoneNumber || '',
       name: company.name || '',
-      emailAddress: company.emailAddress || '',
+      email: company.email || '',
       password: '',
       location: company.location || '',
       description: company.description || '',
@@ -50,22 +87,34 @@ const defaultImageUrl = process.env.PUBLIC_URL + '/defaultprofile.jpg';
     };
   
     const handleSubmit = async (e) => {
+
+      setError(false);
+      setSuccess(false);
       
       e.preventDefault();
       try {
         const formData = {
           id: localStorage.getItem('id'),
-          ...formInput
+          userType: localStorage.getItem('userType'),
+          updatedData:
+          {...formInput}
         }
-        const response = await axios.post('/update_user_profile', formData, {
+        const url = 'http://127.0.0.1:5000/update_user_profile';
+        const response = await axios.post(url, formData, {
           headers: {
             'Content-Type': 'application/json'
           }
+       
         });
     
         console.log(response.data); 
+        
+        setSuccess(true);
+        setError(false);
       } catch (error) {
         console.error(error.response ? error.response.data : error.message); 
+        setError(true);
+        setSuccess(false);
       }
     }
 
@@ -107,6 +156,8 @@ const defaultImageUrl = process.env.PUBLIC_URL + '/defaultprofile.jpg';
        
       <Form id="userform" onSubmit={handleSubmit}>
       <Form.Group className='mb-2' controlId="formName">
+      {success && <Alert variant="success">Create/Edit successful!</Alert>}
+    {error && <Alert variant="danger">An error occurred!</Alert>}
           <div><Form.Label>Name</Form.Label></div>
           <Form.Control
             type="text"
@@ -118,13 +169,13 @@ const defaultImageUrl = process.env.PUBLIC_URL + '/defaultprofile.jpg';
         </Form.Group>
 
         <Form.Group className='mb-2' controlId="formEmail">
-        <div> <Form.Label>Email Address</Form.Label></div> 
+        <div> <Form.Label>Email</Form.Label></div> 
           <Form.Control
             type="email"
             name="email"
-            value={formInput.emailAddress}
+            value={formInput.email}
             onChange={handleChange}
-            placeholder="Email Address"
+            placeholder="Email"
           />
         </Form.Group>
 
@@ -155,7 +206,7 @@ const defaultImageUrl = process.env.PUBLIC_URL + '/defaultprofile.jpg';
           <Form.Control
             type="text"
             name="companyDescription"
-            value={formInput.description}
+            value={formInput.companyDescription}
             onChange={handleChange}
             placeholder="Describe your company here..."
             as="textarea" rows={3}

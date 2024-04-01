@@ -17,7 +17,7 @@ const [formInput, setFormInput] = useState({
   expectedSalary: user?.expectedSalary || '',
   phoneNumber: user.phoneNumber || '',
   name: user.name || '',
-  emailAddress: user.emailAddress || '',
+  email: user.email || '',
   password: '',
   preferredJobTitle: user.preferredJobTitle || '',
   university: user.university || '',
@@ -52,7 +52,7 @@ const [formInput, setFormInput] = useState({
           expectedSalary: user.expectedSalary || '',
           phoneNumber: user.phoneNumber || '',
           name: user.name || '',
-          emailAddress: user.emailAddress || '',
+          email: user.email || '',
           password: '',
           preferredJobTitle: user.preferredJobTitle || '',
           location: user.location || '',
@@ -238,13 +238,13 @@ const [formInput, setFormInput] = useState({
         </Form.Group>
 
         <Form.Group className='mb-2' controlId="formEmail">
-        <div> <Form.Label>Email Address</Form.Label></div> 
+        <div> <Form.Label>Email</Form.Label></div> 
           <Form.Control
             type="email"
-            name="emailAddress"
-            value={formInput.emailAddress}
+            name="email"
+            value={formInput.email}
             onChange={handleChange}
-            placeholder="Email Address"
+            placeholder="Email"
           />
         </Form.Group>
 
