@@ -1,22 +1,11 @@
 import Axios from "axios";
 import { useEffect, useState } from "react";
 import '../Styles/jobpage.css'
-import {
-    Container,
-    DropdownButton,
-    Dropdown,
-    Row,
-    Form,
-    FormLabel,
-    Button,
-    Card,
-    Modal,
-    Col,
-} from "react-bootstrap";
-
+import {Button} from "react-bootstrap";
 import JobCard from "../Components/Jobcard";
 import Filter from "../Components/JobFilter";
 
+const API_BASE_URL = 'http://127.0.0.1:5000';
 
 export default function Jobpage() {
     const [jobs, setJobs] = useState([]);
@@ -31,7 +20,7 @@ export default function Jobpage() {
 
         const fetchData = async () => {
             try {
-                const response = await Axios.get("http://localhost:3000/get_all_jobs/", {
+                const response = await Axios.get(`${API_BASE_URL}/get_all_jobs/`, {
                 })
                 console.log(response);
                 setJobs(response.data);
