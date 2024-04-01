@@ -14,8 +14,9 @@ function JobCard({ job, userType }) {
 
   }
 
-  const editJob = () => {
-
+  const editJob = (e) => {
+    e.stopPropagation();
+    navigate('/createjob');
   }
   return (
     <>
