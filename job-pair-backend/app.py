@@ -333,16 +333,39 @@ def update_job_answer():
 @app.route('/submit_application', methods=['POST'])
 def submit_application():
     try:
+        # Extracting the application information and the seeker's ID from the request
         data = request.json
-        username = data.get('username')
-        title = data.get('title')
+        seeker_id = data.get('id')  # This is the field 'id' inside the document.
 
-        # Update the 'Submitted' field to True
-        db.collection('users').document(username).collection('job').document(title).update({'Submitted': True})
+        if not seeker_id:
+            return jsonify({'error': 'Missing seeker ID'}), 400
 
-        return jsonify({'success': True, 'message': 'Application submitted successfully.'})
+        # Preparing the document data to be added
+        application_data = {
+            'application_date': data.get('application_date'),
+            'application_response': data.get('application_response'),
+            'application_status': data.get('application_status'),
+            'company': data.get('company'),
+            'job_id': data.get('job_id'),
+            'job_title': data.get('job_title')
+        }
+
+        # Find the seeker using his id since it's not the key of his document but is unique
+        seeker_query = db.collection('seekers').where('id', '==', seeker_id).limit(1).get()
+
+        seeker_doc_ref = None
+        for doc in seeker_query:
+            seeker_doc_ref = doc.reference  # Get the document reference for the found seeker
+
+        if seeker_doc_ref:
+            # Adding the application information to the seeker's 'applied_jobs' subcollection
+            seeker_doc_ref.collection('applied_jobs').add(application_data)
+            return jsonify({'success': True, 'message': 'Application submitted successfully.'}), 200
+        else:
+            return jsonify({'error': 'Seeker not found'}), 404
 
     except Exception as e:
+        # It's a good practice to log the exception here for debugging purposes
         return jsonify({'error': str(e)}), 500
 
 
