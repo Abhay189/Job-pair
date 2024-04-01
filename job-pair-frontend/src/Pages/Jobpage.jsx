@@ -110,7 +110,7 @@ export default function Jobpage() {
                             );
                         })}
                     </div>
-                    {userType === 'recruiter' &&
+                    {userType === 'recruiters' &&
                         <div className="create-job-button-wrapper">
                             <Button size="lg" variant="primary" onClick={createJob}>
                                 Create Job

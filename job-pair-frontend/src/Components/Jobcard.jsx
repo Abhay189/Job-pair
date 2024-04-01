@@ -29,7 +29,7 @@ function JobCard({ job, userType,deleteJobFunction }) {
     
     <div onClick={sendToApplication} className="job-card">
       <div className="job-card-body">
-        {(userType === 'recruiter' || userType === 'admin') &&
+        {(userType === 'recruiters' || userType === 'admins') &&
           <div className='job-card-buttons'>
             <Button size="lg" variant="primary" onClick={closeJob} >
               Close
@@ -43,7 +43,7 @@ function JobCard({ job, userType,deleteJobFunction }) {
         }
 
         {
-          (userType === 'seeker') &&
+          (userType === 'seekers') &&
           <img src={job.logoUrl} alt="Company Logo" className="company-logo" />
         }
 

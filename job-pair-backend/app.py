@@ -45,7 +45,7 @@ def signup():
         email = signup_data['email']
         full_name = signup_data['fullName']
         password = signup_data['password'] 
-        user_type = signup_data['usertype']
+        user_type = signup_data['userType']
 
         # Get the current user counter for the specific user_type collection
         counter_ref = db.collection(user_type).document('counter')
@@ -86,7 +86,7 @@ def signin():
         signin_data = request.json
         email = signin_data['email']
         password = signin_data['password']
-        userType = signin_data['usertype']
+        userType = signin_data['userType']
         print(f"Attempting to sign in user: {email}, {userType}")
 
         # Query the Firestore database
@@ -214,7 +214,7 @@ def get_all_jobs_brief():
 #Fixed
 @app.route('/get_all_jobs', methods=['GET'])
 def get_all_jobs():
-    userType = request.args.get('usertype')
+    userType = request.args.get('userType')
     identifier = request.args.get('id')  # 'id' here is used generically; it could represent different types of identifiers.
 
     if userType == 'seekers':
@@ -411,9 +411,9 @@ def submit_application():
 def update_user_profile():
     try:
         data = request.json
-        userType = data.get('usertype')
+        userType = data.get('userType')
         userId = data.get('id')  # This is the field 'id' inside the document.
-        updated_info = data.get('updated_info')
+        updated_data = data.get('updatedData')
 
         if not userType or not userId:
             return jsonify({'error': 'Missing userType or userId'}), 400
@@ -423,7 +423,7 @@ def update_user_profile():
             return jsonify({'error': 'Invalid userType'}), 400
 
         # First, find the document by id
-        query = db.collection(collection_name).where('id', '==', userId).limit(1).stream()
+        query = db.collection(collection_name).where('id', '==', int(userId)).limit(1).stream()
 
         doc_ref = None
         for doc in query:
@@ -433,11 +433,14 @@ def update_user_profile():
             return jsonify({'error': 'User not found'}), 404
 
         # Define allowed fields based on userType
-        allowed_fields = {'seekers': {'fullName', 'password', 'username', 'email', 'phoneNo', 'technicalSkills', 'expectedSalary', 'university'},
+        allowed_fields = {'seekers': {'name', 'password', 'username', 'emailAddress', 'phoneNumber', 'techSkills', 'expectedSalary', 'institution','gender','pronouns','location','preferredJobTitle'},
                           'recruiters': {'fullName', 'password', 'username', 'email', 'location', 'companyDescription'}}
-        
+        #if updated_data['password'] is not None and updated_data['password'] != '':
+            #updated_data['password'] = bcrypt.hashpw(updated_data['password'].encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+        if updated_data['password'] is not None and updated_data['password'] == '':
+            updated_data.pop('password')
         # Filter the updated_info to include only allowed fields
-        filtered_response = {key: value for key, value in updated_info.items() if key in allowed_fields[userType]}
+        filtered_response = {key: value for key, value in updated_data.items() if key in allowed_fields[userType]}
 
         # Perform the update
         doc_ref.update(filtered_response)
@@ -447,32 +450,34 @@ def update_user_profile():
         return jsonify({'error': str(e)}), 500
 
 
-@app.route('/get_seeker', methods=['GET'])
-def get_seeker():
-    id_value = request.args.get('id')
+@app.route('/get_user', methods=['POST'])
+def get_user():
+    data = request.json
+    userType = data.get('userType')
+    userId = data.get('id') 
+
+
+    if not userType or not userId:
+        return jsonify({'error': 'Missing userType or userId'}), 400
+
+    collection_name = 'seekers' if userType == 'seekers' else 'recruiters' if userType == 'recruiters' else None
+    if not collection_name:
+        return jsonify({'error': 'Invalid userType'}), 400
     
     try:
-        if not id_value:
+        if not userId:
             return {'message': 'Missing id parameter'}, 400
     
-        query_ref = db.collection('seekers').where('id', '==', id)
+        query_ref = db.collection(collection_name).where('id', '==', int(userId)).limit(1)
         docs = list(query_ref.stream())
     
-        if docs is not None:
+        if docs is not None and len(docs) > 0:
             doc = docs[0]
             data = doc.to_dict()
+            data.pop('password', None)  # Remove password from the response
 
-            seeker_data = {
-            'techSkills': data.get('techSkills', []),
-            'expectedsalary': data.get('expectedsalary', ''),
-            'phoneNumber': data.get('phoneNumber', ''),
-            'name': data.get('name', ''),
-            'email': data.get('emailAddress', ''),
-            'preferredJobTitle': data.get('preferredJobTitle', ''),
-            'university': data.get('university', ''),
-            'id': data.get('id', '')
-            }
-            return jsonify(seeker_data), 200
+            
+            return jsonify(data), 200
         else:
             return jsonify({"error": "No seekers found matching id"}), 404
     
