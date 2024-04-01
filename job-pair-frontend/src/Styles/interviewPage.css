@@ -1,28 +1,43 @@
 /* InterviewPageStyles.css */
 
 .interview-container {
-    padding-left: 50px;
-    margin-top: 60px;
-    margin-bottom: 90px;
+    margin: 40px;
     display: flex;
+    height: 90vh;
+    width: auto;
+    background-color: #D9D9D9;
     justify-content: center;
-    align-items: flex-start;
+    align-items: center;
+    border-radius: 10px;
+    flex-wrap: wrap;
   }
   
-  .interview-section {
-    margin-right: 30px;
+  .interview-section, .interview-section-2 {
+    min-width: 300px;
+    max-width: 800px;
+    margin: 30px;
+    height: auto;
+    padding: 20px;
     flex: 1.375;
     display: flex;
     flex-direction: column;
+    justify-content: center;
     align-items: center;
+    background-color: #F3F3F3;
+    border-radius: 10px;
+    min-height: 40vh;
+  }
+
+  .interview-section-2{
+    background-color: #575DFB;
   }
   
   .heroHeadText {
     font-weight: bold;
     font-size: 50px;
     text-align: center;
-    margin-bottom: 35px;
-    padding-top: 30px;
+    margin-bottom: 50px;
+    padding-top: 20px;
   }
   
   .sectionHeadText {
@@ -32,20 +47,7 @@
   }
   
   .question-box {
-    width: 22rem;
-    height: 100px;
-    font-weight: bolder;
-    color: black;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    background: #FFC0BE;
-    margin: 1% 0;
-    border-radius: 15px;
-    border: solid;
-    border-width: 5px;
-    border-color: #FF82A9;
-    text-align: center;
-    padding: 19px;
-    margin-top: 20px;
+    font-size: 1.3em;
   }
   
   .answer-section {
@@ -61,6 +63,7 @@
   }
   
   .video-container {
+    background-color: #F3F3F3;
     border-radius: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     width: 100%;
@@ -90,9 +93,44 @@
   }
   
   .timer {
-    font-size: 15px;
+    font-size: 1.5em;
     font-weight: bold;
     text-align: center;
     margin-top: 15px;
+    color: white;
+  }
+
+  .video-screen {
+    width: 98%;
+    height: auto;
+    border-radius: 10px;
+  }
+
+
+  .feedback-section {
+    margin-top: 20px;
+    padding: 10px;
+    width: 95%;
+    text-align: center;
+    /* other styles */
   }
   
+  .feedback-textbox {
+    color: white;
+    width: 100%;
+    height: auto;
+    min-height: 200px;
+    border: 1px solid black;
+    border-radius: 4px;
+    padding: 10px;
+    font-size: 16px;
+    background-color: #949494;
+    font-size: 1.1em;
+  }
+  
+
+  .feedback-textbox::placeholder {
+    color: white; /* Set placeholder text color to white */
+    opacity: 1; /* Firefox reduces the opacity of the placeholder by default, so reset it if needed */
+    font-size: 1.4em;
+}

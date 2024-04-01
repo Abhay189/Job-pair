@@ -223,23 +223,26 @@ render() {
         {/* Left Section: Question Pane and Answer Section */}
         <div className="interview-section">
           <h1 className="heroHeadText">Interview Prep</h1>
-          <p className="sectionHeadText">Here is your interview question!</p>
           <div className="question-box">
             <p><strong>Question: Tell us about the biggest challenge you've ever faced</strong></p>
           </div>
-          {showAiFeedback && (
-            <div className="answer-section">
-              <p><strong>AI Feedback:</strong></p>
-              <div dangerouslySetInnerHTML={{ __html: aiFeedback }} />
-            </div>
-          )}
+          {/* Permanent AI Feedback Section */}
+          <div className="feedback-section">
+            <p><strong>AI Feedback:</strong></p>
+            <textarea 
+              className="feedback-textbox" 
+              value={aiFeedback} 
+              readOnly 
+              placeholder="Your AI feedback will appear here after submitting your video."
+            />
+          </div>
         </div>
 
         {/* Right Section: Video Container and Time Indicator */}
-        <div className="interview-section">
+        <div className="interview-section-2">
           <div className="video-container">
             <div className="video-box">
-              <video autoPlay muted playsInline ref={this.videoLive}></video>
+              <video className='video-screen'autoPlay muted playsInline ref={this.videoLive}></video>
               <video controls playsInline ref={this.videoRecorded} style={{ display: 'none' }}></video>
             </div>
 
