@@ -31,27 +31,26 @@ function App() {
   }
 
   return (
-    <div className="App">
-      <Navbar />
-      <Routes>
-      <Route path="/" element={<div></div>} />
-      {/* Add your page route here, like the examples given below : */}
-      <Route path="/userprofile" element={<Profilepage/>} />
-      <Route path="/companyprofile" element={<Companyprofilepage/>} />
-      <Route path="/applicants" element={<JobApplicants/>} /> 
-      <Route path="/applicationReview" element={<ApplicationReviewPage/>} />
-      <Route path="/interview" element={<InterviewPage/>} />  
-      <Route path="/admin/flagged-conversations" element={<AdminPanelPage />} />
-      <Route path="/createjob" element={<CreateJobPage/>} />
-      <Route path="/tracking" element={<TrackingPage/>} />
-       <Route path= "/viewJobs" element={<Jobpage />}/>
-       <Route path = "/editJob/:id" element={<CreateJobPage/>} />
-       <Route path="*" element={<MainLayout><h1 style={{marginTop: `5%`, fontFamily:`Ubuntu`}}>Sorry, this page doesn't exist!</h1></MainLayout>} />
+       
 
-      </Routes>
-    </div>
-
- 
+    <Routes>
+      <Route path="/login" element={<LoginLayout><LoginPage /></LoginLayout>} />
+      <Route path="/signup" element={<LoginLayout><SignupPage /></LoginLayout>} />
+      <Route path="/" element={<LoginLayout><LoginPage /></LoginLayout>} />
+      {/* more routes */}
+      <Route path="/userprofile" element={<MainLayout><Profilepage /></MainLayout>} />
+      <Route path="/companyprofile" element={<MainLayout><Companyprofilepage /></MainLayout>} />
+      <Route path="/applicants" element={<MainLayout><JobApplicants /></MainLayout>} />
+      <Route path="/applicationReview" element={<MainLayout><ApplicationReviewPage /></MainLayout>} />
+      <Route path="/interview" element={<MainLayout><InterviewPage /></MainLayout>} />
+      <Route path="/admin/flagged-conversations" element={<MainLayout><AdminPanelPage /></MainLayout>} />
+      <Route path="/createjob" element={<MainLayout><CreateJobPage /></MainLayout>} />
+      <Route path="/tracking" element={<MainLayout><TrackingPage /></MainLayout>} />
+      <Route path="/viewJobs" element={<MainLayout><Jobpage /></MainLayout>} />
+      <Route path = "/editJob/:id" element={<CreateJobPage/>} />
+      <Route path="*" element={<MainLayout><h1 style={{marginTop: `5%`, fontFamily:`Ubuntu`}}>Sorry, this page doesn't exist!</h1></MainLayout>} />
+    </Routes>
+  
   );
 }
 
