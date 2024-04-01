@@ -23,6 +23,8 @@ const defaultImageUrl = process.env.PUBLIC_URL + '/defaultprofile.jpg';
       emailAddress: user.emailAddress || '',
       password: '',
       preferredJobTitle: user.preferredJobTitle || '',
+      location: user.location || '',
+      bio: user.bio || '',
     });
   };
   fetchData();
@@ -36,7 +38,9 @@ const defaultImageUrl = process.env.PUBLIC_URL + '/defaultprofile.jpg';
       password: '',
       preferredJobTitle: user.preferredJobTitle || '',
       pronouns: [],
-      gender: ''
+      gender: '',
+      location: user.location || '',
+      bio: user.bio || ''
     });
 
 
@@ -219,6 +223,30 @@ const defaultImageUrl = process.env.PUBLIC_URL + '/defaultprofile.jpg';
             value={formInput.phoneNumber}
             onChange={handleChange}
             placeholder="123-456-7890"
+          />
+        </Form.Group>
+
+        <Form.Group className='mb-2' controlId="formLocation">
+          <div><Form.Label>Current Location</Form.Label></div>
+          <Form.Control
+            type="text"
+            name="location"
+            value={formInput.location}
+            onChange={handleChange}
+            placeholder="Calgary, AB"
+          />
+        </Form.Group>
+
+        <Form.Group className='mb-3' controlId="formbio">
+          <div><Form.Label>Bio</Form.Label></div>
+          <Form.Control
+            as="textarea"
+            name="bio"
+            value={formInput.bio}
+            onChange={handleChange}
+            placeholder="Tell us about yourself..."
+            rows={4}
+            className='biotextarea' 
           />
         </Form.Group>
     
