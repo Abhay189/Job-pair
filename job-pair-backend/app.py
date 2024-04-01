@@ -62,7 +62,7 @@ def signup():
                 'fullName': full_name,
                 'username': username,
                 'password': password,  
-                'userID': new_user_id,  # Assign the unique userID
+                'id': new_user_id,  # Assign the unique userID
             })
 
             # Update the counter in the database
@@ -247,7 +247,7 @@ def get_all_jobs():
     else:
         return jsonify({'error': 'Invalid user type.'}), 400
 
-
+#Fixed
 @app.route('/get_all_applied_jobs', methods=['GET'])
 def get_all_applied_jobs():
     seeker_id = request.args.get('id')
@@ -405,21 +405,49 @@ def submit_application():
 #     except Exception as e:
 #         return jsonify({'error': str(e)}), 500
 
+#Fixed
 @app.route('/update_user_profile', methods=['POST'])
 def update_user_profile():
     try:
-        # Get data from the request
         data = request.json
-        username = data.get('username')
-        user_response = data.get('user_response')
+        userType = data.get('usertype')
+        userId = data.get('id')  # This is the field 'id' inside the document.
+        updated_info = data.get('updated_info')
 
-        # Update user profile in the database
-        db.collection('users').document(username).set(user_response)
+        if not userType or not userId:
+            return jsonify({'error': 'Missing userType or userId'}), 400
+
+        collection_name = 'seekers' if userType == 'seekers' else 'recruiters' if userType == 'recruiters' else None
+        if not collection_name:
+            return jsonify({'error': 'Invalid userType'}), 400
+
+        # First, find the document by id
+        query = db.collection(collection_name).where('id', '==', userId).limit(1).stream()
+
+        doc_ref = None
+        for doc in query:
+            doc_ref = doc.reference  # Get the document reference
+
+        if not doc_ref:
+            return jsonify({'error': 'User not found'}), 404
+
+        # Define allowed fields based on userType
+        allowed_fields = {'seekers': {'fullName', 'password', 'username', 'email', 'phoneNo', 'technicalSkills', 'expectedSalary', 'university'},
+                          'recruiters': {'fullName', 'password', 'username', 'email', 'location', 'companyDescription'}}
+        
+        # Filter the updated_info to include only allowed fields
+        filtered_response = {key: value for key, value in updated_info.items() if key in allowed_fields[userType]}
+
+        # Perform the update
+        doc_ref.update(filtered_response)
 
         return jsonify({'success': True, 'message': 'User profile updated successfully'}), 200
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+if __name__ == '__main__':
+    app.run(debug=True)
 
 @app.route('/update_job_status', methods=['POST'])
 def update_job_status():
