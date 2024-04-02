@@ -34,7 +34,7 @@ db=firestore.client()
 # os.environ["OPENAI_API_KEY"] = api_key
 
 # client = OpenAI()
-
+#chat gpt used in several endpoints in this file
 #Fixed
 @app.route('/signup', methods=['POST'])
 def signup():
