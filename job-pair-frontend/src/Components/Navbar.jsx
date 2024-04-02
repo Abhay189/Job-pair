@@ -11,6 +11,11 @@ const Navbar = () => {
 
     };
 
+    const handleLogout = () => {
+        localStorage.removeItem('usertype');
+        localStorage.removeItem('id');
+    }
+
     const buttons = [
         { id: 'viewJobs', text: 'Jobs' },
         { id: 'interview', text: 'Interview' },
@@ -34,7 +39,7 @@ const Navbar = () => {
                 </Link>
             ))}
             </div>
-            <a className="logout-button" href="/logout">Logout</a>
+            <Link className="logout-button" onClick={handleLogout} to="/">Logout</Link>
         </div>
         
         <div className="menu-icon">

@@ -32,7 +32,7 @@ const LoginPage = () => {
         setId(response.data.user_data.id);
       
         localStorage.setItem('id', id);
-        localStorage.setItem('userType', userType);
+        localStorage.setItem('usertype', userType);
 
         navigate('/viewJobs');
     
