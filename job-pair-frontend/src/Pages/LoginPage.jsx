@@ -23,7 +23,7 @@ const LoginPage = () => {
       const response = await axios.post(`${API_BASE_URL}/signin`, {
         email: email, // Use the username state variable
         password: password,
-        usertype: userType
+        userType: userType
       });
 
       if (response.data.success) {

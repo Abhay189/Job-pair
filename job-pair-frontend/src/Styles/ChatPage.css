@@ -4,7 +4,7 @@
     display: flex;
     flex-direction: column;
     background-color: #F3F3F3;
-    height: 100%;
+    
     font-weight: bold;
 }
 
@@ -25,11 +25,18 @@
 }
 
 
+
+
+
 /* Messages list */
 .messages-list {
+  width: 100%; 
+
+  margin-right: auto;
     flex: 1;
     overflow-y: auto;
- 
+    justify-content: center;
+    align-items: center;
     display: flex;
     flex-direction: column; /* Ensure messages stack vertically */
 
@@ -46,11 +53,11 @@
   }
 
   &::-webkit-scrollbar-thumb {
-    background-color: #4e73df;; /* Your desired shade of green for the thumb */
+    background-color: #4e73df;; 
     border-radius: 10px; /* Rounded corners on the thumb */
   }
   padding-right: 15px; /* Adjust the padding to make sure messages don't get under the scrollbar */
-  padding-bottom: 20px; /* Extra padding at the bottom */
+  padding-bottom: 20px; 
 
 }
 
@@ -75,7 +82,7 @@
 
 /* User message style */
 .message.user {
-    background-color: #DEB992;
+    background-color: #ccc;
     color: black;
     align-self: flex-end;
     font-weight: bold;
@@ -108,7 +115,8 @@
   
   .message-footer {
     display: flex;
-    justify-content: space-between; /* Aligns date to left and time to right */
+    justify-content: space-between; 
+    gap: 1em;
     margin-top: 8px; /* Space between text and footer */
     padding: 4px 0; /* Add padding to the top and bottom */
   }
@@ -133,3 +141,10 @@
     border-radius: 8px;
   }
   
+  @media only screen and (min-width: 1000px) {
+    .messages-list {
+      width: 30%;
+      margin-right: auto;
+    }
+    
+  }
