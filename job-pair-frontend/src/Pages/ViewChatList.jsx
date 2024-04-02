@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ChatCard from '../Components/ChatCard';
 import '../Styles/ChatList.css';
+
 export default function ViewChatList() {
     const [chatList, setChatList] = useState([]);
     const baseUrl = 'http://127.0.0.1:5000/'
@@ -43,7 +44,7 @@ export default function ViewChatList() {
     }, []);
   return (
     <div>
-        <h1>Chat List</h1>
+        <h1 className='chat-list-header'>Conversations</h1>
         <div className='chat-card-list'>
         {chatList.map((chat) => (
             <ChatCard chat={chat} key={chat.id}/>
