@@ -1,8 +1,10 @@
 /* Container for the entire page */
+
 .signup-page-container {
   display: flex;
   height: 100vh;
   background-color: #051622;
+  overflow: hidden;
 }
 
 /* Container for the image section, taking up the left 50% */
@@ -40,7 +42,7 @@
   display: flex;
   justify-content: center; /* Center the form in the middle of the right half */
   align-items: center;
-  padding: 40px; /* Add padding as needed */
+  padding: 20px; /* Add padding as needed */
   background-color: rgba(87, 93, 251, 0.5);
 
 }
@@ -50,7 +52,7 @@
   background: rgba(87, 93, 251, 0.5);
   border-radius: 10px;
   width: 80%; /* Form should fill the container */
-  padding: 40px; /* Padding inside the form */
+  padding: 20px; /* Padding inside the form */
   margin: 0; /* Override any default margins */
   max-width: 600px;
 }
@@ -254,4 +256,43 @@
   outline: none;
   transition: color 0.3s ease-in-out; /* Add a smooth color transition on hover */
   box-shadow: 0 0 5pxwhite;
+}
+
+@media (max-width: 768px) {
+  .signup-page-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .signup-image-section, .signup-form-container {
+    width: 100%;
+    padding: 20px; 
+  }
+
+  .signup-form {
+    width: 100%;
+    max-width: 100%;
+    padding: 20px;
+  }
+
+  .social-signup button {
+    margin-right: 5px;
+    padding: 10px; 
+  }
+
+  .signup-form input, .dropdown-container select {
+    padding: 10px; 
+  }
+
+  .signup-form h1 {
+    font-size: 2rem;
+  }
+
+  .dropdown-container .dropdown-arrow {
+    right: 15px;
+  }
+
+  .signup-footer p {
+    padding-top: 1rem; 
+  }
 }

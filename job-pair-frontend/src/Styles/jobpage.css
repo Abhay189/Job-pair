@@ -39,16 +39,21 @@
   transform: translateY(-5px); /* Slight lift effect on hover */
 }
 
+.job-card-body img {
+  width: 8%;
+  height: 8%;
+  object-fit: cover;
+}
+
 .jobs-body {
-  text-align: center;
-  width: 100%;
-  min-height: 85%;
-  display: flex;
-  flex-direction: row;
-  gap: 30px;
-  flex-wrap: wrap;
-  padding: 40px;
-  justify-content: flex-start;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 1em;
+ 
+  padding:1em;
+  cursor: pointer;
+
+
 }
 
 

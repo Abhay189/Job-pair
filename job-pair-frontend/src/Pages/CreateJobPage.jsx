@@ -1,7 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import '../Styles/CreateJobPage.css';
-
+import { useParams } from 'react-router-dom';
+import Axios from "axios";
+import { Alert } from 'react-bootstrap';
 function CreateJobPage() {
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState(false);
   const [jobDetails, setJobDetails] = useState({
     jobTitle: '',
     jobLocation: '',
@@ -9,56 +13,131 @@ function CreateJobPage() {
     company: '',
     technicalSkills: '',
     deadline: '',
-    jobDescription: ''
+    jobDescription: '',
+    questionsCount: '1'
   });
+  const { id } = useParams();
+
+  const [additionalQuestions, setAdditionalQuestions] = useState(['']);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setJobDetails({ ...jobDetails, [name]: value });
+    if (name === "questionsCount") {
+      const newQuestionsCount = parseInt(value);
+      const newAdditionalQuestions = Array(newQuestionsCount).fill('');
+      setAdditionalQuestions(newAdditionalQuestions);
+      setJobDetails({ ...jobDetails, [name]: value });
+    } else {
+      setJobDetails({ ...jobDetails, [name]: value });
+    }
   };
+
+  const handleQuestionChange = (value, index) => {
+    const updatedQuestions = [...additionalQuestions];
+    updatedQuestions[index] = value;
+    setAdditionalQuestions(updatedQuestions);
+  };
+
+  useEffect(() => {
+    const fetchJob = async () => {
+      try {
+        if (!id) {
+          return;
+        }
+        const response = await Axios.post('http://127.0.0.1:5000/get-job', { id: id});
+        const responseObject = response.data;
+        setJobDetails( {
+          jobTitle: responseObject.job_title,
+          jobLocation: responseObject.job_location,
+          salary: responseObject.salary,
+          company: responseObject.company,
+          technicalSkills: responseObject.technical_skills,
+          deadline: responseObject.deadline,
+          jobDescription: responseObject.job_description
+        });
+      } catch (error) {
+        console.error(error);
+        setError(true);
+      }
+    };
+    fetchJob();
+  }, [id]);
+
+
+
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-  
-    // Define the API endpoint
-    const apiEndpoint = 'http://localhost:5000/create_job'; // Adjust the URL based on your actual endpoint
-  
-    // Prepare the data to be sent in the request
-    const formData = new FormData();
-    formData.append('job_title', jobDetails.jobTitle);
-    formData.append('job_location', jobDetails.jobLocation);
-    formData.append('salary', jobDetails.salary);
-    formData.append('technical_skills', jobDetails.technicalSkills);
-    formData.append('company', jobDetails.company);
-    formData.append('deadline', jobDetails.deadline);
-    formData.append('job_description', jobDetails.jobDescription);
-    // Append other fields as necessary
-  
-    try {
-      const response = await fetch(apiEndpoint, {
-        method: 'POST',
-        body: formData // Sending the form data
+    setSuccess(false);
+    setError(false);
+    try{
+    const formObj = {
+      
+      job_title: jobDetails.jobTitle,
+    job_location: jobDetails.jobLocation,
+    salary: jobDetails.salary,
+    company: jobDetails.company,
+    technical_skills: jobDetails.technicalSkills,
+    deadline: jobDetails.deadline,
+    job_description: jobDetails.jobDescription}
+    if(id) {
+      const response = await Axios.put('http://127.0.0.1:5000/update-job', {
+        
+    ...formObj
+        
+      
+      
+      , id: id }, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        
+
       });
-  
-      const responseData = await response.json(); // Assuming the server responds with JSON
-  
-      if (response.ok) {
-        console.log('Job created successfully:', responseData);
-        // Handle success response (e.g., showing a success message or redirecting)
-      } else {
-        console.error('Failed to create job:', responseData);
-        // Handle non-success responses (e.g., showing an error message)
-      }
-    } catch (error) {
-      console.error('Error submitting the form:', error);
-      // Handle network errors or other unexpected errors
+      setSuccess(true);
+      setJobDetails({
+        jobTitle: '',
+        jobLocation: '',
+        salary: '',
+        company: '',
+        technicalSkills: '',
+        deadline: '',
+        jobDescription: ''
+      });
+    } else {
+      const response = await Axios.post('http://127.0.0.1:5000/create_job', {...formObj},  {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        
+
+      });
+      setSuccess(true);
+      setJobDetails({
+        jobTitle: '',
+        jobLocation: '',
+        salary: '',
+        company: '',
+        technicalSkills: '',
+        deadline: '',
+        jobDescription: ''
+      });
+    }}
+    catch (error) {
+      console.error(error);
+      setSuccess(false);
+      setError(true);
     }
-  };  
+  };
 
   return (
+    <>
+    
     <div className="ce-job-form-container-upper">
       <h1>Create/Edit Job</h1>
     <div className="ce-job-form-container">
+    {success && <Alert variant="success">Create/Edit successful!</Alert>}
+    {error && <Alert variant="danger">An error occurred!</Alert>}
       
       <form onSubmit={handleSubmit}>
 
@@ -96,10 +175,33 @@ function CreateJobPage() {
           <textarea name="jobDescription" value={jobDetails.jobDescription} onChange={handleChange} />
         </label>
 
+        {/* Field for selecting the number of questions */}
+        <label>How many questions do you want to ask?
+            <select name="questionsCount" value={jobDetails.questionsCount} onChange={handleChange}>
+              {Array.from({ length: 5 }, (_, i) => (
+                <option key={i} value={i + 1}>{i + 1}</option>
+              ))}
+            </select>
+          </label>
+
+          {/* Dynamically generated question fields */}
+          {additionalQuestions.map((question, index) => (
+            <input
+              key={index}
+              type="text"
+              name={`question${index + 1}`}
+              value={question}
+              placeholder={`Question ${index + 1}`}
+              onChange={(e) => handleQuestionChange(e.target.value, index)}
+            />
+          ))}
+
         <button type="submit">Submit</button>
       </form>
     </div>
     </div>
+   
+    </>
   );
 }
 

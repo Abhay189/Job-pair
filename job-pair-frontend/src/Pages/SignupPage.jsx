@@ -25,7 +25,7 @@ const SignupPage = () => {
             email: email,
             password: password,
             fullName: fullName,
-            usertype: userType,
+            userType: userType,
         });
 
         if (signupResponse.data.success) {
@@ -33,9 +33,9 @@ const SignupPage = () => {
 
             const { id } = signupResponse.data.user_data;
 
-            // Store the username in local storage
-            localStorage.setItem('id', id);
-            localStorage.setItem('usertype', userType);
+            debugger
+            localStorage.setItem('userType',userType);
+            localStorage.setItem('id',id);
 
             navigate('/viewJobs');
         } else {
@@ -88,7 +88,7 @@ const SignupPage = () => {
             />
             <input
               type="email"
-              placeholder="Email Address"
+              placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />

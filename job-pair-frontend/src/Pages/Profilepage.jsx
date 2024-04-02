@@ -9,20 +9,28 @@ export default function Profilepage() {
     expectedsalary: '',
     phoneNumber: '',
     name: '',
-    emailAddress: '',
+    email: '',
     preferredJobTitle: '',
+    pronouns: [],
+    gender: '',
+    university: '',
 
   });
+  
   useEffect(() => {
     setUser({
       techSkills: ['Java', 'CSS'],
       expectedsalary: '100000',
       phoneNumber: '1234567890',
       name: 'John Doe',
-      emailAddress: 'john@email.com',
+      email: 'john@email.com',
       preferredJobTitle: 'Software Engineer',
       password: '',
+      university: 'University of Waterloo',
       
+
+      pronouns: [{ value: 'he/him', label: 'he/him' }], // Assuming pronouns are stored in a similar format as techSkills
+      gender: 'Male', // Example gender
     });
   }, [id]);
   return (

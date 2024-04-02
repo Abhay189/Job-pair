@@ -4,15 +4,15 @@ import '../Styles/jobpage.css'
 import {Button} from "react-bootstrap";
 import JobCard from "../Components/Jobcard";
 import Filter from "../Components/JobFilter";
-
-const API_BASE_URL = 'http://127.0.0.1:5000';
+import { useNavigate } from "react-router-dom";
 
 export default function Jobpage() {
     const [jobs, setJobs] = useState([]);
-    const [userType, setUserType] = useState("recruiter")
+    const [userType, setUserType] = useState("")
+    const navigate = useNavigate();
 
     const createJob = () => {
-
+        navigate('/createJob');
     }
 
 
@@ -20,8 +20,13 @@ export default function Jobpage() {
 
         const fetchData = async () => {
             try {
-                const response = await Axios.get(`${API_BASE_URL}/get_all_jobs/`, {
-                })
+                const id = localStorage.getItem('id');
+                const userType = localStorage.getItem('userType');
+                const response = await Axios.get("http://127.0.0.1:5000/get_all_jobs",{ 
+                    params:{
+                    id,userType
+                    }
+                  }  )
                 console.log(response);
                 setJobs(response.data);
 
@@ -55,10 +60,24 @@ export default function Jobpage() {
         };
 
         fetchData();
+        debugger;
+        const localStoragetype = localStorage.getItem('userType');
+        console.log(localStoragetype);
+        setUserType(localStoragetype);
 
     }, [])
 
-   
+   const deleteJobFunction = async (jobId) => {
+        try {
+            const response = await Axios.delete("http://localhost:3000/delete_job/" + jobId, {
+            })
+            const newJobs = jobs.filter(job => job.id !== jobId);
+            setJobs(newJobs);
+
+        } catch (error) {
+            console.error("Error in getting resources for job page", error);
+        }
+    }
 
 
 
@@ -79,12 +98,12 @@ export default function Jobpage() {
                     <div className="jobs-body">
                         {jobs?.map((job) => {
                             return (
-                                <JobCard job={job} userType={"recruiter"}></JobCard>
+                                <JobCard job={job} userType={userType} deleteJobFunction={deleteJobFunction}></JobCard>
 
                             );
                         })}
                     </div>
-                    {userType === 'recruiter' &&
+                    {userType === 'recruiters' &&
                         <div className="create-job-button-wrapper">
                             <Button size="lg" variant="primary" onClick={createJob}>
                                 Create Job
@@ -108,7 +127,7 @@ export default function Jobpage() {
         <div className="jobs-body-mobile">
             {jobs?.map((job) => {
                 return (
-                    <JobCard job={job} userType={"recruiter"}></JobCard>
+                    <JobCard job={job} userType={userType}></JobCard>
 
                 );
             })}

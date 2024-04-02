@@ -35,6 +35,7 @@ function App() {
   }
 
   return (
+       
 
     <Routes>
       <Route path="/login" element={<LoginLayout><LoginPage /></LoginLayout>} />
@@ -50,29 +51,12 @@ function App() {
       <Route path="/createjob" element={<MainLayout><CreateJobPage /></MainLayout>} />
       <Route path="/tracking" element={<MainLayout><TrackingPage /></MainLayout>} />
       <Route path="/viewJobs" element={<MainLayout><Jobpage /></MainLayout>} />
+      <Route path = "/editJob/:id" element={<CreateJobPage/>} />
       <Route path="/chats" element={<MainLayout><ChatPage /></MainLayout>} />
 
       <Route path="*" element={<MainLayout><h1 style={{marginTop: `5%`, fontFamily:`Ubuntu`}}>Sorry, this page doesn't exist!</h1></MainLayout>} />
     </Routes>
   
-    // <div className="App">
-    //   <Navbar />
-    //   <Routes>
-    //   <Route path= "/" element={<LoginPage />}/>
-    //   <Route path= "/login" element={<LoginPage />}/>
-    //   <Route path= "/signup" element={<SignupPage />}/>
-    //   <Route path="/userprofile" element={<Profilepage/>} />
-    //   <Route path="/companyprofile" element={<Companyprofilepage/>} />
-    //   <Route path="/applicants" element={<JobApplicants/>} /> 
-    //   <Route path="/applicationReview" element={<ApplicationReviewPage/>} />
-    //   <Route path="/interview" element={<InterviewPage/>} />  
-    //   <Route path="/admin/flagged-conversations" element={<AdminPanelPage />} />
-    //   <Route path="/createjob" element={<CreateJobPage/>} />
-    //   <Route path="/tracking" element={<TrackingPage/>} />
-    //   <Route path= "/viewJobs" element={<Jobpage />}/>
-    //   <Route path="*" element={<h1 style={{marginTop: `5%`, fontFamily:`Ubuntu`}}>Sorry, this page doesn't exist!</h1>} />
-    // </Routes>
-    // </div>
   );
 }
 
