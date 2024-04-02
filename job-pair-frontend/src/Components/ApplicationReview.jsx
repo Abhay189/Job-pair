@@ -39,7 +39,7 @@ export default function ApplicationReview() {
   };
 
   useEffect(() => {
-    Axios.get("http://127.0.0.1:5000/get_all_jobs?id=1&usertype=seekers", {})
+    Axios.get("http://127.0.0.1:5000/get_all_jobs?id=1&userType=seekers", {})
       .then((res) => {
         const jsonData = res.data;
         if (jsonData.length > 0) {
