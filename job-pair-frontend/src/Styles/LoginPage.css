@@ -200,4 +200,12 @@
     color: #00a699; /* Change the color on hover to a different color */
     text-decoration: none; /* Remove underline on hover */
   }
+
+  .error-message {
+    color: red; /* Bright red color for high visibility */
+    padding: 10px; /* Some padding to ensure space around the text */
+    text-align: center; /* Center-align the text for better focus */
+    font-weight: bold; /* Make the font bold to catch attention */
+    /* display: block; Ensure it takes its own line */
+  }
   
