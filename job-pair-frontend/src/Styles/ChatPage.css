@@ -1,11 +1,9 @@
-/* ChatPage.css */
 
-/* ChatPage container */
 .chat-page {
     position: relative;
     display: flex;
     flex-direction: column;
-    background-color: #051622;
+    background-color: #F3F3F3;
     height: 100%;
     font-weight: bold;
 }
@@ -14,8 +12,7 @@
     text-align: center; /* Center the text */
     width: 100%; /* Full width */
     padding: 10px 0; /* Padding to ensure space around the text */
-    background-color: #051622; /* Background color */
-    color: #DEB992; /* Text color */
+    background-color: #e0e0e0;
     font-size: 2em; /* Adjust the font size as needed */
     margin-bottom: 20px; /* Space between the header and the rest of the content */
   }
@@ -27,17 +24,6 @@
     z-index: 1; /* Ensure it's above other content */
 }
 
-/* Back button styles */
-.back-button {
-  background-color: #1BA098;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  padding: 10px 20px;
-  margin-top: 10px; /* Adjust margin as needed to position the button */
-  font-weight: bold;
-}
 
 /* Messages list */
 .messages-list {
@@ -60,9 +46,8 @@
   }
 
   &::-webkit-scrollbar-thumb {
-    background-color: #00a699; /* Your desired shade of green for the thumb */
+    background-color: #4e73df;; /* Your desired shade of green for the thumb */
     border-radius: 10px; /* Rounded corners on the thumb */
-    border: 3px solid #022b3a; /* Space between thumb and track */
   }
   padding-right: 15px; /* Adjust the padding to make sure messages don't get under the scrollbar */
   padding-bottom: 20px; /* Extra padding at the bottom */
@@ -101,7 +86,7 @@
 
 /* Other user message style */
 .message.other {
-    background-color: #1BA098;
+    background-color: purple;
     color: white;
     align-self: flex-start;
     /* Consistent shadow with user messages */
@@ -120,11 +105,6 @@
     font-weight: bold;
 }
 
-.feedback-form-container {
-    background: #051622; /* Your chosen color for the feedback form */
-    padding: 20px;
-    /* Make sure this container is not flex or you need to set flex: none; */
-  }
   
   .message-footer {
     display: flex;

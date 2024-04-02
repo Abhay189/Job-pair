@@ -14,6 +14,7 @@ import ApplicationReviewPage from './Pages/ApplicationReviewPage.jsx';
 import LoginPage from './Pages/LoginPage.jsx'
 import SignupPage from './Pages/SignupPage.jsx';
 import ChatPage from './Pages/ChatPage.jsx';
+import ViewChatList from './Pages/ViewChatList.jsx';
 
 function App() {
 
@@ -52,7 +53,8 @@ function App() {
       <Route path="/tracking" element={<MainLayout><TrackingPage /></MainLayout>} />
       <Route path="/viewJobs" element={<MainLayout><Jobpage /></MainLayout>} />
       <Route path = "/editJob/:id" element={<CreateJobPage/>} />
-      <Route path="/chats" element={<MainLayout><ChatPage /></MainLayout>} />
+      <Route path="/chat/:id" element={<MainLayout><ChatPage /></MainLayout>} />
+      <Route path="/chats" element={<MainLayout><ViewChatList /></MainLayout>} />
 
       <Route path="*" element={<MainLayout><h1 style={{marginTop: `5%`, fontFamily:`Ubuntu`}}>Sorry, this page doesn't exist!</h1></MainLayout>} />
     </Routes>

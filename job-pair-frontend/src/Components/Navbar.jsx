@@ -21,7 +21,7 @@ const Navbar = () => {
         { id: 'interview', text: 'Interview' },
         { id: 'tracking', text: 'Tracking' },
         { id: 'userprofile', text: 'Profile' },
-        { id: 'chat', text: 'Chat' }
+        { id: 'chats', text: 'Chats' }
     ];
     return (
         <nav className="navbar">
