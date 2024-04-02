@@ -106,7 +106,6 @@ const SignupPage = () => {
                 onChange={(e) => setUserType(e.target.value)}
               >
                 <option value="seekers">Job Seeker</option>
-                <option value="admins">Admin</option>
                 <option value="recruiters">Recruiter</option>
               </select> 
               <span className="dropdown-arrow">&#9660;</span>

@@ -13,8 +13,12 @@ import Jobpage from './Pages/Jobpage.jsx';
 import ApplicationReviewPage from './Pages/ApplicationReviewPage.jsx';
 import LoginPage from './Pages/LoginPage.jsx'
 import SignupPage from './Pages/SignupPage.jsx';
+import ChatPage from './Pages/ChatPage.jsx';
 
 function App() {
+
+  localStorage.setItem('API_BASE_URL', 'http://127.0.0.1:5000');
+
   // MainLayout includes Navbar
   function MainLayout({ children }) {
     return (
@@ -46,6 +50,8 @@ function App() {
       <Route path="/createjob" element={<MainLayout><CreateJobPage /></MainLayout>} />
       <Route path="/tracking" element={<MainLayout><TrackingPage /></MainLayout>} />
       <Route path="/viewJobs" element={<MainLayout><Jobpage /></MainLayout>} />
+      <Route path="/chats" element={<MainLayout><ChatPage /></MainLayout>} />
+
       <Route path="*" element={<MainLayout><h1 style={{marginTop: `5%`, fontFamily:`Ubuntu`}}>Sorry, this page doesn't exist!</h1></MainLayout>} />
     </Routes>
   
