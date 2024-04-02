@@ -10,13 +10,39 @@
   width: 4em;
   height: 4em;
   font-size: 0.9em;
-  text-align: center;
+  text-align: center; /* Centers text horizontally */
+  line-height: 4em; /* Centers text vertically */
+  display: flex; /* Using flexbox for centering */
+  justify-content: center; /* Horizontally centers the content for flexbox */
+  align-items: center; /* Vertically centers the content for flexbox */
+  overflow: hidden; /* Prevent text from spilling over */
+  transition: background-color 0.3s ease;
+}
+
+.job-card-buttons button:hover {
+  background-color: #0056b3; /* Darker shade when hovering over the button */
 }
 
 .job-card {
   background-color: white;
   padding: 0.5em;
-  max-height: 16em;
+  height: auto;
+  max-height: 300px;
+  width: 100%;
+  max-width: 400px;
+  border-radius: 10px;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.job-card:hover {
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); /* Shadow effect on hover */
+  transform: translateY(-5px); /* Slight lift effect on hover */
+}
+
+.job-card-body img {
+  width: 8%;
+  height: 8%;
+  object-fit: cover;
 }
 
 .jobs-body {
@@ -25,6 +51,7 @@
   grid-gap: 1em;
  
   padding:1em;
+  cursor: pointer;
 
 
 }
@@ -43,8 +70,10 @@
 }
 
 .company-logo {
+  border-radius: 10px;
   width: 5em;
   height: 5em;
+  margin-bottom: 10px;
 }
 
 .jobs-container {
@@ -56,10 +85,13 @@
 }
 
 .job-right-div {
-  flex-grow: 2;
+  flex: 1;
+  height: 90vh;
+  margin-right: 20px;
   background-color: #D9D9D9;
   display: flex;
   flex-direction: column;
+  border-radius: 10px;
 }
 
 
@@ -87,6 +119,7 @@
 
   .job-main-content-wrapper-mobile {
     display: flex;
+    max-width: 400px;
     flex-direction: column;
     gap:1em;
   }

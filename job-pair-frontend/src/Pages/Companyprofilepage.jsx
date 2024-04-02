@@ -8,7 +8,7 @@ export default function Companyprofilepage() {
 
   const [company, setCompany] = useState({
     name: '',
-    emailAddress: '',
+    email: '',
     phoneNumber: '',
     location: '',
     description: '',
@@ -17,10 +17,10 @@ export default function Companyprofilepage() {
   useEffect(() => {
     setCompany({
       name: 'Company Name',
-      emailAddress: 'weqweqe@email.com',
+      email: 'weqweqe@email.com',
       phoneNumber: '1234567890',
       location: '1234 Some Street, Some City, Some State, 12345',
-      description: 'This is a company description',
+      companyDescription: 'This is a company description',
     });
   }, [id]);
 

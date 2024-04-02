@@ -13,8 +13,13 @@ import Jobpage from './Pages/Jobpage.jsx';
 import ApplicationReviewPage from './Pages/ApplicationReviewPage.jsx';
 import LoginPage from './Pages/LoginPage.jsx'
 import SignupPage from './Pages/SignupPage.jsx';
+import ChatPage from './Pages/ChatPage.jsx';
+import ViewChatList from './Pages/ViewChatList.jsx';
 
 function App() {
+
+  localStorage.setItem('API_BASE_URL', 'http://127.0.0.1:5000');
+
   // MainLayout includes Navbar
   function MainLayout({ children }) {
     return (
@@ -31,6 +36,7 @@ function App() {
   }
 
   return (
+       
 
     <Routes>
       <Route path="/login" element={<LoginLayout><LoginPage /></LoginLayout>} />
@@ -46,27 +52,13 @@ function App() {
       <Route path="/createjob" element={<MainLayout><CreateJobPage /></MainLayout>} />
       <Route path="/tracking" element={<MainLayout><TrackingPage /></MainLayout>} />
       <Route path="/viewJobs" element={<MainLayout><Jobpage /></MainLayout>} />
+      <Route path = "/editJob/:id" element={<CreateJobPage/>} />
+      <Route path="/chat/:id" element={<MainLayout><ChatPage /></MainLayout>} />
+      <Route path="/chats" element={<MainLayout><ViewChatList /></MainLayout>} />
+
       <Route path="*" element={<MainLayout><h1 style={{marginTop: `5%`, fontFamily:`Ubuntu`}}>Sorry, this page doesn't exist!</h1></MainLayout>} />
     </Routes>
   
-    // <div className="App">
-    //   <Navbar />
-    //   <Routes>
-    //   <Route path= "/" element={<LoginPage />}/>
-    //   <Route path= "/login" element={<LoginPage />}/>
-    //   <Route path= "/signup" element={<SignupPage />}/>
-    //   <Route path="/userprofile" element={<Profilepage/>} />
-    //   <Route path="/companyprofile" element={<Companyprofilepage/>} />
-    //   <Route path="/applicants" element={<JobApplicants/>} /> 
-    //   <Route path="/applicationReview" element={<ApplicationReviewPage/>} />
-    //   <Route path="/interview" element={<InterviewPage/>} />  
-    //   <Route path="/admin/flagged-conversations" element={<AdminPanelPage />} />
-    //   <Route path="/createjob" element={<CreateJobPage/>} />
-    //   <Route path="/tracking" element={<TrackingPage/>} />
-    //   <Route path= "/viewJobs" element={<Jobpage />}/>
-    //   <Route path="*" element={<h1 style={{marginTop: `5%`, fontFamily:`Ubuntu`}}>Sorry, this page doesn't exist!</h1>} />
-    // </Routes>
-    // </div>
   );
 }
 

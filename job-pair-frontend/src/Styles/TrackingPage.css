@@ -1,36 +1,53 @@
 /* TrackingPage.css */
 
+
 .TrackingPage {
     display: flex;
+    flex-direction: row;
+    height: 90vh;
+    max-width: 100%;
     justify-content: space-between;
   }
   
   .columns-container {
+    color: white;
     display: flex;
+    flex-direction: row;
+    height: auto;
     flex-grow: 1;
+    flex-wrap: wrap;
     padding: 25px;
     gap:5px;
+    justify-content: center;
   }
+  
   
   .column {
     flex-grow: 1;
     margin: 8px;
     padding: 16px;
-    background-color: #FFEBE7 ;
+    max-width: 400px;
+    background-color: #575DFB ;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
   
   .card {
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     padding: 16px;
+    margin: 10px;
     background-color: white;
-    border: 4px solid #FFC0BE;
     border-radius: 15px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     font-weight: bolder;
-    color: #FF82A9;
-    
+    color: black;
+    text-align: center;
   }
-  
-  /* Add additional styling as needed */
+
+  /* Media query for smaller screens to ensure wrapping occurs */
+@media (max-width: 768px) {
+  .column {
+    max-width: none; /* Allow the columns to take full width on smaller screens */
+    width: 100%;
+  }
+}

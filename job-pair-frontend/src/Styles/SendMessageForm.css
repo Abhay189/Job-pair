@@ -1,0 +1,7 @@
+.send-message-container {
+  padding: 0.8em;
+  display: flex;
+    flex-direction: column;
+    gap: 1em;
+    
+}

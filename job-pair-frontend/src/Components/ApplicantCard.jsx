@@ -28,7 +28,7 @@ function ApplicantCard({ applicant }) {
               GPA: {applicant.GPA}
             </div>
             <div className='applicant-info-box'>
-              {applicant.institution}
+              {applicant.university}
             </div>
 
           </div>
@@ -82,7 +82,7 @@ function ApplicantCard({ applicant }) {
           </div>
           <div className='applicant-mobile-row'>
             <div className='applicant-summary-box'>
-              {applicant.career_aspirations}
+              {applicant.bio}
             </div>
           </div>
 

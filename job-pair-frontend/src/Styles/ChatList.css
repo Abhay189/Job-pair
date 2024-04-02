@@ -1,0 +1,14 @@
+.chat-card-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
+    
+
+}
+
+.chat-list-header {
+
+    margin-bottom: 0.5em;
+    margin-top: 0.5em;
+    margin-left: 2em;
+}

@@ -1,0 +1,55 @@
+.chat-card {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 50%;
+  height: 100%;
+  padding: 1em;
+  margin-left: 2em;
+
+  background-color: #f5f5f5;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+
+.chat-card-top {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.8em;
+}
+
+.chat-card-top-info {
+  padding: 0.8em;
+  border-radius: 0.8em;
+  background-color: #ced4da;
+}
+
+.chat-card-top-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.chat-card-mobile {
+  display: none;
+}
+
+@media only screen and (max-width: 768px) {
+  .chat-card-mobile {
+    display: flex;
+    flex-direction: column;
+    background-color: #f5f5f5;
+    gap: 1em;
+    padding: 1em;
+    cursor: pointer;
+  }
+  .mobile-sender {
+    font-size: 1.5em;
+  }
+}
+
+@media only screen and (min-width: 769px) {
+  .chat-card {
+    display: flex;
+  }
+}

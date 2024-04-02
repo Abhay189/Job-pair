@@ -3,40 +3,72 @@ import { useState, useEffect } from 'react';
 import { Form, Button, Col,Modal } from 'react-bootstrap';
 import Select from 'react-select';
 import '../Styles/profilepage.css';
+import axios from 'axios';
+import { Alert } from 'react-bootstrap';
+
 export function Profilepageform({user}) {
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState(false);
 // default profile picure taken from https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg
 const defaultImageUrl = process.env.PUBLIC_URL + '/defaultprofile.jpg';
+const [formInput, setFormInput] = useState({
+  techSkills: user?.techSkills.map(item => ({ value: item, label: item })) || [],
+  pronouns: user?.pronouns.map(item => ({ value: item, label: item })) || [],
+  expectedSalary: user?.expectedSalary || '',
+  phoneNumber: user.phoneNumber || '',
+  name: user.name || '',
+  email: user.email || '',
+  password: '',
+  preferredJobTitle: user.preferredJobTitle || '',
+  university: user.university || '',
+  gender: '',
+  location: user.location || '',
+  bio: user.bio || ''
+});
   const selectStyles = {
     control: (provided) => ({
       ...provided,
       backgroundColor: '#D9D9D9',
     }),
   };
+
+
   useEffect(() => {
+    const fetchUserData = async () => {
+      const userType = localStorage.getItem('userType');
+      const userId = localStorage.getItem('id');
+      const url = 'http://127.0.0.1:5000/get_user';
 
-    const fetchData = async () => {
-    setFormInput({
-      techSkills: user.techSkills.map(item => ({ value: item, label: item })) || [],
-      expectedsalary: user.expectedsalary || '',
-      phoneNumber: user.phoneNumber || '',
-      name: user.name || '',
-      emailAddress: user.emailAddress || '',
-      password: '',
-      preferredJobTitle: user.preferredJobTitle || '',
-    });
-  };
-  fetchData();
-  }, [user]);
-    const [formInput, setFormInput] = useState({
-      techSkills: user.techSkills.map(item => ({ value: item, label: item })) || [],
-      expectedsalary: user.expectedsalary || '',
-      phoneNumber: user.phoneNumber || '',
-      name: user.name || '',
-      emailAddress: user.emailAddress || '',
-      password: '',
-      preferredJobTitle: user.preferredJobTitle || '',
-    });
+      try {
+        setError (false);
+        setSuccess(false);
+        const response = await axios.post(url, { userType: userType, id: userId });
+        const user = response.data;
+        debugger
+        const mapData =  {
+          techSkills: user.techSkills ? user?.techSkills.map(item => ({ value: item, label: item })) : [],
+          pronouns: user.pronouns ? user?.pronouns.map(item => ({ value: item, label: item })) : [],
+          gender: user.gender || '',
+          expectedSalary: user.expectedSalary || '',
+          phoneNumber: user.phoneNumber || '',
+          name: user.name || '',
+          email: user.email || '',
+          password: '',
+          preferredJobTitle: user.preferredJobTitle || '',
+          location: user.location || '',
+          bio: user.bio || '',
+          university: user.institution || '',
+        }
+        setFormInput(mapData);
+     
+      } catch (error) {
+        console.log(error.response ? error.response.data : error.message)
+        setError(true);
+      }
+    };
 
+    fetchUserData();
+  }, []);
 
     
   
@@ -48,6 +80,28 @@ const defaultImageUrl = process.env.PUBLIC_URL + '/defaultprofile.jpg';
       { value: 'CSS', label: 'CSS' },
       { value: 'HTML', label: 'HTML' },
     ];
+
+    const pronounOptions = [
+      { value: 'he/him', label: 'he/him' },
+      { value: 'she/her', label: 'she/her' },
+      { value: 'they/them', label: 'they/them' },
+      { value: 'other', label: 'Other' },
+    ];
+
+    const genderOptions = [
+      "Male",
+      "Female",
+      "Non-binary",
+      "Prefer not to say",
+      "Other"
+    ];
+
+    const handlePronounsChange = (selectedOptions) => {
+      setFormInput({
+        ...formInput,
+        pronouns: selectedOptions || []
+      });
+    };
   
     const handleTechSkillChange = (selectedOptions) => {
       setFormInput({
@@ -55,6 +109,16 @@ const defaultImageUrl = process.env.PUBLIC_URL + '/defaultprofile.jpg';
         techSkills: selectedOptions || []
       });
     };
+
+    const handleGenderChange = (e) => {
+      const { name, value } = e.target;
+      setFormInput({
+        ...formInput,
+        [name]: value
+      });
+    };
+   
+
   
     const handleChange = (e) => {
       const { name, value } = e.target;
@@ -64,10 +128,41 @@ const defaultImageUrl = process.env.PUBLIC_URL + '/defaultprofile.jpg';
       });
     };
   
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
+      
       e.preventDefault();
-      console.log(formInput);
-    };
+      try { 
+
+        setError(false);
+        setSuccess(false);
+        
+        const formatInput = {
+          ...formInput,
+          pronouns: formInput.pronouns.map(item => item.value),
+          techSkills: formInput.techSkills.map(item => item.value)
+        }
+
+        const formData = {
+          id: localStorage.getItem('id'),
+          userType: localStorage.getItem('userType'),
+          updatedData:
+          {...formatInput}
+        }
+        const url = 'http://127.0.0.1:5000/update_user_profile';
+        const response = await axios.post(url, formData, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+       
+        });
+    
+        setError(false);
+        setSuccess(true);
+      } catch (error) {
+        setError(true);
+        console.error(error.response ? error.response.data : error.message); 
+      }
+    }
 
   const [showFileSelect, setShowFileSelect] = useState(false);
 
@@ -104,6 +199,8 @@ const defaultImageUrl = process.env.PUBLIC_URL + '/defaultprofile.jpg';
 
 
       <div className='written-form'>
+      {success && <Alert variant="success">Create/Edit successful!</Alert>}
+    {error && <Alert variant="danger">An error occurred!</Alert>}
        
       <Form id="userform" onSubmit={handleSubmit}>
       <Form.Group className='mb-2' controlId="formName">
@@ -117,14 +214,37 @@ const defaultImageUrl = process.env.PUBLIC_URL + '/defaultprofile.jpg';
           />
         </Form.Group>
 
+        <Form.Group className='mb-2' controlId="formPronouns">
+            <div><Form.Label>Pronouns</Form.Label></div>
+            <Select
+              isMulti
+              value={formInput.pronouns}
+              styles={selectStyles}
+              options={pronounOptions}
+              className="basic-multi-select"
+              classNamePrefix="select"
+              onChange={handlePronounsChange}
+              name="pronouns"
+            />
+        </Form.Group>
+
+        <Form.Group className='mb-2' controlId="formGender">
+            <div><Form.Label>Gender</Form.Label></div>
+            <Form.Control as="select" name="gender" value={formInput.gender} onChange={handleChange}>
+              {genderOptions.map(gender => (
+                <option key={gender} value={gender}>{gender}</option>
+              ))}
+            </Form.Control>
+        </Form.Group>
+
         <Form.Group className='mb-2' controlId="formEmail">
-        <div> <Form.Label>Email Address</Form.Label></div> 
+        <div> <Form.Label>Email</Form.Label></div> 
           <Form.Control
             type="email"
             name="email"
-            value={formInput.emailAddress}
+            value={formInput.email}
             onChange={handleChange}
-            placeholder="Email Address"
+            placeholder="Email"
           />
         </Form.Group>
 
@@ -148,16 +268,29 @@ const defaultImageUrl = process.env.PUBLIC_URL + '/defaultprofile.jpg';
             className="basic-multi-select"
             classNamePrefix="select"
             onChange={handleTechSkillChange}
-            name="multiSelect"
+            name="techSkills"
           />
         </Form.Group>
+
+        <Form.Group className='mb-2' controlId="formName">
+          <div><Form.Label>University</Form.Label></div>
+          <Form.Control
+            type="text"
+            name="university"
+            value={formInput.university}
+            onChange={handleChange}
+            placeholder="university"
+          />
+        </Form.Group>
+
+        
   
         <Form.Group className='mb-2' controlId="formMoneyInput">
         <div> <Form.Label>Expected Salary($)</Form.Label> </div> 
           <Form.Control
             type="number"
-            name="moneyInput"
-            value={formInput.expectedsalary}
+            name="expectedSalary"
+            value={formInput.expectedSalary}
             onChange={handleChange}
             placeholder="Enter amount"
           />
@@ -172,6 +305,30 @@ const defaultImageUrl = process.env.PUBLIC_URL + '/defaultprofile.jpg';
             value={formInput.phoneNumber}
             onChange={handleChange}
             placeholder="123-456-7890"
+          />
+        </Form.Group>
+
+        <Form.Group className='mb-2' controlId="formLocation">
+          <div><Form.Label>Current Location</Form.Label></div>
+          <Form.Control
+            type="text"
+            name="location"
+            value={formInput.location}
+            onChange={handleChange}
+            placeholder="Calgary, AB"
+          />
+        </Form.Group>
+
+        <Form.Group className='mb-3' controlId="formbio">
+          <div><Form.Label>Bio</Form.Label></div>
+          <Form.Control
+            as="textarea"
+            name="bio"
+            value={formInput.bio}
+            onChange={handleChange}
+            placeholder="Tell us about yourself..."
+            rows={4}
+            className='biotextarea' 
           />
         </Form.Group>
     
