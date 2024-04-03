@@ -1,8 +1,11 @@
 import React from 'react';
-import { styles } from "../Styles/InterviewPage"
 import "../Styles/interviewPage.css";
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-class InterviewPage extends React.Component {
+class InterviewPageBase  extends React.Component {
+
+
   constructor(props) {
     super(props);
     
@@ -31,9 +34,17 @@ class InterviewPage extends React.Component {
     };
 }
 
-
   componentDidMount() {
-      this.initVideoStream();
+    this.checkAuthentication();
+    this.initVideoStream();
+  }
+
+  checkAuthentication = () => {
+    const temp_id = localStorage.getItem('id');
+    if (temp_id == null) {
+      console.error('User not signed in, redirecting to login..');
+      this.props.navigate('/');
+    }
   }
 
   initVideoStream = async () => {
@@ -273,6 +284,13 @@ render() {
       </div>
     );
   }
+}
+
+function InterviewPage(props) {
+  let navigate = useNavigate();
+
+  // Pass navigate as a prop to the class component
+  return <InterviewPageBase {...props} navigate={navigate} />;
 }
 
 export default InterviewPage;

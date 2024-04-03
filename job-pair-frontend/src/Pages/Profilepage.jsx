@@ -1,8 +1,23 @@
 import React from 'react'
 import { Profilepageform } from  '../Components/Profilepageform.jsx';
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams,useNavigate } from 'react-router-dom';
+
+
 export default function Profilepage() {
+
+  let navigate = useNavigate();
+
+  useEffect(()=> {
+    const temp_id = localStorage.getItem('id');
+
+    if (temp_id == null) {
+        console.error('User not signed in, redirecting to login..');
+        navigate('/');
+    }
+  },[]);
+
+  
   const { id } = useParams();
   const [user, setUser] = useState({
     techSkills: [],

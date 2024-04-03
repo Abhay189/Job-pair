@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../Styles/SignupPage.css'; // Make sure this is the correct path to your CSS file
 import logoImage from '../Assets/job-pair_new_logo.png'; // Update with the correct path to your logo image
@@ -15,6 +15,14 @@ const SignupPage = () => {
   const [userType, setUserType] = useState('seekers'); // Initialize role state
   const [username, setUsername] = useState(''); // State for username
   let navigate = useNavigate();
+
+  useEffect(() => {
+    const temp_id = localStorage.getItem('id');
+    if (temp_id != null) {
+      console.error('User already logged in, redirecting to Homepage..');
+      navigate('/viewJobs');
+    }
+  }, []);
 
   const handleSignUp = async (e) => {
     e.preventDefault();

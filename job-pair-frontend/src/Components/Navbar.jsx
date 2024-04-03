@@ -28,7 +28,7 @@ const CustomNavbar = () => {
 
   const recruiterButtons = [
     { to: "/viewJobs", text: "Jobs" },
-    { to: "/userprofile", text: "Profile" },
+    { to: "/companyprofile", text: "Company Profile" },
   ];
 
   const seekerButtons = [
@@ -36,6 +36,7 @@ const CustomNavbar = () => {
     { to: "/tracking", text: "Job Tracking " },
     { to: "/interview", text: "Mock Interview" },
     { to: "/chats", text: "Chats" },
+    { to: "/userprofile", text: "Profile" },
   ];
 
   // Helper function to render buttons based on the user type

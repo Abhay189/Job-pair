@@ -3,11 +3,25 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import axios from 'axios';
 import '../Styles/TrackingPage.css';
 import {  Container } from "react-bootstrap";
-import { styles } from "../Styles/Trackingpagestyles"
+import { styles } from "../Styles/Trackingpagestyles";
+import { useNavigate } from "react-router-dom";
 
 const API_BASE_URL = 'http://127.0.0.1:5000';
 
 const TrackingPage = () => {
+
+  let navigate = useNavigate();
+
+  useEffect(()=> {
+    const temp_id = localStorage.getItem('id');
+
+    if (temp_id == null) {
+        console.error('User not signed in, redirecting to login..');
+        navigate('/');
+    }
+  },[]);
+
+
   const [applications, setApplications] = useState({
     applied: [],
     in_progress: [],

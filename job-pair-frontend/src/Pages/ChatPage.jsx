@@ -3,13 +3,25 @@ import {Message} from '../Components/Message';
 import axios from 'axios';  // Import axios
 import '../Styles/ChatPage.css';
 import { SendMessageForm } from '../Components/SendMessageForm';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 const baseUrl = 'http://127.0.0.1:5000/';
 
 
 
 const ChatPage = () => {
+  let navigate = useNavigate();
+
+  useEffect(()=> {
+    const temp_id = localStorage.getItem('id');
+
+    if (temp_id == null) {
+        console.error('User not signed in, redirecting to login..');
+        navigate('/');
+    }
+  },[]);
+
+  
   const [messages, setMessages] = useState([]);
   let { threadIndex } = useParams();
   

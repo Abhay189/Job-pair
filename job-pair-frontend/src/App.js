@@ -42,7 +42,6 @@ function App() {
       <Route path="/login" element={<LoginLayout><LoginPage /></LoginLayout>} />
       <Route path="/signup" element={<LoginLayout><SignupPage /></LoginLayout>} />
       <Route path="/" element={<LoginLayout><LoginPage /></LoginLayout>} />
-      {/* more routes */}
       <Route path="/userprofile" element={<MainLayout><Profilepage /></MainLayout>} />
       <Route path="/companyprofile" element={<MainLayout><Companyprofilepage /></MainLayout>} />
       <Route path="/applicants" element={<MainLayout><JobApplicants /></MainLayout>} />

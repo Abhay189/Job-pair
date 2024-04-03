@@ -1,9 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import ApplicationReview from '../Components/ApplicationReview';
 import MobileWarning from '../Components/MobileWarning';
+import { useNavigate } from "react-router-dom";
 
 const ApplicationReviewPage = () => {
   const [isMobile, setIsMobile] = useState(false);
+  let navigate = useNavigate();
+
+  useEffect(()=> {
+    const temp_id = localStorage.getItem('id');
+
+    if (temp_id == null) {
+        console.error('User not signed in, redirecting to login..');
+        navigate('/');
+    }
+  },[]);
+  
 
   useEffect(() => {
     const handleResize = () => {

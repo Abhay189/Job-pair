@@ -2,9 +2,20 @@ import React from 'react'
 import { Companyprofilepageform } from '../Components/Companyprofilepageform'
 import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 
 export default function Companyprofilepage() {
   const { id } = useParams();
+  let navigate = useNavigate();
+
+  useEffect(()=> {
+    const temp_id = localStorage.getItem('id');
+
+    if (temp_id == null) {
+        console.error('User not signed in, redirecting to login..');
+        navigate('/');
+    }
+  },[]);
 
   const [company, setCompany] = useState({
     name: '',

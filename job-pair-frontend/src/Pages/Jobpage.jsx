@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function Jobpage() {
     const [jobs, setJobs] = useState([]);
-    const [userType, setUserType] = useState("")
+    const [userType, setUserType] = useState("");
     const navigate = useNavigate();
 
     const createJob = () => {
@@ -17,6 +17,13 @@ export default function Jobpage() {
 
 
     useEffect(() => {
+
+        const temp_id = localStorage.getItem('id');
+
+        if (temp_id == null) {
+            console.error('User not signed in, redirecting to login..');
+            navigate('/');
+        }
 
         const fetchData = async () => {
             try {
