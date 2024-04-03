@@ -23,12 +23,14 @@ const CustomNavbar = () => {
 
   // Define the buttons for each user type
   const adminButtons = [
-    { to: "/viewJobs", text: "Dashboard" },
+    { to: "/viewJobs", text: "Jobs Dashboard" },
+    { to: "/admin/flagged-conversations", text: "Flagged Chats" },
   ];
 
   const recruiterButtons = [
     { to: "/viewJobs", text: "Jobs" },
     { to: "/companyprofile", text: "Company Profile" },
+    { to: "/chats", text: "Chats" },
   ];
 
   const seekerButtons = [

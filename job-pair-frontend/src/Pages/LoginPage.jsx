@@ -113,6 +113,7 @@ const LoginPage = () => {
               >
                 <option value="seekers">Job Seeker</option>
                 <option value="recruiters">Recruiter</option>
+                <option value="admins">Admin</option>
               </select> 
               <span className="dropdown-arrow">&#9660;</span>
             </div>
