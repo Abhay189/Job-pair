@@ -44,7 +44,6 @@ const defaultImageUrl = process.env.PUBLIC_URL + '/defaultprofile.jpg';
         setSuccess(false);
         const response = await axios.post(url, { userType: userType, id: userId });
         const user = response.data;
-        debugger
         const mapData =  {
           phoneNumber: user.phoneNumber || '',
           name: user.name || '',

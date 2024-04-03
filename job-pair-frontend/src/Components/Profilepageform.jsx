@@ -44,7 +44,6 @@ const [formInput, setFormInput] = useState({
         setSuccess(false);
         const response = await axios.post(url, { userType: userType, id: userId });
         const user = response.data;
-        debugger
         const mapData =  {
           techSkills: user.techSkills ? user?.techSkills.map(item => ({ value: item, label: item })) : [],
           pronouns: user.pronouns ? user?.pronouns.map(item => ({ value: item, label: item })) : [],

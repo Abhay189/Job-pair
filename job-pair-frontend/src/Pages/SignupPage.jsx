@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import '../Styles/SignupPage.css'; // Make sure this is the correct path to your CSS file
-import logoImage from '../Assets/Job-pair-small 1.png'; // Update with the correct path to your logo image
+import logoImage from '../Assets/job-pair_new_logo.png'; // Update with the correct path to your logo image
 import google from '../Assets/google.png'; // Update with the correct path to your logo image
 import outlook from '../Assets/outlook.png'; // Update with the correct path to your logo image
 import { Link, useNavigate} from "react-router-dom";
@@ -33,7 +33,6 @@ const SignupPage = () => {
 
             const { id } = signupResponse.data.user_data;
 
-            debugger
             localStorage.setItem('userType',userType);
             localStorage.setItem('id',id);
 

@@ -60,7 +60,6 @@ export default function Jobpage() {
         };
 
         fetchData();
-        debugger;
         const localStoragetype = localStorage.getItem('userType');
         console.log(localStoragetype);
         setUserType(localStoragetype);

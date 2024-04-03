@@ -1,149 +1,24 @@
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #f0f0f0;
-    padding: 10px 20px;
-    font-size: 1.3em;
-  }
-  
-  .navbar .logo {
-    font-weight: bold;
-  }
-  
-  .navbar .menu {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    width: 70%;
-    gap: 100px;
-  }
+.custom-navbar .nav-link, .custom-navbar .navbar-toggler {
+  font-size: 1.5rem; /* Increase font size */
+  padding: 12px 15px; /* Increase padding */
+}
 
-  .menu-options {
-    display: flex;
-    flex-direction: row;
-    gap: 70px;
-  }
+.custom-logo {
+  width: auto; /* Adjust width automatically */
+  height: 100px; /* New height for the logo */
+}
 
-  .navbar .logout-button {
-    padding: 0px 0px 0px 50px;
-  }
-  
-  .navbar .menu .search-bar {
-    margin-left: 40px;
-  }
-  
-  .navbar .menu .search-bar input {
-    padding: 5px 10px;
-  }
-  
-  /* Hide the menu icon by default */
-  .navbar .menu-icon {
-    display: none;
-  }
+/* Increase spacing between buttons */
+.custom-navbar .nav-link {
+  margin-right: 20px; /* Adjust the spacing as needed */
+  transition: background-color 0.2s ease-in-out; /* For a smooth background color transition */
+}
 
-  .toggle-button, .logout-button {
-    color: #333;
-    padding: 10px 15px; /* Some padding */
-    margin: 2px; /* A little space between buttons */
-    text-decoration: none; /* No underline */
-    border-radius: 5px; /* Rounded corners */
-    cursor: pointer; /* Pointer cursor on hover */
-    transition: background-color 0.3s; /* Smooth background transition */
-  }
-  
-  .toggle-button:hover{
-    background-color: #e0e0e0; /* Slightly darker on hover */
-  }
-  
-  .toggle-button.active {
-    background-color: #575DFB; /* Active color */
-    color: white; /* White text on active */
-  }
-
-  /* Add this to your existing Navbar.css */
-  .search-bar input[type="text"] {
-    padding: 20px; /* Adjust padding to match your design */
-    margin: 0px 20px;
-    font-size: 1em; /* Adjust font size to match your design */
-    border: none; /* Removes the default border */
-    border-radius: 30px; /* Gives the input rounded corners */
-    outline: none; /* Removes the outline to match your design */
-    width: 100%; /* Adjust width as necessary, or to a fixed width */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
-    background-color: rgba(87, 93, 251, 0.5); /* Background color */
-    color: white; /* Text color */
-    transition: box-shadow 0.2s ease-in-out; /* Smooth transition for shadow */
-    margin-right: 10px; /* Add some margin if necessary */
-  }
-  
-  .search-bar input[type="text"]::placeholder {
-    color: rgba(255, 255, 255, 0.7); /* Lighter text color for placeholder */
-  }
-  
-  .search-bar input[type="text"]:focus {
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Slightly larger shadow when focused */
-  }
-
-  
-  /* Adjustments for smaller screens can also be added if necessary */
-  @media (max-width: 768px) {
-    .search-bar input[type="text"] {
-      /* Adjust styles for mobile view if needed */
-    }
-  }
-
-
-
-
-
-  @media (max-width: 768px) {
-    .navbar .menu {
-      display: none; /* Hide the menu items */
-    }
-  
-    .navbar .menu-icon {
-      display: flex; /* Show the menu icon */
-      align-items: center;
-      justify-content: flex-end;
-      cursor: pointer;
-    }
-  
-    .navbar .menu-icon::before {
-      content: '☰'; /* You can use any suitable icon here */
-      font-size: 1.5em;
-    }
-  
-    .navbar .menu-icon.active::before {
-      content: '✕'; /* Change to a close icon when menu is open */
-    }
-  
-    .menu-options {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      position: absolute;
-      top: 100%; /* Position the menu below the menu icon */
-      right: 0;
-      background-color: #f0f0f0;
-      width: 100%;
-      border-radius: 5px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      z-index: 1000; /* Ensure the menu appears above other content */
-      padding: 10px;
-      transition: opacity 0.3s ease-in-out; /* Smooth transition for visibility */
-      opacity: 0; /* Initially hidden */
-      pointer-events: none; /* Initially not clickable */
-    }
-  
-    .navbar .menu-icon.active ~ .menu-options {
-      opacity: 1; /* Show the menu when menu icon is active */
-      pointer-events: auto; /* Allow clicking on the menu */
-    }
-  
-    .toggle-button, .logout-button {
-      width: 100%; /* Make buttons full width */
-      color: #575DFB;
-    }
-  }
-  
+/* Custom effect for the selected (active) button */
+/* Increasing specificity by targeting .nav-link within .navbar and then the active class */
+.custom-navbar .navbar-nav .nav-link.active {
+  background-color: #575DFB; /* Example: Bootstrap primary color */
+  color: white; /* Changes text color to white */
+  font-weight: bold; /* Makes the text bold */
+  border-radius: 5px; /* Adds rounded corners for a button-like appearance */
+}

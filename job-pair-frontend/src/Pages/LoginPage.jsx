@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import '../Styles/LoginPage.css'; // Make sure this is the correct path to your CSS file
-import logoImage from '../Assets/Job-pair-small 1.png'; // Update with the correct path to your logo image
+import logoImage from '../Assets/job-pair_new_logo.png'; // Update with the correct path to your logo image
 import google from '../Assets/google.png'; // Update with the correct path to your logo image
 import outlook from '../Assets/outlook.png'; // Update with the correct path to your logo image
 import axios from 'axios'; // Import axios for making API requests
