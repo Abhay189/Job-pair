@@ -254,7 +254,7 @@ const [formInput, setFormInput] = useState({
             name="password"
             value={formInput.password}
             onChange={handleChange}
-            placeholder=""
+            placeholder="********"
           />
         </Form.Group>
         <Form.Group className='mb-2' controlId="formTechSkills">

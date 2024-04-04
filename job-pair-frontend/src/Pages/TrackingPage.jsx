@@ -124,6 +124,7 @@ const TrackingPage = () => {
 
       <DragDropContext onDragEnd={onDragEnd}>
         <div className="TrackingPage">
+          <h1>Application Tracking</h1>
           <div className="columns-container ">
             {Object.keys(applications).map((column) => (
               

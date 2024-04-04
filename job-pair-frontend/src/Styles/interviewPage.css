@@ -1,10 +1,27 @@
 /* InterviewPageStyles.css */
+.interview-wrapper{
+  padding-top: 100px;
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.interview-wrapper h1 {
+  font-size: 4em;
+  text-align: center;
+  margin-bottom: 20px;
+}
 
 .interview-container {
-    margin: 40px;
+    margin: 15px;
     display: flex;
-    height: 90vh;
+    min-height: 60vh;
+    height: auto;
     width: auto;
+    max-width: 2000px;
     background-color: #D9D9D9;
     justify-content: center;
     align-items: center;
@@ -30,6 +47,7 @@
 
   .interview-section-2{
     background-color: #575DFB;
+    order: -1;
   }
   
   .heroHeadText {
@@ -134,3 +152,10 @@
     opacity: 1; /* Firefox reduces the opacity of the placeholder by default, so reset it if needed */
     font-size: 1.4em;
 }
+
+
+@media only screen and (max-width: 768px) {
+  .interview-wrapper{
+    padding-top: 50px;
+  }
+} 

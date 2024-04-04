@@ -230,6 +230,8 @@ render() {
     const seconds = remainingTime % 60;
 
     return (
+      <div className='interview-wrapper'>
+      <h1>Mock Interview</h1>
       <div className="interview-container">
         {/* Left Section: Question Pane and Answer Section */}
         <div className="interview-section">
@@ -281,6 +283,7 @@ render() {
             Time Limit: {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
           </div>
         </div>
+      </div>
       </div>
     );
   }

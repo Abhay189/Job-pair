@@ -50,8 +50,8 @@ export default function Profilepage() {
   }, [id]);
   return (
     <div className='main-container'>
+      <h1>Profile</h1>
         <div className='profile-container'>
-            <h1>Profile</h1>
             <Profilepageform user={user}/>
         </div>
 
