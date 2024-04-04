@@ -23,7 +23,8 @@ import "../Styles/LearningPageStyles.css";
 import { styles } from "../Styles/styles"
 
 export default function ApplicationReview() {
-  const param1 = localStorage.getItem("ApplicationReviewTitle");
+  // const param1 = localStorage.getItem("ApplicationReviewTitle");
+  const param1 = "Financial Analyst"
   const [jobName, setJobName] = useState(param1);
   const [jobDescription, setJobDescription] = useState("");
   const [questions, setQuestions] = useState([]);
@@ -38,7 +39,7 @@ export default function ApplicationReview() {
   };
 
   useEffect(() => {
-    Axios.get("http://127.0.0.1:5000/get_all_jobs?username=zeeshan", {})
+    Axios.get("http://127.0.0.1:5000/get_all_jobs?id=1&userType=seekers", {})
       .then((res) => {
         const jsonData = res.data;
         if (jsonData.length > 0) {
