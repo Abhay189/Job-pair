@@ -23,7 +23,8 @@ import "../Styles/LearningPageStyles.css";
 import { styles } from "../Styles/styles"
 
 export default function ApplicationReview() {
-  const param1 = localStorage.getItem("ApplicationReviewTitle");
+  // const param1 = localStorage.getItem("ApplicationReviewTitle");
+  const param1 = "Financial Analyst"
   const [jobName, setJobName] = useState(param1);
   const [jobDescription, setJobDescription] = useState("");
   const [questions, setQuestions] = useState([]);
@@ -38,7 +39,7 @@ export default function ApplicationReview() {
   };
 
   useEffect(() => {
-    Axios.get("http://127.0.0.1:5000/get_all_jobs?username=zeeshan", {})
+    Axios.get("http://127.0.0.1:5000/get_all_jobs?id=1&userType=seekers", {})
       .then((res) => {
         const jsonData = res.data;
         if (jsonData.length > 0) {
@@ -125,32 +126,37 @@ export default function ApplicationReview() {
           <div className="questiondiv"  style={{ minHeight: `100vh`, minWidth:`100vh`, alignContent:`center`, alignItems:`center` }}>
             {questions.map((questionItem, index) => (
               <div key={index} className="question-container" style={{ display: 'flex', flexDirection:'column', alignItems: 'center', justifyContent: 'center' }}>
-                <div style={{ width: "50rem", height: "100%", boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)', background: '#FFEBE7', margin: `1% 0`, border:'solid', borderWidth:'4px', borderColor:'#FF82A9', borderRadius: '15px', padding: '15px', position: 'relative', alignText: 'center', justifyContent: 'space-between'  }}>
+                <div style={{ width: "50rem", height: "100%", boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)', margin: `1% 0`, border:'solid', borderWidth:'4px', borderColor:'#f0f0f0', borderRadius: '15px', padding: '15px', position: 'relative', alignText: 'center', justifyContent: 'space-between'  }}>
                     <strong className={`${styles.heroHeadText}`} style={{ fontSize: '20px', textAlign: 'center', marginBottom: '35px' }}>Question:</strong> {questions[index]}
                     <br />
                 </div>
-                <div style={{ width: "50rem", height: "100%", boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)', background: '#FFEBE7', margin: `1% 0`, border:'solid', borderWidth:'4px', borderColor:'#FF82A9', borderRadius: '15px', padding: '15px', position: 'relative', alignText: 'center', justifyContent: 'space-between'  }}>
+                <div style={{ width: "50rem", height: "100%", boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)', background: '#f0f0f0', margin: `1% 0`, border:'solid', borderWidth:'4px', borderColor:'#f0f0f0', borderRadius: '15px', padding: '15px', position: 'relative', alignText: 'center', justifyContent: 'space-between'  }}>
                 <label htmlFor={`textInput-${index}`} className={`${styles.heroHeadText}`}  style={{ fontSize: '20px', fontWeight:'bold', textAlign: 'center'}} >Answer:</label>
                     {editingIndex === index ? (
                       <div >
-                        <textarea
+                        <textarea 
                           id={`textInput-${index}`}
                           name={`textInput-${index}`}
                           value={editedText}
                           onChange={handleInputChange}
                           rows={4}
-                          style={{ width: '100%', background: 'black', padding: '10px', boxSizing: 'border-box' }}
+                          style={{ width: '100%', background: '#f0f0f0', padding: '10px', boxSizing: 'border-box' }}
                         />
                         <button className="invisiblePadding saveButton" style={{ marginRight: '10px', fontWeight:'bold', color:'black'  }} onClick={() => handleSaveClick(index)}>Save</button>
                       </div>
                     ) : (
-                      <div className="answer-container" style={{ overflow: 'hidden' }}>
-                        <p style={{ whiteSpace: 'pre-wrap', overflow: 'hidden' }}>{responses[index]}</p>
-                        <div className="buttonContainer" style={{ display: 'flex', flexDirection:'row', alignItems: 'center', justifyContent: 'center' }}>
+                      <div>
+                        <div className="answer-container" style={{ overflow: 'hidden' }}>
+                          {/* <p style={{ whiteSpace: 'pre-wrap', overflow: 'hidden' }}>{responses[0]}</p> */}
+                          <p style={{ whiteSpace: 'pre-wrap', overflow: 'hidden' }}>{"Blah Blah"}</p>
+                        </div>
+                        <div className="buttonContainer" style={{ display: 'flex', flexDirection: 'row', alignItems: 'left', justifyContent: 'left' }}>
                           <span style={{ padding: '0 8px' }}></span>
-                          <button className="invisiblePadding editButton" style={{ height:'58px', marginRight: '10px', fontWeight:'bold', color:'black'  }} onClick={() => handleEditClick(index)}>Edit</button>
+                          <button className="invisiblePadding editButton" style={{ height: '35px', marginRight: '10px', fontWeight: 'bold', color: 'white', backgroundColor: '#575DFB', borderRadius: '15px', border: 'none', }} onClick={() => handleEditClick(index)}>Edit</button>
                           <span style={{ padding: '0 8px' }}></span>
-                          <button className="invisiblePadding enhanceButton" style={{ width: '140px', marginRight: '10px', fontWeight:'bold', color:'black', display:'flex', flex:'wrap'}}  onClick={() => handleEnhanceClick(index)}> <img src={chatgpt} alt="ChatGPT Icon" style={{ marginRight: '5px', height: '30px', width: '30px' }} /> Enhance</button>
+                          <button className="invisiblePadding enhanceButton" style={{ width: '140px', marginRight: '10px', fontWeight: 'bold', color: 'white', backgroundColor: '#575DFB', borderRadius: '15px', border: 'none', display: 'flex', flex: 'wrap' }} onClick={() => handleEnhanceClick(index)}>
+                            <img src={chatgpt} alt="ChatGPT Icon" style={{ marginRight: '5px', height: '30px', width: '30px' }} /> Enhance
+                          </button>
                           <span style={{ padding: '0 8px' }}></span>
                         </div>
                       </div>
@@ -163,10 +169,9 @@ export default function ApplicationReview() {
           </Container>
           <div style={{ textAlign: "center" }}>
             <button className="SignupButton"   style={{
-                    backgroundColor: `#FFC0BE`,
+                    backgroundColor: `#575DFB`,
                     color: `black`,
-                    borderColor: `#FF82A9`,
-                    borderWidth:'4px',
+                    border: `none`,
                     width:'400px',
                     borderRadius: '15px',
                     fontWeight:'bold',

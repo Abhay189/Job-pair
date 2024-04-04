@@ -15,7 +15,7 @@ import LoginPage from './Pages/LoginPage.jsx'
 import SignupPage from './Pages/SignupPage.jsx';
 import ChatPage from './Pages/ChatPage.jsx';
 import ViewChatList from './Pages/ViewChatList.jsx';
-
+// chat gpt used on this project on some the frontend files to help with styling, react components and html structure
 function App() {
 
   localStorage.setItem('API_BASE_URL', 'http://127.0.0.1:5000');
