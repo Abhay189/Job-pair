@@ -51,7 +51,8 @@
     height: auto;
     resize: vertical;
   }
-  .profile-container h2 {
+  .profile-container h1 {
+    font-size: 4em;
     text-align: center;
     margin-bottom: 20px;
   }
@@ -119,11 +120,11 @@
   } 
 
   .form-label {
+    font-size: 1.3em;
     padding: 5px 0px 0px 5px;
   }
 
   #userform {
-    min-width: 400px;
     display: flex;
     flex-direction: column;
   }

@@ -30,10 +30,8 @@ export default function ChatCard({chat}) {
         </div>
 
         <div className='chat-card-bottom'>
-            <div className='chat-card-bottom-info'>
                 {chat.lastMessage}
-            </div>
-            </div>
+        </div>
 
     </div>
     <div onClick={handleClick} className="chat-card-mobile">

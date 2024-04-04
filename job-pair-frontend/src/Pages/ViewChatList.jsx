@@ -55,8 +55,8 @@ export default function ViewChatList() {
         
     }, []);
   return (
-    <div>
-        <h1 className='chat-list-header'>Conversations</h1>
+    <div className='chat-list-container'>
+        <h1>Conversations</h1>
         <div className='chat-card-list'>
         {chatList.map((chat) => (
             <ChatCard chat={chat} key={chat.id}/>
