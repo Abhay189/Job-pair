@@ -61,7 +61,30 @@ export default function Jobpage() {
                         applicantsList: [],
                         companyName: 'Google'
 
-                    }
+                    },
+                    {
+                        id: 1,
+                        logoUrl: 'https://banner2.cleanpng.com/20180324/sww/kisspng-google-logo-g-suite-chrome-5ab6e618b3b2c3.5810634915219358967361.jpg', 
+                        title: 'Entry Level - Software Developer',
+                        location: 'Calgary, Alberta / Remote',
+                        applicants: 129,
+                        postingDate: '2024-01-10',
+                        applicantsList: [],
+                        companyName: 'Google'
+
+                    },
+                    {
+                        id: 1,
+                        logoUrl: 'https://banner2.cleanpng.com/20180324/sww/kisspng-google-logo-g-suite-chrome-5ab6e618b3b2c3.5810634915219358967361.jpg', 
+                        title: 'Entry Level - Software Developer',
+                        location: 'Calgary, Alberta / Remote',
+                        applicants: 129,
+                        postingDate: '2024-01-10',
+                        applicantsList: [],
+                        companyName: 'Google'
+
+                    },
+                    
                 ])
             }
         };
@@ -94,7 +117,7 @@ export default function Jobpage() {
         <>
         <div className="jobs-container">
 
-            <h1 style={{ fontWeight: 'bold', fontSize: '50px', textAlign: 'center', marginBottom: '35px', paddingTop: `70px` }}>Jobs</h1>
+            <h1>Jobs</h1>
             <div className="job-main-content-wrapper">
 
 
@@ -120,36 +143,23 @@ export default function Jobpage() {
                 </div>
             </div>
 
-           
-
-
-        </div>
-
-<div className="job-mobile-container">
-<div>
-        <Filter></Filter>
-    </div>
-    <div className="job-right-div-mobile">
-        <div className="jobs-body-mobile">
-            {jobs?.map((job) => {
-                return (
-                    <JobCard job={job} userType={userType}></JobCard>
-
-                );
-            })}
-        </div>
-        {userType === 'recruiter' &&
-            <div className="create-job-button-wrapper">
-                <Button size="lg" variant="primary" onClick={createJob}>
-                    Create Job
-                </Button>
+            <div className="job-mobile-container">
+                <div className="jobs-body-mobile">
+                    {jobs?.map((job) => {
+                        return (
+                            <JobCard job={job} userType={userType}></JobCard>
+                        );
+                    })}
+                </div>
+                {userType === 'recruiters' &&
+                    <div className="create-job-button-wrapper">
+                        <Button size="lg" variant="primary" onClick={createJob}>
+                            Create Job
+                        </Button>
+                    </div>
+                }
             </div>
-
-        }
-    </div>
-
-
-    </div>
+        </div>
     </>
     );
 }

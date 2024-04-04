@@ -178,6 +178,18 @@ const defaultImageUrl = process.env.PUBLIC_URL + '/defaultprofile.jpg';
           />
         </Form.Group>
 
+        <Form.Group className='mb-2' controlId="formPhoneNumber">
+       <div>  <Form.Label>Phone Number</Form.Label> </div> 
+          <Form.Control
+            type="tel"
+            pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+            name="phoneNumber"
+            value={formInput.phoneNumber}
+            onChange={handleChange}
+            placeholder="123-456-7890"
+          />
+        </Form.Group>
+
         <Form.Group className='mb-2' controlId="formPassword">
          <div> <Form.Label>Password</Form.Label> </div>
           <Form.Control
@@ -185,7 +197,7 @@ const defaultImageUrl = process.env.PUBLIC_URL + '/defaultprofile.jpg';
             name="password"
             value={formInput.password}
             onChange={handleChange}
-            placeholder=""
+            placeholder="********"
           />
         </Form.Group>
 
@@ -211,20 +223,6 @@ const defaultImageUrl = process.env.PUBLIC_URL + '/defaultprofile.jpg';
             as="textarea" rows={3}
           />
         </Form.Group>
-
-      
-        <Form.Group className='mb-2' controlId="formPhoneNumber">
-       <div>  <Form.Label>Phone Number</Form.Label> </div> 
-          <Form.Control
-            type="tel"
-            pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
-            name="phoneNumber"
-            value={formInput.phoneNumber}
-            onChange={handleChange}
-            placeholder="123-456-7890"
-          />
-        </Form.Group>
-    
         
       <Button id='small-screen-button' form='userform' className='mt-5' size="lg" variant="primary" type="submit">
           Update

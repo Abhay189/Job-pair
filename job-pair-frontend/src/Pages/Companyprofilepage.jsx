@@ -37,8 +37,9 @@ export default function Companyprofilepage() {
 
   return (
     <div className='main-container'>
+      <h1>Profile</h1>
         <div className='profile-container'>
-            <h1>Profile</h1>
+            
             <Companyprofilepageform company={company}/>
         </div>
 

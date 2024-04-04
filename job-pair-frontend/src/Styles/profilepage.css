@@ -5,7 +5,6 @@
   justify-content: flex-start;
   align-items: center;
   padding: 100px 0px 30px 0px;
-  gap: 100px;
 }
 
 
@@ -51,7 +50,7 @@
     height: auto;
     resize: vertical;
   }
-  .profile-container h1 {
+  .main-container h1 {
     font-size: 4em;
     text-align: center;
     margin-bottom: 20px;
