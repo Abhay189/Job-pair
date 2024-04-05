@@ -15,8 +15,13 @@ function JobCard({ job, userType,deleteJobFunction }) {
   }
 
   const editJob = () => {
+    debugger;
     navigate('/editJob/' + job.id)
 
+  }
+
+  const viewApplicants = () => {
+    navigate('/applicants/' + job.id)
   }
 
   // use effect print user type every time it changes 
@@ -27,7 +32,7 @@ function JobCard({ job, userType,deleteJobFunction }) {
   return (
     <>
     
-    <div onClick={sendToApplication} className="job-card">
+    <div className="job-card">
       <div className="job-card-body">
         {(userType === 'recruiters' || userType === 'admins') &&
           <div className='job-card-buttons'>
@@ -38,6 +43,9 @@ function JobCard({ job, userType,deleteJobFunction }) {
             <Button size="lg" variant="primary" onClick={editJob}>
               Edit
             </Button>
+            <Button size="lg" variant="primary" onClick={viewApplicants}>
+              Applicants
+            </Button>
 
           </div>
         }
@@ -47,11 +55,11 @@ function JobCard({ job, userType,deleteJobFunction }) {
           <img src={job.logoUrl} alt="Company Logo" className="company-logo" />
         }
 
-        <h3>{job.title}</h3>
-        <p>{job.location}</p>
-        <p>{job.companyName}</p>
+        <h3>{job.job_title}</h3>
+        <p>{job.job_location}</p>
+        <p>{job.company}</p>
         <p>{job.applicants} Applicants</p>
-        <p>Posting date: {job.postingDate}</p>
+        <p>Posting date: {job.posting_date}</p>
       </div>
     </div>
     </>

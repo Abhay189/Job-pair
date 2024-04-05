@@ -92,7 +92,10 @@ function CreateJobPage() {
     company: jobDetails.company,
     technical_skills: jobDetails.technicalSkills,
     deadline: jobDetails.deadline,
-    job_description: jobDetails.jobDescription}
+    job_description: jobDetails.jobDescription,
+    recruiter_id: localStorage.getItem('id'),
+  
+  }
     if(id) {
       const response = await Axios.put('http://127.0.0.1:5000/update-job', {
         
@@ -115,7 +118,7 @@ function CreateJobPage() {
         company: '',
         technicalSkills: '',
         deadline: '',
-        jobDescription: ''
+        jobDescription: '',
       });
     } else {
       const response = await Axios.post('http://127.0.0.1:5000/create_job', {...formObj},  {

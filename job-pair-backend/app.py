@@ -1,3 +1,4 @@
+from datetime import datetime, date
 import threading
 # from moviepy.editor import VideoFileClip, AudioFileClip
 from flask import Flask, request, jsonify
@@ -133,6 +134,7 @@ def create_job():
         recruiter_id = request.form.get('recruiter_id')
         questions_csv = request.form.get('questions')
         questions = questions_csv.split(',') if questions_csv else []
+        posting_date = datetime.datetime.now().strftime("%Y-%m-%d")
 
         # Create a new job document in the 'jobs' collection
         job_data = {
@@ -144,7 +146,9 @@ def create_job():
             'deadline': deadline,
             'job_description': job_description,
             'company_logo_url': company_logo_url,
-            'questions': questions
+            'questions': questions,
+            'posting_date': posting_date,
+            'applicants': 0
         }
 
         # Retrieve all jobs to determine the new job's ID
@@ -159,7 +163,7 @@ def create_job():
         # If recruiter_id is provided, update the recruiter's document
         if recruiter_id:
             # Find the recruiter's document by 'id' field
-            recruiters_query = db.collection('recruiters').where('id', '==', int(recruiter_id)).limit(1)
+            recruiters_query = db.collection('recruiters').where('id', '==', recruiter_id).limit(1)
             recruiters_docs = recruiters_query.stream()
             
             recruiter_doc = next(recruiters_docs, None)
@@ -211,6 +215,11 @@ def get_all_jobs_brief():
 
     return jsonify(result)
 
+
+#firebase only allows in clause to have 10 items at a time, so divide list into chunks of 10
+def divide_into_chunks_of_10(l):
+    for i in range(0, len(l), 10):
+        yield l[i:i + 10]
 #Fixed
 @app.route('/get_all_jobs', methods=['GET'])
 def get_all_jobs():
@@ -233,14 +242,18 @@ def get_all_jobs():
 
         identifier_int = int(identifier)
         recruiters = db.collection('recruiters').where('id', '==', identifier_int).limit(1).get()
+        job_ids_chunks = []
         for recruiter in recruiters:
-            recruiter_data = recruiter.to_dict()
-            company_name = recruiter_data.get('company')
-
-            # Assuming company_name exists and is valid, find jobs associated with this company
-            jobs = db.collection('jobs').where('company', '==', company_name).get()
-            result = [job.to_dict() for job in jobs]
-            return jsonify(result), 200
+            job_ids = recruiter.to_dict().get('my_job_ids', [])
+            job_ids_chunks = list(divide_into_chunks_of_10(job_ids))
+        jobs = []
+        for chunk in job_ids_chunks:
+            jobs_query = db.collection('jobs').where('id', 'in', chunk).stream()
+            for job in jobs_query:
+                jobs.append(job.to_dict())
+                
+            
+            return jsonify(jobs), 200
 
         # If no recruiters were found or loop didn't return, indicate recruiter was not found
         return jsonify({'error': 'Recruiter not found.'}), 404
@@ -349,6 +362,15 @@ def submit_application():
             'job_id': data.get('job_id'),
             'job_title': data.get('job_title')
         }
+
+        
+        job_id = data.get('job_id')
+        job_query = db.collection('jobs').where('id', '==', job_id).limit(1).get()
+        if not job_query: 
+            return jsonify({'error': 'Job not found'}), 404
+        job_doc_ref = job_query[0].reference 
+        job_doc_ref.update({'applicants': firestore.Increment(1)})
+
 
         # Find the seeker using his id since it's not the key of his document but is unique
         seeker_query = db.collection('seekers').where('id', '==', seeker_id).limit(1).get()
@@ -509,8 +531,7 @@ def get_user():
         return jsonify({'error': str(e)}), 500
     
 
-if __name__ == '__main__':
-    app.run(debug=True)
+
 
 @app.route('/update_job_status', methods=['POST'])
 def update_job_status():
@@ -668,6 +689,157 @@ def delete_job(job_id):
         return jsonify({"error": "No matching jobs found"}), 404
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
+
+
+@app.route('/create-chat', methods=['POST'])
+def create_chat():
+    data = request.json
+    recruiter_id = data.get('user_id')
+    seeker_id = data.get('recipient_id')
+
+    if not recruiter_id or not seeker_id:
+        return jsonify({"error": "Missing user ID or recipient ID"}), 400
+
+    try:
+        recruiters_query = db.collection('recruiters').where('id', '==', recruiter_id).limit(1).stream()
+        seekers_query = db.collection('seekers').where('id', '==', seeker_id).limit(1).stream()
+
+        recruiter_name, seeker_name = None, None
+        for recruiter in recruiters_query:
+            recruiter_name = recruiter.to_dict().get('name')
+        for seeker in seekers_query:
+            seeker_name = seeker.to_dict().get('name')
+
+        if not recruiter_name or not seeker_name:
+            return jsonify({"error": "Recruiter or Seeker not found"}), 404
+
+        
+        chat_data = {
+            'recruiter_id': recruiter_id,
+            'seeker_id': seeker_id,
+            'recruiter_name': recruiter_name,
+            'seeker_name': seeker_name,
+            'messages': [],
+            'date': datetime.utcnow().isoformat()
+        }
+
+        chat_ref = db.collection('chats').add(chat_data)
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500    
+
+    return jsonify({"success": "Chat created successfully", "chat_id": chat_ref[1].id}), 201
+
+
+@app.route('/get-messages', methods=['GET'])
+def get_messages():
+    chat_id = request.args.get('chat_id')
+    user_id = request.args.get('user_id')
+
+    if not chat_id:
+        return jsonify({"error": "Missing chat ID"}), 400
+
+    try:
+        chat_ref = db.collection('chats').document(chat_id)
+
+        chat_doc = chat_ref.get()
+
+        if chat_doc.exists:
+            chat_data = chat_doc.to_dict()
+            messages = chat_data.get('messages', [])
+            ret_val = {
+                'messages': messages,
+                'recruiterName': chat_data.get('recruiter_name'),
+                'seekerName': chat_data.get('seeker_name'),
+            }
+            return jsonify(ret_val), 200
+        else:
+            return jsonify({"error": "Chat not found"}), 404
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+
+
+@app.route('/get-chats', methods=['GET'])
+def get_chats():
+    user_id = request.args.get('user_id')
+    user_type = request.args.get('user_type')
+
+    if not user_id or not user_type:
+        return jsonify({"error": "Missing user ID or user type"}), 400
+
+    try:
+        user_field = 'recruiter_id' if user_type == 'recruiters' else 'seeker_id'
+        chats_query = db.collection('chats').where(user_field, '==', user_id).stream()
+
+        chats = []
+        for chat in chats_query:
+            chat_dict = chat.to_dict()
+            last_message = chat_dict['messages'][-1]['message'] if chat_dict.get('messages') else ""
+            sender = chat_dict.get('seeker_name') if user_type == 'recruiters' else chat_dict.get('seeker_name')
+            chats.append({
+                'recruiter_id': chat_dict.get('recruiter_id'),
+                'seeker_id': chat_dict.get('seeker_id'),
+                'lastMessage': last_message,
+                'sender': sender,
+                'date': chat_dict.get('date'),
+                'id': chat.id,
+            })
+
+        return jsonify(chats), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+
+
+@app.route('/add-message', methods=['POST'])
+def add_message():
+    data = request.json
+    chat_id = data.get('chat_id')
+    sender_id = data.get('sender_id')
+    message_text = data.get('message')
+    time = data.get('time')
+    date = data.get('date')
+
+    if not chat_id or not sender_id or message_text is None or time is None or date is None: 
+        return jsonify({"error": "Missing required parameters"}), 400
+
+    try:
+        chat_ref = db.collection('chats').document(chat_id)
+        chat = chat_ref.get()
+
+        if not chat.exists:
+            return jsonify({"error": "Chat not found"}), 404
+
+        # construct the new message with current time and date
+        new_message = {
+            'sender_id': sender_id,
+            'message': message_text,
+            'time': time,
+            'date': date
+        }
+
+        # add the new message to the 'messages' array
+        chat_ref.update({'messages': firestore.ArrayUnion([new_message])})
+
+        return jsonify({"success": "Message added successfully"}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+
+
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+
 
 # @app.route('/test', methods=['GET'])
 # def test():
