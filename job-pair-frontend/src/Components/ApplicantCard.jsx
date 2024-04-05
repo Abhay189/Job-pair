@@ -5,13 +5,25 @@ import { Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar as farStar } from '@fortawesome/free-regular-svg-icons';
 import { faStar as fasStar } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 function ApplicantCard({ applicant }) {
+  const navigate = useNavigate();
   const [isStarFilled, setIsStarFilled] = useState(false);
 
-  const chatNow = () => {
-    console.log('Chat Now')
+  const chatNow = async () => {
+    try {
+      const response = await axios.post('http://127.0.0.1:5000/create-chat', {
+        user_id: localStorage.getItem('id'),
+        recipient_id: applicant.id,
+      });
+      console.log(response.data);
+      navigate(`/chat/${response.data.chat_id}`);
+    } catch (error) {
+      console.error('Error creating chat:', error);
+    }
+};
 
-  }
   const sendInterview = () => {
     console.log('Interview Sent')
 

@@ -5,43 +5,25 @@ import '../Styles/ChatList.css';
 
 export default function ViewChatList() {
     const [chatList, setChatList] = useState([]);
-    const baseUrl = 'http://127.0.0.1:5000/'
+    const baseUrl = 'http://127.0.0.1:5000'
     useEffect(() => {
-
-        async function fetchData() {
-            const params = {
-                id: localStorage.getItem('id')
-            }
-            try{
-            const response = await axios.get(baseUrl + '/get_chat_list', { params });
+        const fetchChats = async () => {
+          try {
+            const userId = localStorage.getItem('id'); 
+            const userType = localStorage.getItem('userType');
+            
+    
+            const response = await axios.get('http://127.0.0.1:5000/get-chats', { params: { user_id: userId,user_type:userType } });
             setChatList(response.data);
-            }
-            catch (error) {
-                setChatList([
-                    {
-                        id: 1,
-                        sender: 'Sender',
-                        date: '01/01/2021',
-                        unreadMessages: 0,
-                        lastMessage: 'Last message'
-                    },
-                    {
-                        id: 2,
-                        sender: 'Sender2',
-                        date: '01/09/2021',
-                        unreadMessages: 0,
-                        lastMessage: 'Last message2'
-                    }
-
-                ]);
-                console.error(error);
-            }
-        }
-
-        fetchData();
-        
-        
-    }, []);
+          } catch (err) {
+            console.error('Error fetching chats:', err);
+          }
+        };
+    
+        fetchChats();
+      }, []); // The empty array ensures this effect runs only once after the initial render
+    
+      
   return (
     <div>
         <h1 className='chat-list-header'>Conversations</h1>

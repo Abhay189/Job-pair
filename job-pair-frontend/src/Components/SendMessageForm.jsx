@@ -16,7 +16,7 @@ export function SendMessageForm ({ sendMessage }) {
     };
 
     const sendChat = (message) => {
-        console.log("Chat message sent:", message);
+        sendMessage(message);
     };
     return (
       <div className='send-message-container'>

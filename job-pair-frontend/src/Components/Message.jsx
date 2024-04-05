@@ -1,7 +1,7 @@
 import React from 'react'
 
 export function Message ({ text, date, time, isUser }) {
-    const messageClass = isUser ? 'user' : 'other';
+    const messageClass = !isUser ? 'user' : 'other';
     console.log('Message:', text, date, time, isUser);
     return (
       <div className={`message ${messageClass}`}>

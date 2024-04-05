@@ -5,8 +5,10 @@ import { Badge} from 'react-bootstrap';
 export default function ChatCard({chat}) {
     const navigate = useNavigate();
     const handleClick = () => {
-        navigate('/chats/' + chat.id);
+        navigate('/chat/' + chat.id);
     }
+
+    
 
 
 

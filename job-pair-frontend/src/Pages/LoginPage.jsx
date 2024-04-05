@@ -31,8 +31,8 @@ const LoginPage = () => {
         console.log(response.data);
         setId(response.data.user_data.id);
       
-        localStorage.setItem('id', id);
-        localStorage.setItem('usertype', userType);
+        localStorage.setItem('id', response.data.user_data.id);
+        localStorage.setItem('userType', userType);
 
         navigate('/viewJobs');
     

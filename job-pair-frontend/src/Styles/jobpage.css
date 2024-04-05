@@ -138,3 +138,8 @@
   }
 
 }
+
+.job-card-buttons button {
+  width: 4.5em;
+  padding: 2em;
+}

@@ -5,13 +5,13 @@ import '../Styles/ChatPage.css';
 import { SendMessageForm } from '../Components/SendMessageForm';
 import { useParams } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
-const baseUrl = 'http://127.0.0.1:5000/';
+const baseUrl = 'http://127.0.0.1:5000';
 
 
 
 const ChatPage = () => {
   const [messages, setMessages] = useState([]);
-  let { threadIndex } = useParams();
+  let { id} = useParams();
   
   const [otherUsername, setOtherUsername] = useState('Test user');
 
@@ -31,25 +31,35 @@ const ChatPage = () => {
 
     const fetchMessages = async () => {
 
-    const id = localStorage.getItem('id');
+    const userId = localStorage.getItem('id');
     const userType = localStorage.getItem('userType');
 
     
 
     try{
-    const response = await axios.get(baseUrl + '/get_messages', {
-     params:{ username: id,
-      index: threadIndex
+    const response = await axios.get(baseUrl + '/get-messages', {
+     params:{ user_id: userId,
+      chat_id: id
      }
     });
 
     console.log('Messages:', response.data);
-    response.data.map(msg => ({
+    const received = response.data.messages.map(msg => ({
       text: msg.message,
       date: msg.date,
       time: msg.time,
-      isUser: msg.sender === id 
+      isUser: msg.sender_id == userId 
     }));
+    console.log('Received messages:', received);
+    debugger;
+    console.log("user id is", userId)
+    setMessages(received);
+    if(userType === 'seekers'){
+      setOtherUsername(response.data.recruiterName)
+    }
+    else if(userType === 'recruiters'){
+      setOtherUsername(response.data.seekerName)
+    }
   }
   catch (error) {
     console.error('Error fetching messages:', error);
@@ -84,12 +94,12 @@ const ChatPage = () => {
       }
     
     ]
-    console.log("user id is", id) 
+    console.log("user id is", userId) 
       const initialMessages = selectedMessages.map(msg => ({
         text: msg.text,
         date: msg.date,
         time: msg.time,
-        isUser: msg.sender == id
+        isUser: msg.sender_id == userId
       }));
       setMessages(initialMessages);
     
@@ -104,20 +114,24 @@ const ChatPage = () => {
 
   const sendChat = async (chatMessage) => {
     if (chatMessage.trim() !== '') {
-      const id = localStorage.getItem('id');
+      const userId = localStorage.getItem('id');
       const currentDate = new Date();
       const formattedDate = currentDate.toLocaleDateString(); // Format as 'MM/DD/YYYY'
       const formattedTime = currentDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // Format as 'HH:MM AM/PM'
 
-      setMessages(prevMessages => [...prevMessages, { text: chatMessage, date: formattedDate, time: formattedTime, isUser: true }]);
+     
       
       try {
-        const response = await axios.post(baseUrl +'/add_message', {
-          username: id,
-          index: threadIndex,
+        const response = await axios.post(baseUrl +'/add-message', {
+          chat_id: id,
           message: chatMessage,
-          sender: id
+          sender_id: userId,
+          date: formattedDate,
+          time: formattedTime
         });
+        debugger;
+        setMessages(prevMessages => [...prevMessages, { text: chatMessage, date: formattedDate, time: formattedTime, isUser: true}]);
+        console.log('Message sent to server:', messages);
 
         console.log('Message sent to server:', response.data);
       } catch (error) {
@@ -141,7 +155,7 @@ const ChatPage = () => {
         ))}
       </div>
      
-          <SendMessageForm sendChat={sendChat} />
+          <SendMessageForm sendMessage={sendChat} />
 
          
      
