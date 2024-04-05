@@ -363,6 +363,15 @@ def submit_application():
             'job_title': data.get('job_title')
         }
 
+        
+        job_id = data.get('job_id')
+        job_query = db.collection('jobs').where('id', '==', job_id).limit(1).get()
+        if not job_query: 
+            return jsonify({'error': 'Job not found'}), 404
+        job_doc_ref = job_query[0].reference 
+        job_doc_ref.update({'applicants': firestore.Increment(1)})
+
+
         # Find the seeker using his id since it's not the key of his document but is unique
         seeker_query = db.collection('seekers').where('id', '==', seeker_id).limit(1).get()
 
