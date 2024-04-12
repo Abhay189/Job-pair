@@ -49,6 +49,13 @@ const ChatPage = () => {
     
 
     try{
+    if (userType === 'admins') {
+      const response = await axios.get(baseUrl + '/get-messages', {
+        params:{ user_id: userId,
+         chat_id: id
+        }
+       });
+    }
     const response = await axios.get(baseUrl + '/get-messages', {
      params:{ user_id: userId,
       chat_id: id

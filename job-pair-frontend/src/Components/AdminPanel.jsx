@@ -1,85 +1,105 @@
-import React, { useState } from 'react';
-import '../Styles/AdminPanel.css'; // Import the separate CSS file
+import React, { Component } from 'react';
+import axios from 'axios';
 import Dropdown from 'react-bootstrap/Dropdown';
+import '../Styles/AdminPanel.css'; // Import the separate CSS file
 
-const flaggedConversations = [
-  { id: 1, companyLogo: "https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg", user: 'James Halpert', reason: 'Message Overflow', date: '10 Sept 2024' },
-  { id: 2, companyLogo: "https://upload.wikimedia.org/wikipedia/commons/6/6f/Logo_of_Twitter.svg", user: 'Victoria Kazakis', reason: 'Message Overflow', date: '21 Nov 2024' },
-  { id: 3, companyLogo: "https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg", user: 'Jakob Soto', reason: 'Message Overflow', date: '1 Jan 2023' },
-];
+class AdminPanel extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      openDropdownId: null,
+      chatList: [],
+    };
+  }
 
-const AdminPanel = () => {
-  const [openDropdownId, setOpenDropdownId] = useState(null);
+  componentDidMount() {
+    this.fetchData();
+  }
 
-  const toggleDropdown = (conversationId) => {
-    setOpenDropdownId(openDropdownId === conversationId ? null : conversationId);
+  fetchData = async () => {
+    try {
+      const response = await axios.get('http://127.0.0.1:5000/get-chats-admin', { params: { user_type: 'admins' } });
+      this.setState({ chatList: response.data });
+    } catch (error) {
+      console.error('Error fetching flagged conversations:', error);
+    }
   };
 
-  const handleOptionSelect = (conversationId, action) => {
+  toggleDropdown = (conversationId) => {
+    this.setState((prevState) => ({
+      openDropdownId: prevState.openDropdownId === conversationId ? null : conversationId,
+    }));
+  };
+
+  handleOptionSelect = (conversationId, action) => {
     // Perform action based on the selected option
     if (action === 'delete') {
-      deleteConversation(conversationId);
+      this.deleteConversation(conversationId);
     } else if (action === 'resolve') {
-      resolveConversation(conversationId);
+      this.resolveConversation(conversationId);
     }
     // After performing the action, you might want to hide the dropdown
-    setOpenDropdownId(null);
+    this.setState({ openDropdownId: null });
   };
 
-  const deleteConversation = (conversationId) => {
+  deleteConversation = (conversationId) => {
     // Implement delete logic here
     console.log(`Deleting conversation with ID ${conversationId}`);
   };
 
-  const resolveConversation = (conversationId) => {
+  resolveConversation = (conversationId) => {
     // Implement resolve logic here
     console.log(`Resolving conversation with ID ${conversationId}`);
   };
 
-  return (
-    <div className="admin-panel">
-      <main className="main">
-        <h1 className="title">Flagged Conversations (Admin)</h1>
-        <table className="table">
-          <thead>
-            <tr>
-              <th>Company</th>
-              <th>User</th>
-              <th>Flagging Reason</th>
-              <th>Date</th>
-              <th></th> {/* For the options button */}
-            </tr>
-          </thead>
-          <tbody>
-            {flaggedConversations.map((conversation) => (
-              <tr key={conversation.id}>
-                <td className="logo-cell">
-                  <img 
-                    src={conversation.companyLogo} 
-                    alt={`${conversation.company} logo`} 
-                    className="company-logo"
-                  />
-                </td>
-                <td>{conversation.user}</td>
-                <td>{conversation.reason}</td>
-                <td>{conversation.date}</td>
-                <td className="options" style={{ position: 'relative' }}>
-                  <Dropdown>
-                    <Dropdown.Toggle>
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu>
-                      <Dropdown.Item onClick={() => handleOptionSelect(conversation.id, 'delete')}>Delete</Dropdown.Item>
-                      <Dropdown.Item onClick={() => handleOptionSelect(conversation.id, 'resolve')}>Resolve</Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </td>
+  render() {
+    const { chatList, openDropdownId } = this.state;
+
+    return (
+      <div className="admin-panel">
+        <main className="main">
+          <h1 className="title">Flagged Conversations (Admin)</h1>
+          <table className="table">
+            <thead>
+              <tr>
+                <th>Company</th>
+                <th>User</th>
+                <th>Flagging Reason</th>
+                <th>Date</th>
+                <th></th> {/* For the options button */}
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </main>
-    </div>
-  );
-};
+            </thead>
+            <tbody>
+              {chatList.map((conversation) => (
+                <tr key={conversation.id}>
+                  <td className="logo-cell">
+                    <img 
+                      src={conversation.companyLogo} 
+                      alt={`${conversation.company} logo`} 
+                      className="company-logo"
+                    />
+                  </td>
+                  <td>{conversation.sender}</td>
+                  <td>{conversation.flaggedReason}</td>
+                  <td>{conversation.date}</td>
+                  <td className="options" style={{ position: 'relative' }}>
+                    <Dropdown>
+                      <Dropdown.Toggle>
+                      </Dropdown.Toggle>
+                      <Dropdown.Menu>
+                        <Dropdown.Item onClick={() => this.handleOptionSelect(conversation.id, 'delete')}>Delete</Dropdown.Item>
+                        <Dropdown.Item onClick={() => this.handleOptionSelect(conversation.id, 'resolve')}>Resolve</Dropdown.Item>
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </main>
+      </div>
+    );
+  }
+}
 
 export default AdminPanel;

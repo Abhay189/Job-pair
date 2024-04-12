@@ -721,7 +721,9 @@ def create_chat():
             'recruiter_name': recruiter_name,
             'seeker_name': seeker_name,
             'messages': [],
-            'date': datetime.utcnow().isoformat()
+            'date': datetime.utcnow().isoformat(),
+            'flagged': False,
+            'deleted': False
         }
 
         chat_ref = db.collection('chats').add(chat_data)
@@ -755,6 +757,8 @@ def get_messages():
             }
             return jsonify(ret_val), 200
         else:
+            if chat_doc.get('deleted'):
+                return jsonify({"error": "Chat has been deleted"}), 404
             return jsonify({"error": "Chat not found"}), 404
 
     except Exception as e:
@@ -786,6 +790,41 @@ def get_chats():
                 'sender': sender,
                 'date': chat_dict.get('date'),
                 'id': chat.id,
+                'deleted': chat_dict.get('deleted'),
+                'flagged': chat_dict.get('flagged')
+            })
+
+        return jsonify(chats), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+
+@app.route('/get-chats-admin', methods=['GET'])
+def get_chats_admin():
+    user_type = request.args.get('user_type')
+
+    # Check if the user is an admin
+    # if user_type != 'admin':
+    #     return jsonify({"error": "Unauthorized access"}), 403
+
+    try:
+        chats_query = db.collection('chats').where('flagged', '==', True).stream()
+
+        chats = []
+        for chat in chats_query:
+            chat_dict = chat.to_dict()
+            last_message = chat_dict['messages'][-1]['message'] if chat_dict.get('messages') else ""
+            sender = chat_dict.get('seeker_name') if 'recruiter_id' in chat_dict else chat_dict.get('recruiter_name')
+            chats.append({
+                'recruiter_id': chat_dict.get('recruiter_id'),
+                'seeker_id': chat_dict.get('seeker_id'),
+                'lastMessage': last_message,
+                'sender': sender,
+                'date': chat_dict.get('date'),
+                'id': chat.id,
+                'deleted': chat_dict.get('deleted'),
+                'flagged': chat_dict.get('flagged')
             })
 
         return jsonify(chats), 200

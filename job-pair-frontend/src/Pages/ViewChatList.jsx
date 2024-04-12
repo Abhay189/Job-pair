@@ -24,9 +24,15 @@ export default function ViewChatList() {
             const userId = localStorage.getItem('id'); 
             const userType = localStorage.getItem('userType');
             
-    
-            const response = await axios.get('http://127.0.0.1:5000/get-chats', { params: { user_id: userId,user_type:userType } });
-            setChatList(response.data);
+            if (userType == 'admins') {
+              const response = await axios.get('http://127.0.0.1:5000/get-chats-admin', { params: { user_id: userId,user_type:userType } });
+              setChatList(response.data);
+            }
+            else{
+              const response = await axios.get('http://127.0.0.1:5000/get-chats', { params: { user_id: userId,user_type:userType } });
+              setChatList(response.data);
+            }
+              
           } catch (err) {
             console.error('Error fetching chats:', err);
           }
