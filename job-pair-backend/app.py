@@ -350,8 +350,8 @@ def update_job_answer():
 def get_job_answer():
     try:
         # Get data from the request
-        user_id = request.args.get('user_id')
-        job_id = request.args.get('job_id')
+        user_id = int(request.args.get('user_id'))
+        job_id = int(request.args.get('job_id'))
 
         # Validate required fields
         if not user_id or not job_id:

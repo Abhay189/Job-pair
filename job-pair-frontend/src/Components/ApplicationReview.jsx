@@ -29,7 +29,7 @@ export default function ApplicationReview() {
 
   // const param1 = localStorage.getItem("ApplicationReviewTitle");
   const param1 = "Financial Analyst"
-  const [jobName, setJobName] = useState(param1);
+  const [jobName, setJobName] = useState("");
   const [jobDescription, setJobDescription] = useState("");
   const [questions, setQuestions] = useState([]);
   const [responses, setResponses] = useState([]);
@@ -43,34 +43,37 @@ export default function ApplicationReview() {
   };
 
   useEffect(() => {
-    const url = `http://127.0.0.1:5002/get_all_jobs?id=${id}&userType=seekers`;  // Use the id in your API request
-    Axios.get(url, {})
+    const jobUrl = `http://127.0.0.1:5002/get_all_jobs?id=${id}&userType=seekers`;  // URL to get job details
+  
+    Axios.get(jobUrl, {})
       .then((res) => {
         const jsonData = res.data;
-        console.log("Fetched data:", jsonData);  // Log the entire fetched data
+        console.log("Fetched data:", jsonData);
   
         if (jsonData.length > 0) {
-          // Find the job by id
           const jobData = jsonData.find(item => item.id === Number(11));
           if (jobData) {
-            console.log("Job data found:", jobData);  // Log the found job data
+            console.log("Job data found:", jobData);
             setJobDescription(jobData.Description);
             setJobName(jobData.Title);
             setQuestions(jobData.Questions);
-            setResponses(jobData.Answers);
   
-            // Logging the states after setting them might not reflect the updates immediately due to the async nature of setState
-            console.log("Job Description Set:", jobData.Description);  // Log the job description
-            console.log("Job Name Set:", jobData.Title);  // Log the job title
-            console.log("Questions Set:", jobData.Questions);  // Log the questions
-            console.log("Responses Set:", jobData.Answers);  // Log the responses
+            // Fetch responses for the job using another endpoint
+            const answersUrl = `http://127.0.0.1:5002/get_job_answer?job_id=11&user_id=1`;  // Include user ID as needed
+            return Axios.get(answersUrl);  // Return the promise for chaining
           } else {
             console.error(`Job with id ${id} not found in jsonData`);
           }
         }
       })
+      .then((response) => {
+        if (response && response.data) {
+          console.log("Responses fetched:", response.data);
+          setResponses(response.data.answers);  // Assuming the endpoint returns an object with an 'answers' key
+        }
+      })
       .catch((error) => {
-        console.error("Error fetching job description:", error);
+        console.error("Error fetching job responses:", error);
       });
   }, [id]);  // Only id is needed as a dependency now, as we are no longer using jobName
   
