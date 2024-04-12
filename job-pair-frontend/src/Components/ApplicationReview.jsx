@@ -33,14 +33,15 @@ export default function ApplicationReview() {
         const jsonData = res.data;
   
         if (jsonData.length > 0) {
-          const jobData = jsonData.find(item => item.id === Number(11));
+          const jobData = jsonData.find(item => item.id === Number(id));
           if (jobData) {
             setJobDescription(jobData.Description);
             setJobName(jobData.title);
             setQuestions(jobData.Questions);
   
-            const answersUrl = `http://127.0.0.1:5002/get_job_answer?job_id=11&user_id=1`;
-            return Axios.get(answersUrl);
+            // Fetch responses for the job using another endpoint
+            const answersUrl = `http://127.0.0.1:5002/get_job_answer?job_id=${id}&user_id=1`;  // Include user ID as needed
+            return Axios.get(answersUrl);  // Return the promise for chaining
           } else {
             console.error(`Job with id ${id} not found in jsonData`);
           }
