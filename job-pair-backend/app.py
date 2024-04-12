@@ -139,15 +139,15 @@ def create_job():
 
         # Create a new job document in the 'jobs' collection
         job_data = {
-            'job_title': job_title,
-            'job_location': job_location,
+            'title': job_title,
+            'location': job_location,
             'salary': salary,
             'technical_skills': technical_skills,
             'company': company,
             'deadline': deadline,
-            'job_description': job_description,
-            'company_logo_url': company_logo_url,
-            'questions': questions,
+            'Description': job_description,
+            'logo_url': company_logo_url,
+            'Questions': questions,
             'posting_date': posting_date,
             'applicants': 0
         }
