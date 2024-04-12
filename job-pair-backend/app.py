@@ -225,7 +225,11 @@ def divide_into_chunks_of_10(l):
 @app.route('/get_all_jobs', methods=['GET'])
 def get_all_jobs():
     userType = request.args.get('userType')
-    identifier = request.args.get('id')  # 'id' here is used generically; it could represent different types of identifiers.
+    identifier = int(request.args.get('id'))  # 'id' here is used generically; it could represent different types of identifiers.
+
+    print("user id: ", identifier)
+    print("user type: ", userType)
+    print("user id data type: ", type(identifier))
 
     if userType == 'seekers':
         # Return all jobs for job seekers
@@ -257,7 +261,7 @@ def get_all_jobs():
             return jsonify(jobs), 200
 
         # If no recruiters were found or loop didn't return, indicate recruiter was not found
-        return jsonify({'error': 'Recruiter not found.'}), 404
+        return jsonify({'error': 'No job found for recruiter.'}), 403
     elif userType == 'admins':
         # For admins, return all jobs
         jobs = db.collection('jobs').get()
@@ -446,11 +450,14 @@ def get_enhanced_essay():
         question = request.json.get('question')
         answer = request.json.get('answer')
 
+        print("question: ", question)
+        print("latest answer: ", answer)
+
         # Define the initial conversation
         conversations = [{"role": "system", "content": "You are a helpful assistant who specializes in enhancing users' job essays"}]
 
         # Format user's request message
-        request_message = f"The question asked in my job application is this: {question} My Response is: {answer} Provide just the improved essay in about 100 words)"
+        request_message = f"The question asked in my job application is this: {question} My Response is: {answer} Provide just the improved essay in about 100 words, not this essay can include negative aspects like me being jobless to show character development)"
         request_message_formatted = {'content': request_message, 'role': 'user'}
 
         # Add user's request to the conversation
@@ -824,19 +831,30 @@ def get_messages():
 
 @app.route('/get-chats', methods=['GET'])
 def get_chats():
-    user_id = request.args.get('user_id')
+    user_id = int(request.args.get('user_id'))
     user_type = request.args.get('user_type')
+
+    print("user id: ", user_id)
+    print("user type: ", user_type)
+
 
     if not user_id or not user_type:
         return jsonify({"error": "Missing user ID or user type"}), 400
 
     try:
         user_field = 'recruiter_id' if user_type == 'recruiters' else 'seeker_id'
+
+        print("user field: ", user_field)
+
         chats_query = db.collection('chats').where(user_field, '==', user_id).stream()
+
+        print("chats query: ", chats_query)
 
         chats = []
         for chat in chats_query:
             chat_dict = chat.to_dict()
+            
+            print("Chats dict: ", chat_dict)
             last_message = chat_dict['messages'][-1]['message'] if chat_dict.get('messages') else ""
             sender = chat_dict.get('seeker_name') if user_type == 'recruiters' else chat_dict.get('seeker_name')
             chats.append({
@@ -849,6 +867,8 @@ def get_chats():
                 'deleted': chat_dict.get('deleted'),
                 'flagged': chat_dict.get('flagged')
             })
+
+        print("Chats received: ", chats)
 
         return jsonify(chats), 200
 

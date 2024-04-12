@@ -17,6 +17,8 @@ function ApplicantCard({ applicant }) {
         user_id: localStorage.getItem('id'),
         recipient_id: applicant.id,
       });
+      console.log("recruiter id: ", localStorage.getItem('id'));
+      console.log("seeker id: ", applicant.id);
       console.log(response.data);
       navigate(`/chats`);
     } catch (error) {

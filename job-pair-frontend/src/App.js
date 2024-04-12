@@ -63,6 +63,7 @@ function App() {
       <Route path="/viewJobs" element={<MainLayout><Jobpage /></MainLayout>} />
       <Route path="/setupInfo" element={<SetupInfoPage />} />
       <Route path = "/editJob/:id" element={<CreateJobPage/>} />
+      <Route path="/chat/:id" element={<MainLayout><ChatPage /></MainLayout>} />
       {userType === 'admins' ? (
           <Route path="/chats" element={<MainLayout><AdminPanelPage /></MainLayout>} />
         ) : (
