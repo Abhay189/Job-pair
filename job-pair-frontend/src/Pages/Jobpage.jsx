@@ -42,11 +42,11 @@ export default function Jobpage() {
                 setJobs([
                     {
                         id: 1,
-                        logoUrl: 'https://banner2.cleanpng.com/20180324/sww/kisspng-google-logo-g-suite-chrome-5ab6e618b3b2c3.5810634915219358967361.jpg', 
+                        logo_url: 'https://banner2.cleanpng.com/20180324/sww/kisspng-google-logo-g-suite-chrome-5ab6e618b3b2c3.5810634915219358967361.jpg', 
                         title: 'Entry Level - Software Developer',
                         location: 'Calgary, Alberta / Remote',
                         applicants: 129,
-                        postingDate: '2024-01-10',
+                        posting_date: '2024-01-10',
                         applicantsList: [],
                         companyName: 'Google'
 
@@ -57,7 +57,7 @@ export default function Jobpage() {
                         title: 'Senior Software Developer',
                         location: 'Calgary, Alberta / Remote',
                         applicants: 129,
-                        postingDate: '2024-01-10',
+                        posting_date: '2024-01-10',
                         applicantsList: [],
                         companyName: 'Google'
 
@@ -68,7 +68,7 @@ export default function Jobpage() {
                         title: 'Entry Level - Software Developer',
                         location: 'Calgary, Alberta / Remote',
                         applicants: 129,
-                        postingDate: '2024-01-10',
+                        posting_date: '2024-01-10',
                         applicantsList: [],
                         companyName: 'Google'
 
@@ -79,7 +79,7 @@ export default function Jobpage() {
                         title: 'Entry Level - Software Developer',
                         location: 'Calgary, Alberta / Remote',
                         applicants: 129,
-                        postingDate: '2024-01-10',
+                        posting_date: '2024-01-10',
                         applicantsList: [],
                         companyName: 'Google'
 
