@@ -7,7 +7,9 @@ function JobCard({ job, userType,deleteJobFunction }) {
   const navigate = useNavigate();
   
   const sendToApplication = () => {
-    navigate('/')
+    if(userType === 'seekers'){
+    navigate('/applicationReview/' + job.id)
+    }
   }
 
   const closeJob = () => {
@@ -32,7 +34,7 @@ function JobCard({ job, userType,deleteJobFunction }) {
   return (
     <>
     
-    <div className="job-card">
+    <div className="job-card" onClick={sendToApplication }>
       <div className="job-card-body">
         {(userType === 'recruiters' || userType === 'admins') &&
           <div className='job-card-buttons'>
