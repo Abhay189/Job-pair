@@ -18,7 +18,7 @@ function ApplicantCard({ applicant }) {
         recipient_id: applicant.id,
       });
       console.log(response.data);
-      navigate(`/chat/${response.data.chat_id}`);
+      navigate(`/chats`);
     } catch (error) {
       console.error('Error creating chat:', error);
     }

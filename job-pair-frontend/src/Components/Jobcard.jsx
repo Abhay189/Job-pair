@@ -17,7 +17,6 @@ function JobCard({ job, userType,deleteJobFunction }) {
   }
 
   const editJob = () => {
-    debugger;
     navigate('/editJob/' + job.id)
 
   }

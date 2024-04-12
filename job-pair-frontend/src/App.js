@@ -16,6 +16,7 @@ import LoginPage from './Pages/LoginPage.jsx'
 import SignupPage from './Pages/SignupPage.jsx';
 import ChatPage from './Pages/ChatPage.jsx';
 import ViewChatList from './Pages/ViewChatList.jsx';
+import SetupInfoPage from './Pages/SetupInfoPage.jsx';
 // chat gpt used on this project on some the frontend files to help with styling, react components and html structure
 function App() {
 
@@ -60,6 +61,7 @@ function App() {
       <Route path="/createjob" element={<MainLayout><CreateJobPage /></MainLayout>} />
       <Route path="/tracking" element={<MainLayout><TrackingPage /></MainLayout>} />
       <Route path="/viewJobs" element={<MainLayout><Jobpage /></MainLayout>} />
+      <Route path="/setupInfo" element={<MainLayout><SetupInfoPage /></MainLayout>} />
       <Route path = "/editJob/:id" element={<CreateJobPage/>} />
       {userType === 'admins' ? (
           <Route path="/chats" element={<MainLayout><AdminPanelPage /></MainLayout>} />

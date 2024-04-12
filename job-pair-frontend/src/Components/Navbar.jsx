@@ -30,8 +30,8 @@ const CustomNavbar = () => {
 
   const recruiterButtons = [
     { to: "/viewJobs", text: "Jobs" },
-    { to: "/companyprofile", text: "Company Profile" },
     { to: "/chats", text: "Chats" },
+    { to: "/companyprofile", text: "Company Profile" },
   ];
 
   const seekerButtons = [

@@ -666,6 +666,7 @@ def get_job():
         results = [doc.to_dict() for doc in docs]
         
         if results:
+            print(results)
             return jsonify(results[0]), 200
         else:
             return jsonify({"error": "No records found matching id"}), 404
@@ -742,8 +743,10 @@ def delete_job(job_id):
 @app.route('/create-chat', methods=['POST'])
 def create_chat():
     data = request.json
-    recruiter_id = data.get('user_id')
-    seeker_id = data.get('recipient_id')
+    recruiter_id = int(data.get('user_id'))
+    seeker_id = int(data.get('recipient_id'))
+    print("recruiter: ", recruiter_id)
+    print("seeker: ", seeker_id)
 
     if not recruiter_id or not seeker_id:
         return jsonify({"error": "Missing user ID or recipient ID"}), 400
@@ -757,6 +760,9 @@ def create_chat():
             recruiter_name = recruiter.to_dict().get('name')
         for seeker in seekers_query:
             seeker_name = seeker.to_dict().get('name')
+
+        print(seeker_name)
+        print(recruiter_name)
 
         if not recruiter_name or not seeker_name:
             return jsonify({"error": "Recruiter or Seeker not found"}), 404

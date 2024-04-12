@@ -57,7 +57,7 @@ function CreateJobPage() {
         if (!id) {
           return;
         }
-        const response = await Axios.post('http://127.0.0.1:5002/get-job', { id: id});
+        const response = await Axios.post('http://127.0.0.1:5002/get-job', { id: 3});
         const responseObject = response.data;
         setJobDetails( {
           jobTitle: responseObject.job_title,
