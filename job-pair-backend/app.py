@@ -930,7 +930,7 @@ def add_message():
 def delete_conversation(conversation_id):
     try:
         conversation_ref = db.collection('chats').document(conversation_id)
-        conversation_ref.update({'deleted': True})
+        conversation_ref.delete()
         return jsonify({"success": "Conversation deleted successfully"}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
