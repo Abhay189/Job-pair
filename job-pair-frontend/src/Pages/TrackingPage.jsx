@@ -35,7 +35,7 @@ const TrackingPage = () => {
     // Reloads the current page
     window.location.reload();
     // Redirects to the main page
-    window.location.href = "http://localhost:3000/applicationReview";
+    window.location.href = "http://localhost:3000/applicationReview/1";
   };
 
   const Get_Title_Name = (given_name) => {

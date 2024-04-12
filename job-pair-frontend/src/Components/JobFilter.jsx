@@ -1,5 +1,6 @@
 import React from 'react';
 import '../Styles/jobfilter.css';
+import { Button } from 'react-bootstrap';
 function Filter({ onFilterChange }) {
   return (
     <div className="filter-sidebar desktop">
@@ -24,6 +25,7 @@ function Filter({ onFilterChange }) {
         placeholder="Posting Date"
         onChange={(e) => onFilterChange('date', e.target.value)}
       />
+      <Button>Search</Button>
     </div>
   );
 }
