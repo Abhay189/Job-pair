@@ -27,14 +27,15 @@ firebase_admin.initialize_app(cred)
 
 db=firestore.client()
 
-# # Read the API key from a file
-# with open("APIKEY", "r") as file:
-#     api_key = file.read().strip()
+# Read the API key from a file
+with open("APIKEY", "r") as file:
+    api_key = file.read().strip()
 
-# # Set the API key as an environment variable
-# os.environ["OPENAI_API_KEY"] = api_key
+# Set the API key as an environment variable
+os.environ["OPENAI_API_KEY"] = api_key
 
-# client = OpenAI()
+client = OpenAI()
+
 #chat gpt used in several endpoints in this file to connect to firebase db and process rest api requests
 #Fixed
 @app.route('/signup', methods=['POST'])
@@ -433,36 +434,36 @@ def submit_application():
         return jsonify({'error': str(e)}), 500
 
 
-# @app.route('/get_enhanced_essay', methods=['POST'])
-# def get_enhanced_essay():
-#     try:
-#         # Get question and answer from the request JSON
-#         question = request.json.get('question')
-#         answer = request.json.get('answer')
+@app.route('/get_enhanced_essay', methods=['POST'])
+def get_enhanced_essay():
+    try:
+        # Get question and answer from the request JSON
+        question = request.json.get('question')
+        answer = request.json.get('answer')
 
-#         # Define the initial conversation
-#         conversations = [{"role": "system", "content": "You are a helpful assistant who specializes in enhancing users' job essays"}]
+        # Define the initial conversation
+        conversations = [{"role": "system", "content": "You are a helpful assistant who specializes in enhancing users' job essays"}]
 
-#         # Format user's request message
-#         request_message = f"The question asked in my job application is this: {question} My Response is: {answer} Provide just the improved essay in about 100 words)"
-#         request_message_formatted = {'content': request_message, 'role': 'user'}
+        # Format user's request message
+        request_message = f"The question asked in my job application is this: {question} My Response is: {answer} Provide just the improved essay in about 100 words)"
+        request_message_formatted = {'content': request_message, 'role': 'user'}
 
-#         # Add user's request to the conversation
-#         conversations.append(request_message_formatted)
+        # Add user's request to the conversation
+        conversations.append(request_message_formatted)
 
-#         # Generate a response using OpenAI GPT-3.5-turbo
-#         response = client.chat.completions.create(
-#             model="gpt-3.5-turbo",
-#             messages=conversations
-#         )
+        # Generate a response using OpenAI GPT-3.5-turbo
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=conversations
+        )
 
-#         # Get the AI's response from the choices
-#         ai_response = response.choices[0].message.content
+        # Get the AI's response from the choices
+        ai_response = response.choices[0].message.content
 
-#         return jsonify({'success': True, 'response': ai_response})
+        return jsonify({'success': True, 'response': ai_response})
 
-#     except Exception as e:
-#         return jsonify({'error': str(e)}), 500
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 
 # @app.route('/get_interview_feedback', methods=['POST'])
