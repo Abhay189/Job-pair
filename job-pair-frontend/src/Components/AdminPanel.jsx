@@ -42,14 +42,22 @@ class AdminPanel extends Component {
     this.setState({ openDropdownId: null });
   };
 
-  deleteConversation = (conversationId) => {
-    // Implement delete logic here
-    console.log(`Deleting conversation with ID ${conversationId}`);
+  deleteConversation = async (conversationId) => {
+    try {
+      await axios.put(`http://127.0.0.1:5000/update-conversation/${conversationId}`, { deleted: true });
+      this.fetchData(); // Refresh conversation list
+    } catch (error) {
+      console.error(`Error deleting conversation with ID ${conversationId}:`, error);
+    }
   };
 
-  resolveConversation = (conversationId) => {
-    // Implement resolve logic here
-    console.log(`Resolving conversation with ID ${conversationId}`);
+  resolveConversation = async (conversationId) => {
+    try {
+      await axios.put(`http://127.0.0.1:5000/update-conversation/${conversationId}`, { flagged: false });
+      this.fetchData(); // Refresh conversation list
+    } catch (error) {
+      console.error(`Error resolving conversation with ID ${conversationId}:`, error);
+    }
   };
 
   render() {
