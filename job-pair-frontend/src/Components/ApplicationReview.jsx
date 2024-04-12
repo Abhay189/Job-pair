@@ -115,15 +115,36 @@ export default function ApplicationReview() {
   };
 
   const handleEnhanceClick = async (index) => {
-    const enhancedResponse = await Axios.post("http://127.0.0.1:5002/get_enhanced_essay", {
-      question: questions[index],
-      answer: responses[index],
-    });
+    try {
+        // Fetch the enhanced response
+        const enhancedResponse = await Axios.post("http://127.0.0.1:5002/get_enhanced_essay", {
+            question: questions[index],
+            answer: responses[index],
+        });
 
-    const updatedResponses = [...responses];
-    updatedResponses[index] = enhancedResponse.data.response;
-    setResponses(updatedResponses);
-  };
+        // Check if we actually received the enhanced response
+        if (enhancedResponse && enhancedResponse.data && enhancedResponse.data.response) {
+            const updatedResponses = [...responses];
+            updatedResponses[index] = enhancedResponse.data.response;
+            setResponses(updatedResponses);
+
+            // Save the updated response to the server
+            await Axios.post("http://127.0.0.1:5002/update_job_answer", {
+                user_id: 1,  
+                job_id: 11, 
+                index: index,
+                updated_answer: enhancedResponse.data.response,
+            });
+
+            console.log("Post request successful, response updated on server.");
+        } else {
+            console.error("Failed to receive enhanced essay response.");
+        }
+    } catch (error) {
+        console.error("Error during enhancement or update process:", error);
+    }
+};
+
 
   const handleSubmitClick = async () => {
     console.log(jobName);
