@@ -5,9 +5,9 @@ import { useNavigate } from 'react-router-dom';
 
 class InterviewPageBase  extends React.Component {
 
-
   constructor(props) {
     super(props);
+    this.API_BASE_URL = 'http://127.0.0.1:5002';
     
     // Refs for video elements
     this.videoLive = React.createRef();
@@ -184,13 +184,13 @@ uploadVideo = () => {
 }
 
   // Fetch API call
-  fetch('http://localhost:5000/upload_video', {
+  fetch(`${this.API_BASE_URL}/upload_video`, {
     method: 'POST',
     body: formData
 })
 .then(response => {
     if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(`HTTP error! status: ${response}`);
     }
     return response.json();
 })
