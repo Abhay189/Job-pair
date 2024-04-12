@@ -20,9 +20,13 @@ import {
 // import "../Styles/SalariesPageStyles.css";
 import "../Styles/LearningPageStyles.css";
 // import "../Styles/LearningPageStyles.css"; // Import the new CSS file here
-import { styles } from "../Styles/styles"
+import { styles } from "../Styles/styles";
+import { useParams } from 'react-router-dom';
 
 export default function ApplicationReview() {
+
+  const { id } = useParams();  // Extracting the id from the route
+
   // const param1 = localStorage.getItem("ApplicationReviewTitle");
   const param1 = "Financial Analyst"
   const [jobName, setJobName] = useState(param1);
@@ -39,26 +43,37 @@ export default function ApplicationReview() {
   };
 
   useEffect(() => {
-    Axios.get("http://127.0.0.1:5002/get_all_jobs?id=1&userType=seekers", {})
+    const url = `http://127.0.0.1:5002/get_all_jobs?id=${id}&userType=seekers`;  // Use the id in your API request
+    Axios.get(url, {})
       .then((res) => {
         const jsonData = res.data;
+        console.log("Fetched data:", jsonData);  // Log the entire fetched data
+  
         if (jsonData.length > 0) {
-          const jobData = jsonData.find(item => item.Title === jobName);
+          // Find the job by id
+          const jobData = jsonData.find(item => item.id === Number(11));
           if (jobData) {
+            console.log("Job data found:", jobData);  // Log the found job data
             setJobDescription(jobData.Description);
             setJobName(jobData.Title);
             setQuestions(jobData.Questions);
             setResponses(jobData.Answers);
+  
+            // Logging the states after setting them might not reflect the updates immediately due to the async nature of setState
+            console.log("Job Description Set:", jobData.Description);  // Log the job description
+            console.log("Job Name Set:", jobData.Title);  // Log the job title
+            console.log("Questions Set:", jobData.Questions);  // Log the questions
+            console.log("Responses Set:", jobData.Answers);  // Log the responses
           } else {
-            console.error(`Job with title ${jobName} not found in jsonData`);
+            console.error(`Job with id ${id} not found in jsonData`);
           }
         }
       })
       .catch((error) => {
         console.error("Error fetching job description:", error);
       });
-  }, [jobName]); // Include jobName as a dependency
-
+  }, [id]);  // Only id is needed as a dependency now, as we are no longer using jobName
+  
   const handleEditClick = (index) => {
     setEditingIndex(index);
     setEditedText(responses[index]);

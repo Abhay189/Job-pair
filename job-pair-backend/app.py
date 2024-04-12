@@ -584,6 +584,7 @@ def get_my_job_applicants():
             return jsonify({'error': 'Job not found'}), 404
         
         job_data = job_doc.to_dict()
+        print(job_data)
         applicant_ids = job_data.get('applicant_ids', [])
         
         print(applicant_ids)
@@ -597,7 +598,10 @@ def get_my_job_applicants():
 
             seeker_doc = next(seekers_docs, None)
             if seeker_doc:
+                print(seeker_doc.to_dict())
                 applicants_info.append(seeker_doc.to_dict())
+
+        print(applicants_info)
         return jsonify(applicants_info), 200
 
     except Exception as e:

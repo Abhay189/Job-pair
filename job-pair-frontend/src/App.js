@@ -45,7 +45,7 @@ function App() {
       <Route path="/userprofile" element={<MainLayout><Profilepage /></MainLayout>} />
       <Route path="/companyprofile" element={<MainLayout><Companyprofilepage /></MainLayout>} />
       <Route path="/applicants/:id" element={<MainLayout><JobApplicants /></MainLayout>} />
-      <Route path="/applicationReview" element={<MainLayout><ApplicationReviewPage /></MainLayout>} />
+      <Route path="/applicationReview/:id" element={<MainLayout><ApplicationReviewPage /></MainLayout>} />
       <Route path="/interview" element={<MainLayout><InterviewPage /></MainLayout>} />
       <Route path="/admin/flagged-conversations" element={<MainLayout><AdminPanelPage /></MainLayout>} />
       <Route path="/createjob" element={<MainLayout><CreateJobPage /></MainLayout>} />
