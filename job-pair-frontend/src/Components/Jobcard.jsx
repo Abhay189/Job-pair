@@ -26,7 +26,7 @@ function JobCard({ job, userType,deleteJobFunction }) {
     navigate('/applicants/' + job.id)
   }
 
-  // use effect print user type every time it changes 
+  
    useEffect(() => {
     console.log(userType)
    }, [userType])
@@ -41,7 +41,6 @@ function JobCard({ job, userType,deleteJobFunction }) {
             <Button size="lg" variant="primary" onClick={closeJob} >
               Close
             </Button>
-            <img src={job.logoUrl} alt="Company Logo" className="company-logo" />
             <Button size="lg" variant="primary" onClick={editJob}>
               Edit
             </Button>
@@ -52,16 +51,20 @@ function JobCard({ job, userType,deleteJobFunction }) {
           </div>
         }
 
-        {
-          (userType === 'seekers') &&
-          <img src={job.logoUrl} alt="Company Logo" className="company-logo" />
-        }
-
+        
+        <div className='job-card-body-flex'>
+        <div>
         <h3>{job.job_title}</h3>
         <p>{job.job_location}</p>
         <p>{job.company}</p>
         <p>{job.applicants} Applicants</p>
         <p>Posting date: {job.posting_date}</p>
+        </div>
+        <div>
+        <img src={job.logo_url} alt="Company Logo" className="company-logo" />
+
+        </div>
+        </div>
       </div>
     </div>
     </>

@@ -4,18 +4,20 @@
 .job-card-buttons {
   display: flex;
   justify-content: space-between;
+  gap: 1.5em;
 }
 
 .job-card-buttons button {
   width: 4em;
   height: 4em;
   font-size: 0.9em;
-  text-align: center; /* Centers text horizontally */
-  line-height: 4em; /* Centers text vertically */
-  display: flex; /* Using flexbox for centering */
-  justify-content: center; /* Horizontally centers the content for flexbox */
-  align-items: center; /* Vertically centers the content for flexbox */
-  overflow: hidden; /* Prevent text from spilling over */
+  text-align: center; 
+  line-height: 4em; 
+  display: flex; 
+
+  justify-content: center; 
+  align-items: center; 
+  overflow: hidden; 
   transition: background-color 0.3s ease;
 }
 
@@ -29,7 +31,7 @@
   margin: 15px 0px ;
   height: auto;
   max-height: 300px;
-  width: 95%;
+  width: 100%;
   max-width: 400px;
   border-radius: 10px;
   transition: box-shadow 0.3s ease, transform 0.3s ease;
@@ -41,8 +43,9 @@
 }
 
 .job-card-body img {
-  width: 8%;
-  height: 8%;
+  height: 5em;
+  width: 5em;
+
   object-fit: cover;
 }
 
@@ -69,8 +72,8 @@
 
 .company-logo {
   border-radius: 10px;
-  width: 5em;
-  height: 5em;
+  width: 10em;
+  height: 10em;
   margin-bottom: 10px;
 }
 
@@ -152,4 +155,10 @@
 .job-card-buttons button {
   width: 4.5em;
   padding: 2em;
+}
+
+.job-card-body-flex {
+  display: flex;
+  margin-top: 1em;
+  gap: 1em;
 }

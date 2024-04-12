@@ -257,6 +257,11 @@ def get_all_jobs():
 
         # If no recruiters were found or loop didn't return, indicate recruiter was not found
         return jsonify({'error': 'Recruiter not found.'}), 404
+    elif userType == 'admins':
+        # For admins, return all jobs
+        jobs = db.collection('jobs').get()
+        result = [job.to_dict() for job in jobs]
+        return jsonify(result), 200
 
     else:
         return jsonify({'error': 'Invalid user type.'}), 400
@@ -721,9 +726,7 @@ def create_chat():
             'recruiter_name': recruiter_name,
             'seeker_name': seeker_name,
             'messages': [],
-            'date': datetime.utcnow().isoformat(),
-            'flagged': False,
-            'deleted': False
+            'date': datetime.utcnow().date().isoformat()
         }
 
         chat_ref = db.collection('chats').add(chat_data)
@@ -869,6 +872,22 @@ def add_message():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+
+@app.route('/flagChat', methods=['POST'])
+def flag_conversation():
+  chatId = request.json.get('chatId')
+  flagged = request.json.get('flagged')
+
+  if chatId is None or flagged is None:
+    return {'error': 'Missing required fields in request'}, 400
+
+  try:
+    doc_ref = db.collection('chats').document(chatId)
+    doc_ref.update({'flagged': flagged})
+    return {'message': 'Chat flag updated successfully'}, 200
+  except Exception as e:
+    return {'error': f'Error updating chat flag: {str(e)}'}, 500
 
 
 
