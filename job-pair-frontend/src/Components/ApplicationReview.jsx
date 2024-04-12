@@ -39,7 +39,7 @@ export default function ApplicationReview() {
   };
 
   useEffect(() => {
-    Axios.get("http://127.0.0.1:5000/get_all_jobs?id=1&userType=seekers", {})
+    Axios.get("http://127.0.0.1:5002/get_all_jobs?id=1&userType=seekers", {})
       .then((res) => {
         const jsonData = res.data;
         if (jsonData.length > 0) {
@@ -73,7 +73,7 @@ export default function ApplicationReview() {
     setEditedText("");
 
     try {
-      await Axios.post("http://127.0.0.1:5000/update_job_answer", {
+      await Axios.post("http://127.0.0.1:5002/update_job_answer", {
         username: "zeeshan",
         title: jobName,
         index: index,
@@ -91,7 +91,7 @@ export default function ApplicationReview() {
   };
 
   const handleEnhanceClick = async (index) => {
-    const enhancedResponse = await Axios.post("http://127.0.0.1:5000/get_enhanced_essay", {
+    const enhancedResponse = await Axios.post("http://127.0.0.1:5002/get_enhanced_essay", {
       question: questions[index],
       answer: responses[index],
     });
@@ -104,7 +104,7 @@ export default function ApplicationReview() {
   const handleSubmitClick = async () => {
     console.log(jobName);
     try {
-      await Axios.post("http://127.0.0.1:5000/submit_application", {
+      await Axios.post("http://127.0.0.1:5002/submit_application", {
         username: "zeeshan",
         title: jobName,
       });

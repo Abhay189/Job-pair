@@ -6,7 +6,7 @@ import google from '../Assets/google.png'; // Update with the correct path to yo
 import outlook from '../Assets/outlook.png'; // Update with the correct path to your logo image
 import { Link, useNavigate} from "react-router-dom";
 
-const API_BASE_URL = 'http://127.0.0.1:5000';
+const API_BASE_URL = 'http://127.0.0.1:5002';
 
 const SignupPage = () => {
   const [email, setEmail] = useState('');

@@ -17,7 +17,7 @@ export default function ViewChatList() {
     },[]);
 
     const [chatList, setChatList] = useState([]);
-    const baseUrl = 'http://127.0.0.1:5000'
+    const baseUrl = 'http://127.0.0.1:5002'
     useEffect(() => {
         const fetchChats = async () => {
           try {
@@ -25,11 +25,11 @@ export default function ViewChatList() {
             const userType = localStorage.getItem('userType');
             
             if (userType == 'admins') {
-              const response = await axios.get('http://127.0.0.1:5000/get-chats-admin', { params: { user_id: userId,user_type:userType } });
+              const response = await axios.get('http://127.0.0.1:5002/get-chats-admin', { params: { user_id: userId,user_type:userType } });
               setChatList(response.data);
             }
             else{
-              const response = await axios.get('http://127.0.0.1:5000/get-chats', { params: { user_id: userId,user_type:userType } });
+              const response = await axios.get('http://127.0.0.1:5002/get-chats', { params: { user_id: userId,user_type:userType } });
               setChatList(response.data);
             }
               

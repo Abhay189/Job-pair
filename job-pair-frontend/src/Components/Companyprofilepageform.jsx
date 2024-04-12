@@ -37,7 +37,7 @@ const defaultImageUrl = process.env.PUBLIC_URL + '/defaultprofile.jpg';
     const fetchUserData = async () => {
       const userType = localStorage.getItem('userType');
       const userId = localStorage.getItem('id');
-      const url = 'http://127.0.0.1:5000/get_user';
+      const url = 'http://127.0.0.1:5002/get_user';
 
       try {
         setError (false);
@@ -98,7 +98,7 @@ const defaultImageUrl = process.env.PUBLIC_URL + '/defaultprofile.jpg';
           updatedData:
           {...formInput}
         }
-        const url = 'http://127.0.0.1:5000/update_user_profile';
+        const url = 'http://127.0.0.1:5002/update_user_profile';
         const response = await axios.post(url, formData, {
           headers: {
             'Content-Type': 'application/json'

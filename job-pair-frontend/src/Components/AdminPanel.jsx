@@ -18,7 +18,7 @@ class AdminPanel extends Component {
 
   fetchData = async () => {
     try {
-      const response = await axios.get('http://127.0.0.1:5000/get-chats-admin', { params: { user_type: 'admins' } });
+      const response = await axios.get('http://127.0.0.1:5002/get-chats-admin', { params: { user_type: 'admins' } });
       this.setState({ chatList: response.data });
     } catch (error) {
       console.error('Error fetching flagged conversations:', error);

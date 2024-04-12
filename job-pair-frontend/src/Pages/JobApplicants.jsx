@@ -38,7 +38,7 @@ function JobApplicants() {
     const fetchJobApplicants = async () => {
         try {
            
-            const response = await axios.get(`http://127.0.0.1:5000/get_my_job_applicants?job_id=3`);
+            const response = await axios.get(`http://127.0.0.1:5002/get_my_job_applicants?job_id=3`);
             setApplicants(response.data)
         } catch (error) {
        

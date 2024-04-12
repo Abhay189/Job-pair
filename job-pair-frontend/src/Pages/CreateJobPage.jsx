@@ -57,7 +57,7 @@ function CreateJobPage() {
         if (!id) {
           return;
         }
-        const response = await Axios.post('http://127.0.0.1:5000/get-job', { id: id});
+        const response = await Axios.post('http://127.0.0.1:5002/get-job', { id: id});
         const responseObject = response.data;
         setJobDetails( {
           jobTitle: responseObject.job_title,
@@ -97,7 +97,7 @@ function CreateJobPage() {
   
   }
     if(id) {
-      const response = await Axios.put('http://127.0.0.1:5000/update-job', {
+      const response = await Axios.put('http://127.0.0.1:5002/update-job', {
         
     ...formObj
         
@@ -121,7 +121,7 @@ function CreateJobPage() {
         jobDescription: '',
       });
     } else {
-      const response = await Axios.post('http://127.0.0.1:5000/create_job', {...formObj},  {
+      const response = await Axios.post('http://127.0.0.1:5002/create_job', {...formObj},  {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },

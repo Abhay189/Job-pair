@@ -5,7 +5,7 @@ import '../Styles/ChatPage.css';
 import { SendMessageForm } from '../Components/SendMessageForm';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
-const baseUrl = 'http://127.0.0.1:5000';
+const baseUrl = 'http://127.0.0.1:5002';
 
 
 

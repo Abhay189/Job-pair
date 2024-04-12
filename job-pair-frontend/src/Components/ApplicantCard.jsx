@@ -13,7 +13,7 @@ function ApplicantCard({ applicant }) {
 
   const chatNow = async () => {
     try {
-      const response = await axios.post('http://127.0.0.1:5000/create-chat', {
+      const response = await axios.post('http://127.0.0.1:5002/create-chat', {
         user_id: localStorage.getItem('id'),
         recipient_id: applicant.id,
       });
