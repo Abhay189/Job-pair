@@ -132,10 +132,10 @@ def create_job():
         deadline = request.form.get('deadline')
         job_description = request.form.get('job_description')
         company_logo_url = request.form.get('company_logo_url')
-        recruiter_id = request.form.get('recruiter_id')
+        recruiter_id = int(request.form.get('recruiter_id'))
         questions_csv = request.form.get('questions')
         questions = questions_csv.split(',') if questions_csv else []
-        posting_date = datetime.datetime.now().strftime("%Y-%m-%d")
+        posting_date = datetime.utcnow().date().isoformat()
 
         # Create a new job document in the 'jobs' collection
         job_data = {
@@ -147,6 +147,7 @@ def create_job():
             'deadline': deadline,
             'Description': job_description,
             'logo_url': company_logo_url,
+            "applicant_ids": [],
             'Questions': questions,
             'posting_date': posting_date,
             'applicants': 0
@@ -168,6 +169,7 @@ def create_job():
             recruiters_docs = recruiters_query.stream()
             
             recruiter_doc = next(recruiters_docs, None)
+            print("recruiter doc: ", recruiter_doc)
             if recruiter_doc:
                 # Add the job_id to the recruiter's my_job_ids array
                 recruiter_ref = db.collection('recruiters').document(recruiter_doc.id)
@@ -400,7 +402,8 @@ def submit_application():
     try:
         # Extracting the application information and the seeker's ID from the request
         data = request.json
-        seeker_id = data.get('id')  # This is the field 'id' inside the document.
+        seeker_id = int(data.get('id'))  # This is the field 'id' inside the document.
+        print("seeker id: ", seeker_id)
 
         if not seeker_id:
             return jsonify({'error': 'Missing seeker ID'}), 400
@@ -411,17 +414,19 @@ def submit_application():
             'application_response': data.get('application_response'),
             'application_status': data.get('application_status'),
             'company': data.get('company'),
-            'job_id': data.get('job_id'),
+            'job_id': int(data.get('job_id')),
             'job_title': data.get('job_title')
         }
 
         
-        job_id = data.get('job_id')
+        job_id = int(data.get('job_id'))
         job_query = db.collection('jobs').where('id', '==', job_id).limit(1).get()
         if not job_query: 
             return jsonify({'error': 'Job not found'}), 404
         job_doc_ref = job_query[0].reference 
         job_doc_ref.update({'applicants': firestore.Increment(1)})
+        # add seeker id to job applicant_ids array
+        job_doc_ref.update({'applicant_ids': ArrayUnion([seeker_id])})
 
 
         # Find the seeker using his id since it's not the key of his document but is unique
@@ -729,24 +734,29 @@ def update_job():
         return jsonify({"error": str(e)}), 500
     
 
-@app.route('/delete-job/<job_id>', methods=['DELETE'])
-def delete_job(job_id):
-    data = request.json
-    
+@app.route('/delete-job', methods=['DELETE'])
+def delete_job():
+    job_id = request.args.get('job_id')
     
     if job_id is None:
         return jsonify({"error": "Missing id"}), 400
-
+    
     try:
+        job_id = int(job_id)
+        print("job id: ", job_id)
         query_ref = db.collection('jobs').where('id', '==', job_id)
         docs = query_ref.stream()
 
-        if docs is not None:
-            doc = docs[0]
+        for doc in docs:
+            # Document exists; delete it
             doc.reference.delete()
             return jsonify({"success": "Job deleted successfully"}), 200
 
+        # If no documents were found
         return jsonify({"error": "No matching jobs found"}), 404
+    
+    except ValueError:
+        return jsonify({"error": "Invalid ID format"}), 400
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
@@ -982,9 +992,6 @@ def flag_conversation():
 
 
 
-
-if __name__ == '__main__':
-    app.run(debug=True)
 
 
 

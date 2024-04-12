@@ -149,9 +149,11 @@ export default function ApplicationReview() {
   const handleSubmitClick = async () => {
     console.log(jobName);
     try {
+      const userId = localStorage.getItem('id');
       await Axios.post("http://127.0.0.1:5002/submit_application", {
-        username: "zeeshan",
-        title: jobName,
+        id:userId,
+        job_id: id,
+        
       });
       
       redirectToJobs()
