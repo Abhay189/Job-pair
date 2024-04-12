@@ -346,6 +346,45 @@ def update_job_answer():
         return jsonify({'error': str(e)}), 500
 
 
+@app.route('/get_job_answer', methods=['GET'])
+def get_job_answer():
+    try:
+        # Get data from the request
+        user_id = request.args.get('user_id')
+        job_id = request.args.get('job_id')
+
+        # Validate required fields
+        if not user_id or not job_id:
+            return jsonify({'error': 'Invalid request. Missing required user_id or job_id parameters.'}), 400
+
+        # Assuming db is set up and has collections, fetch data
+        seeker_query = db.collection('seekers').where('id', '==', user_id).limit(1)
+        seeker_docs = seeker_query.get()
+
+        # Check if we have a matching user
+        if not seeker_docs:
+            return jsonify({'message': 'No user found with the provided user ID.'}), 404
+
+        # Access the first document reference from the result
+        seeker_doc_ref = seeker_docs[0].reference
+
+        # Fetch the applied jobs by job_id
+        applied_jobs_query = seeker_doc_ref.collection('applied_jobs').where('job_id', '==', job_id).limit(1)
+        applied_jobs = applied_jobs_query.get()
+
+        if not applied_jobs:
+            return jsonify({'message': 'No job application found for the given user ID and job ID.'}), 404
+
+        # Assuming there's a job application, access the document
+        applied_job_doc = applied_jobs[0]
+        job_application_answers = applied_job_doc.to_dict().get('application_response', [])
+
+        return jsonify({'user_id': user_id, 'job_id': job_id, 'answers': job_application_answers})
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
 @app.route('/submit_application', methods=['POST'])
 def submit_application():
     try:
