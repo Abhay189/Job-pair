@@ -11,9 +11,10 @@ const CustomNavbar = () => {
 
   useEffect(() => {
     // Assuming the user type is stored in local storage after login
-    const storedUserType = localStorage.getItem('usertype') || 'seekers';
+    const storedUserType = localStorage.getItem('userType'); // Changed 'usertype' to 'userType'
+    console.log('Stored User Type:', storedUserType);
     setUserType(storedUserType);
-  }, []);
+  }, []);  
 
   const handleLogout = () => {
     localStorage.removeItem('usertype');
@@ -43,6 +44,7 @@ const CustomNavbar = () => {
 
   // Helper function to render buttons based on the user type
   const renderButtons = (buttons) => {
+    console.log("User Type: ", userType)
     return buttons.map((button, index) => (
       <LinkContainer key={index} to={button.to}>
         <Nav.Link onClick={button.onClick}>{button.text}</Nav.Link>
