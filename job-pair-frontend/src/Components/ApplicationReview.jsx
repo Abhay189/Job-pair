@@ -75,10 +75,16 @@ export default function ApplicationReview() {
   }, [id]);  // Only id is needed as a dependency now, as we are no longer using jobName
   
   const handleEditClick = (index) => {
-    setEditingIndex(index);
-    setEditedText(responses[index]);
+    console.log('Responses:', responses);
+    console.log('Index:', index);
+    if (responses && index < responses.length) {
+      setEditingIndex(index);
+      setEditedText(responses[index]);
+    } else {
+      console.error('Invalid index or empty responses');
+    }
   };
-
+  
   const handleSaveClick = async (index) => {
     const updatedResponses = [...responses];
     updatedResponses[index] = editedText;
@@ -163,7 +169,7 @@ export default function ApplicationReview() {
                       <div>
                         <div className="answer-container" style={{ overflow: 'hidden' }}>
                           {/* <p style={{ whiteSpace: 'pre-wrap', overflow: 'hidden' }}>{responses[0]}</p> */}
-                          <p style={{ whiteSpace: 'pre-wrap', overflow: 'hidden' }}>{"Blah Blah"}</p>
+                          <p style={{ whiteSpace: 'pre-wrap', overflow: 'hidden' }}>{responses[index]}</p>
                         </div>
                         <div className="buttonContainer" style={{ display: 'flex', flexDirection: 'row', alignItems: 'left', justifyContent: 'left' }}>
                           <span style={{ padding: '0 8px' }}></span>
