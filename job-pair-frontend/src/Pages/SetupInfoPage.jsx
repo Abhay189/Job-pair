@@ -28,9 +28,19 @@ const SetupInfoPage = () => {
             <select value={industry} onChange={(e) => setIndustry(e.target.value)}>
               {/* Options for industries */}
               <option value="Tech">Tech</option>
-              <option value="Law">Law</option>
-              <option value="Health">Health</option>
-              {/* Add more options as needed */}
+                <option value="Law">Law</option>
+                <option value="Health">Health</option>
+                <option value="Finance">Finance</option>
+                <option value="Education">Education</option>
+                <option value="Engineering">Engineering</option>
+                <option value="Marketing">Marketing</option>
+                <option value="Entertainment">Entertainment</option>
+                <option value="Hospitality">Hospitality</option>
+                <option value="Retail">Retail</option>
+                <option value="Consulting">Consulting</option>
+                <option value="Government">Government</option>
+                <option value="Non-profit">Non-profit</option>
+                <option value="Other">Other</option>
             </select>
           </div>
           <div className="ce-job-form-twos">
