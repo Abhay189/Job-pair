@@ -20,7 +20,7 @@ const SignupPage = () => {
     const temp_id = localStorage.getItem('id');
     if (temp_id != null) {
       console.error('User already logged in, redirecting to Homepage..');
-      navigate('/viewJobs');
+      navigate('/setupInfo');
     }
   }, []);
 
@@ -44,7 +44,7 @@ const SignupPage = () => {
             localStorage.setItem('userType',userType);
             localStorage.setItem('id',id);
 
-            navigate('/viewJobs');
+            navigate('/setupInfo');
         } else {
             console.log("Failed to create account");
         }

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import '../Styles/CreateJobPage.css'; // Import the same CSS file
 import { Alert } from 'react-bootstrap';
+import { Link, useNavigate} from "react-router-dom";
 
 const SetupInfoPage = () => {
   const [industry, setIndustry] = useState('');
@@ -12,9 +13,12 @@ const SetupInfoPage = () => {
   const [strengths, setStrengths] = useState('');
   const [leadership, setLeadership] = useState('');
 
+  let navigate = useNavigate();
+
   // Function to handle form submission
   const handleSubmit = (event) => {
     event.preventDefault();
+    navigate('/viewJobs');
     // Implement logic to handle form submission (e.g., send data to backend)
   };
 
