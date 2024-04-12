@@ -299,12 +299,15 @@ def get_all_applied_jobs():
 @app.route('/update_job_answer', methods=['POST'])  # Assuming this relates to updating a job application answer
 def update_job_answer():
     try:
+        print("Reached endpoint!")
         # Get data from the request
         data = request.json
         seeker_id = data.get('user_id')
         job_id = data.get('job_id')
         index = data.get('index')
         updated_answer = data.get('updated_answer')
+
+        print(data)
 
         # Validate required fields
         # if not seeker_id or not job_title or index is None or updated_answer is None:

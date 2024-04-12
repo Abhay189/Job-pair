@@ -95,8 +95,8 @@ export default function ApplicationReview() {
 
     try {
       await Axios.post("http://127.0.0.1:5002/update_job_answer", {
-        username: "zeeshan",
-        title: jobName,
+        user_id: 1,
+        job_id: 11,
         index: index,
         updated_answer: editedText,
       });
