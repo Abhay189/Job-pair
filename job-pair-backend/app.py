@@ -874,7 +874,23 @@ def add_message():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route('/delete-conversation/<conversation_id>', methods=['PUT'])
+def delete_conversation(conversation_id):
+    try:
+        conversation_ref = db.collection('chats').document(conversation_id)
+        conversation_ref.update({'deleted': True})
+        return jsonify({"success": "Conversation deleted successfully"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
+@app.route('/resolve-conversation/<conversation_id>', methods=['PUT'])
+def resolve_conversation(conversation_id):
+    try:
+        conversation_ref = db.collection('chats').document(conversation_id)
+        conversation_ref.update({'flagged': False})
+        return jsonify({"success": "Conversation resolved successfully"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 

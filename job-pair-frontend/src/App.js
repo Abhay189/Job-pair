@@ -1,5 +1,6 @@
 import './Styles/App.css';
-import { Routes, Route } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import Navbar from './Components/Navbar.jsx';
 import Profilepage from './Pages/Profilepage.jsx';
 import './Styles/custom.css';
@@ -35,6 +36,14 @@ function App() {
     return <main>{children}</main>;
   }
 
+  const navigate = useNavigate();
+  const [userType, setUserType] = useState('');
+
+  useEffect(() => {
+    const tempUserType = localStorage.getItem('userType');
+    setUserType(tempUserType);
+  }, []);
+
   return (
        
 
@@ -52,7 +61,11 @@ function App() {
       <Route path="/tracking" element={<MainLayout><TrackingPage /></MainLayout>} />
       <Route path="/viewJobs" element={<MainLayout><Jobpage /></MainLayout>} />
       <Route path = "/editJob/:id" element={<CreateJobPage/>} />
-      <Route path="/chat/:id" element={<MainLayout><ChatPage /></MainLayout>} />
+      {userType === 'admins' ? (
+          <Route path="/chats" element={<MainLayout><AdminPanelPage /></MainLayout>} />
+        ) : (
+          <Route path="/chats" element={<MainLayout><ViewChatList /></MainLayout>} />
+        )}
       <Route path="/chats" element={<MainLayout><ViewChatList /></MainLayout>} />
 
       <Route path="*" element={<MainLayout><h1 style={{marginTop: `5%`, fontFamily:`Ubuntu`}}>Sorry, this page doesn't exist!</h1></MainLayout>} />
