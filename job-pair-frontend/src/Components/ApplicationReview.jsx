@@ -55,7 +55,7 @@ export default function ApplicationReview() {
           if (jobData) {
             console.log("Job data found:", jobData);
             setJobDescription(jobData.Description);
-            setJobName(jobData.Title);
+            setJobName(jobData.title);
             setQuestions(jobData.Questions);
   
             // Fetch responses for the job using another endpoint
