@@ -19,21 +19,23 @@ export function SendMessageForm ({ sendMessage }) {
         sendMessage(message);
     };
     return (
-      <Form onSubmit={handleSubmit} className='send-message-container'>
-      <Form.Group className='message-container' controlId="chatMessage">
-        
-        <Form.Control
-          as="textarea"
-          name="chatMessage"
-          value={chatMessage}
-          onChange={handleInputChange}
-          placeholder="message"
-        />
-      </Form.Group>
-      <Button variant="primary" type="submit" className='chat-button'>
-        Send
-      </Button>
-      </Form>
+      <div className='send-message-container'>
+       <Form onSubmit={handleSubmit}>
+       <Form.Group className='mb-2' controlId="chatMessage">
+          
+          <Form.Control
+            as="textarea"
+            name="chatMessage"
+            value={chatMessage}
+            onChange={handleInputChange}
+            placeholder="message"
+          />
+        </Form.Group>
+        <Button variant="primary" type="submit">
+          Send
+        </Button>
+        </Form>
+      </div>
     );
   };
   
