@@ -44,7 +44,7 @@ class AdminPanel extends Component {
 
   deleteConversation = async (conversationId) => {
     try {
-      await axios.put(`http://127.0.0.1:5000/update-conversation/${conversationId}`, { deleted: true });
+      await axios.put(`http://127.0.0.1:5002/delete-conversation/${conversationId}`, { deleted: true });
       this.fetchData(); // Refresh conversation list
     } catch (error) {
       console.error(`Error deleting conversation with ID ${conversationId}:`, error);
@@ -53,7 +53,7 @@ class AdminPanel extends Component {
 
   resolveConversation = async (conversationId) => {
     try {
-      await axios.put(`http://127.0.0.1:5000/update-conversation/${conversationId}`, { flagged: false });
+      await axios.put(`http://127.0.0.1:5002/resolve-conversation/${conversationId}`, { flagged: false });
       this.fetchData(); // Refresh conversation list
     } catch (error) {
       console.error(`Error resolving conversation with ID ${conversationId}:`, error);
@@ -81,11 +81,12 @@ class AdminPanel extends Component {
               {chatList.map((conversation) => (
                 <tr key={conversation.id}>
                   <td className="logo-cell">
-                    <img 
+                    {/* <img 
                       src={conversation.companyLogo} 
                       alt={`${conversation.company} logo`} 
                       className="company-logo"
-                    />
+                    /> */}
+                    {conversation.recruiter_company}
                   </td>
                   <td>{conversation.sender}</td>
                   <td>{conversation.flaggedReason}</td>

@@ -70,7 +70,7 @@ const ChatPage = () => {
       isUser: msg.sender_id == userId 
     }));
     console.log('Received messages:', received);
-    debugger;
+    // debugger;
     console.log("user id is", userId)
     setMessages(received);
     if(userType === 'seekers'){
@@ -148,7 +148,7 @@ const ChatPage = () => {
           date: formattedDate,
           time: formattedTime
         });
-        debugger;
+        // debugger;
         setMessages(prevMessages => [...prevMessages, { text: chatMessage, date: formattedDate, time: formattedTime, isUser: true}]);
         console.log('Message sent to server:', messages);
 
