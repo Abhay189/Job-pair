@@ -3,27 +3,44 @@
   flex-direction: column;
   justify-content: space-between;
   width: 70%;
+  align-items: center;
   max-width: 2000px;
   padding: 1em;
   background-color: #f5f5f5;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
   transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
 
 .chat-card:hover {
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); /* Shadow effect on hover */
-  transform: translateY(-5px); /* Slight lift effect on hover */
 }
 
 .chat-card-top {
   display: flex;
+  width: 100%;
   justify-content: space-between;
 }
 
 .chat-card-bottom {
+  width: 100%;
+  padding: 0px 10px;
   margin: 20px 0px;
   font-size: 1.2em;
+}
+
+.chat-card button {
+  width: 150px;
+  font-size: 1.2em;
+  transition: background-color 0.3s, color 0.3s, transform 0.3s; /* Smooth transition for visual properties */
+  /* Additional default styling for the button goes here */
+  cursor: pointer; /* Changes the mouse cursor to indicate the element is clickable */
+}
+
+.chat-card button:hover {
+  background-color: #575DFB; /* Change the background color on hover */
+  color: #FFFFFF; /* Change the text color on hover */
+  transform: scale(1.05); /* Slightly increase the button size for effect */
+  /* Optionally, add a border color change or other effects as desired */
 }
 
 .chat-card-top-info {

@@ -1,6 +1,3 @@
-
-
-
 .job-card-buttons {
   display: flex;
   justify-content: space-between;
@@ -168,11 +165,11 @@
 .dropdown {
   display: flex;
   flex-direction: row;
-  justify-content: end;
+  justify-content: center;
 }
 
 .dropdown-toggle {
-  text-align: center;
+  width: 100%;
   background-color: #f8f9fa; /* Light gray background for visibility */
   color: #333; /* Default dark text for contrast */
   border: 1px solid #ccc; /* Light border for definition */
@@ -186,7 +183,6 @@
 }
 
 .dropdown-menu {
-  
   width: 100%; /* Ensure menu uses the full width of the toggle */
 }
 

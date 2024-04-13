@@ -162,7 +162,7 @@ const ChatPage = () => {
   return (
     <div className="chat-page">
       <div className="chat-page-header">
-        <h1>Chat with {otherUsername}</h1>
+        <h1>{otherUsername}</h1>
       </div>
       <div className="top-right">
   

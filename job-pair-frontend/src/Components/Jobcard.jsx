@@ -34,8 +34,22 @@ function JobCard({ job, userType,deleteJobFunction }) {
     <>
     
     <div className="job-card" onClick={sendToApplication }>
-      <div className="job-card-body">
-      {userType === 'recruiters' || userType === 'admins' ? (
+      <div className="job-card-body">  
+        <div className='job-card-body-flex'>
+        <div>
+        <h3>{job.title}</h3>
+        <p>{job.location}</p>
+        <p>{job.company}</p>
+        <p>{job.applicants} Applicants</p>
+        <p>Posting date: {job.posting_date}</p>
+        <p>Deadline: {job.deadline}</p>
+        </div>
+        <div>
+        <img src={job.logo_url} alt="Company Logo" className="company-logo" />
+
+        </div>
+        </div>
+        {userType === 'recruiters' || userType === 'admins' ? (
             <Dropdown>
               <Dropdown.Toggle variant="success" id="dropdown-basic">
                 Actions
@@ -53,22 +67,6 @@ function JobCard({ job, userType,deleteJobFunction }) {
               </Dropdown.Menu>
             </Dropdown>
           ) : null}
-
-        
-        <div className='job-card-body-flex'>
-        <div>
-        <h3>{job.title}</h3>
-        <p>{job.location}</p>
-        <p>{job.company}</p>
-        <p>{job.applicants} Applicants</p>
-        <p>Posting date: {job.posting_date}</p>
-        <p>Deadline: {job.deadline}</p>
-        </div>
-        <div>
-        <img src={job.logo_url} alt="Company Logo" className="company-logo" />
-
-        </div>
-        </div>
       </div>
     </div>
     </>
