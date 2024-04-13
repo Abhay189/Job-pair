@@ -34,20 +34,24 @@ function JobApplicants() {
   const [applicants,setApplicants] = useState([])
 
   useEffect(() => {
-    // Define the function to fetch job applicants
+   
     const fetchJobApplicants = async () => {
         try {
            
-            const response = await axios.get(`http://127.0.0.1:5002/get_my_job_applicants?job_id=3`);
+            const response = await axios.get(`http://127.0.0.1:5002/get_my_job_applicants`, {
+                params: {
+                    job_id: id
+                }
+            });
             setApplicants(response.data)
         } catch (error) {
-       
+          console.error('Error fetching job applicants:', error);
         }
     };
 
-    // Call the function to fetch job applicants
+   
     fetchJobApplicants();
-}, [id]); // Empty dependency array to only execute once on mount
+}, [id]); 
 
   return (
     <div>
@@ -57,7 +61,7 @@ function JobApplicants() {
             <ul>
                 {applicants.map((applicant) => {
                     return (
-                        <ApplicantCard applicant={applicant} key={applicant.id} />
+                         <ApplicantCard applicant={applicant} jobId={id} key={applicant.id} />
                     )
                 })}
             </ul>

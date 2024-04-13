@@ -18,6 +18,7 @@ export default function ApplicationReview() {
   const [responses, setResponses] = useState([]);
   const [editingIndex, setEditingIndex] = useState(-1);
   const [editedText, setEditedText] = useState("");
+  const [userId, setUserId] = useState('');
 
   const redirectToJobs = () => {
     window.location.reload();
@@ -28,6 +29,7 @@ export default function ApplicationReview() {
   useEffect(() => {
 
     const user_id = localStorage.getItem('id');
+    setUserId(user_id);
 
     const jobUrl = `http://127.0.0.1:5002/get_all_jobs?id=${id}&userType=seekers`;
   
@@ -60,6 +62,7 @@ export default function ApplicationReview() {
       });
   }, [id]);  
 
+
   const handleEditClick = (index) => {
     if (responses && index < responses.length) {
       setEditingIndex(index);
@@ -77,10 +80,13 @@ export default function ApplicationReview() {
     setEditingIndex(-1);
     setEditedText("");
 
+    console.log("User id when Save is clicked: ", userId)
+    console.log("Job id when Save is clicked: ", id)
+
     try {
       await Axios.post("http://127.0.0.1:5002/update_job_answer", {
-        user_id: 1,
-        job_id: 11,
+        user_id: userId,
+        job_id: id,
         index: index,
         updated_answer: editedText,
       });
@@ -108,8 +114,8 @@ export default function ApplicationReview() {
             setResponses(updatedResponses);
 
             await Axios.post("http://127.0.0.1:5002/update_job_answer", {
-                user_id: 1,  
-                job_id: 11, 
+                user_id: userId,  
+                job_id: id, 
                 index: index,
                 updated_answer: enhancedResponse.data.response,
             });
@@ -130,6 +136,9 @@ export default function ApplicationReview() {
       await Axios.post("http://127.0.0.1:5002/submit_application", {
         id:userId,
         job_id: id,
+        job_title: jobName,
+        application_response: responses,
+
       });
       
       redirectToJobs()

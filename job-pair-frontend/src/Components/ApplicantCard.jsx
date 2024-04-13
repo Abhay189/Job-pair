@@ -7,13 +7,15 @@ import { faStar as farStar } from '@fortawesome/free-regular-svg-icons';
 import { faStar as fasStar } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-function ApplicantCard({ applicant }) {
+function ApplicantCard({ applicant,jobId }) {
   const navigate = useNavigate();
   const [isStarFilled, setIsStarFilled] = useState(false);
+  const apiBaseUrl = 'http://127.0.0.1:5002'
+
 
   const chatNow = async () => {
     try {
-      const response = await axios.post('http://127.0.0.1:5002/create-chat', {
+      const response = await axios.post( `${apiBaseUrl}/create-chat`, {
         user_id: localStorage.getItem('id'),
         recipient_id: applicant.id,
       });
@@ -26,8 +28,17 @@ function ApplicantCard({ applicant }) {
     }
 };
 
-  const sendInterview = () => {
-    console.log('Interview Sent')
+  const sendInterview = async() => {
+    try {
+      const response = await axios.post(`${apiBaseUrl }/send-interview`, {
+          user_id: applicant.id,
+          job_id: jobId
+      });
+
+      console.log('Response:', response.data);
+  } catch (error) {
+      console.error('Error updating application status:', error.response.data);
+  }
 
   }
   return (
@@ -47,9 +58,7 @@ function ApplicantCard({ applicant }) {
 
           </div>
           <div className='applicant-top-row-cell'>
-            <div className='applicant-info-box'>
-              Match Score: {applicant.matchScore}%
-            </div>
+       
             <Button variant="link" onClick={() => setIsStarFilled(!isStarFilled)} style={{ color: isStarFilled ? '#FFD700' : '' }}>
               <FontAwesomeIcon icon={isStarFilled ? fasStar : farStar} />
             </Button>
