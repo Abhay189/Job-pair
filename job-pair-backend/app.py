@@ -671,6 +671,27 @@ def seeker_profile_setup():
         return jsonify({"error": str(e)}), 500
 
 
+@app.route('/get-personal-setup-info/<int:user_id>', methods=['GET'])
+def get_personal_setup_info(user_id):
+    try:
+        # Assuming you have a database connection and 'seekers' collection
+        # Replace 'db' and 'seekers' with your actual database reference
+        query_ref = db.collection('seekers').where('id', '==', user_id).limit(1)
+        docs = list(query_ref.stream())
+        
+        if docs:
+            personal_setup_info = docs[0].get('personal_setup_info')  # Remove extra argument
+            if personal_setup_info:
+                return jsonify({"personal_setup_info": personal_setup_info}), 200
+            else:
+                return jsonify({"error": "No personal setup info found for the provided user ID"}), 404
+        else:
+            return jsonify({"error": "No seeker found with the provided user ID"}), 404
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
 
 @app.route('/update-job', methods=['GET','PUT'])
 def update_job():
