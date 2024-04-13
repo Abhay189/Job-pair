@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import axios from 'axios';
 import '../Styles/TrackingPage.css';
-import {  Container } from "react-bootstrap";
 import { styles } from "../Styles/Trackingpagestyles";
 import { useNavigate } from "react-router-dom";
 
@@ -13,9 +12,6 @@ const TrackingPage = () => {
   let navigate = useNavigate();
   const [userId, setUserId] = useState(0);
 
-
-
-
   const [applications, setApplications] = useState({
     applied: [],
     in_progress: [],
@@ -24,12 +20,38 @@ const TrackingPage = () => {
     rejected: [],
   });
 
-    const redirectToApplicationReview = (applicationTitle) => {
-    localStorage.setItem("ApplicationReviewTitle",applicationTitle);
-    // Reloads the current page
-    window.location.reload();
-    // Redirects to the main page
-    window.location.href = "http://localhost:3000/";
+    const redirectToApplicationReview = (applicationTitle,applicationjobID) => {
+      // console.log("im clicked")
+      console.log(applicationTitle);
+      let redirectHappened = false;
+
+      for (const [key, value] of Object.entries(applications)) {
+        console.log("hello", key, value);
+
+        if (key === 'interview') {
+          for (const val of value) {
+            console.log(val.job_title, applicationTitle);
+            if (val.job_title === applicationTitle) {
+              console.log('redirecting');
+              window.location.reload();
+              window.location.href = "http://localhost:3000/interview";
+              redirectHappened = true;
+              break;
+            }
+          }
+        }
+
+        if (redirectHappened) {
+          break; // Break the outer loop if the redirect condition has been met
+        }
+      }
+      if(!redirectHappened){
+        localStorage.setItem("ApplicationReviewTitle",applicationTitle);
+        // Reloads the current page
+        window.location.reload();
+        // Redirects to the main page
+        window.location.href = `http://localhost:3000/applicationReview/${applicationjobID}`;
+      } 
   };
 
   const Get_Title_Name = (given_name) => {
@@ -50,7 +72,6 @@ const TrackingPage = () => {
   };
 
   useEffect(() => {
-    debugger;
     const fetchData = async () => {
       const tempId = localStorage.getItem('id');
       
@@ -152,7 +173,7 @@ const TrackingPage = () => {
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
                             className="card"
-                            onClick={() => redirectToApplicationReview(application.Title)}
+                            onClick={() => redirectToApplicationReview(application.job_title,application.job_id)}
                           >
                             <p>{application.job_title}</p>
                           </div>
