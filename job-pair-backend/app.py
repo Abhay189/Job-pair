@@ -926,8 +926,6 @@ def get_chats_admin():
         return jsonify({"error": str(e)}), 500
 
 
-
-
 @app.route('/add-message', methods=['POST'])
 def add_message():
     data = request.json
