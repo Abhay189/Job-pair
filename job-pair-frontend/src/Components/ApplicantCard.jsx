@@ -20,7 +20,7 @@ function ApplicantCard({ applicant }) {
       console.log("recruiter id: ", localStorage.getItem('id'));
       console.log("seeker id: ", applicant.id);
       console.log(response.data);
-      navigate(`/chats`);
+      navigate(`/chat/${response.data.chat_id}`);
     } catch (error) {
       console.error('Error creating chat:', error);
     }
@@ -47,9 +47,7 @@ function ApplicantCard({ applicant }) {
 
           </div>
           <div className='applicant-top-row-cell'>
-            <div className='applicant-info-box'>
-              Match Score: {applicant.matchScore}%
-            </div>
+       
             <Button variant="link" onClick={() => setIsStarFilled(!isStarFilled)} style={{ color: isStarFilled ? '#FFD700' : '' }}>
               <FontAwesomeIcon icon={isStarFilled ? fasStar : farStar} />
             </Button>
