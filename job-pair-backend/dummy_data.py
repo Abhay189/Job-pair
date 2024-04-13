@@ -1,245 +1,159 @@
 jobs = [
-  {
-    "Deadline": "April 30, 2023",
-    "Posting Date": "February 25, 2023",
-    "Number of Applicants": 120,
-    "Title": "Cybersecurity Analyst",
-    "Requirements": ["Security Protocols", "Incident Response", "Penetration Testing"],
-    "Description": "Seeking a cybersecurity analyst with expertise in implementing security protocols, incident response, and penetration testing to protect organizational assets from cyber threats.",
-    "Questions": [
-        "Describe a recent cybersecurity incident you successfully mitigated.",
-        "How do you stay updated with emerging cyber threats and vulnerabilities?",
-        "What measures do you take to ensure compliance with data protection regulations?"
-    ],
-    "Company": "Microsoft",
-    "Logo": "URL",
-    "Industry": "Technology"
+    {
+        "deadline": "April 30, 2023",
+        "posting_date": "February 25, 2023",
+        "applicants": 120,
+        "title": "Cybersecurity Analyst",
+        "Requirements": ["Security Protocols", "Incident Response", "Penetration Testing"],
+        "Description": "Seeking a cybersecurity analyst with expertise in implementing security protocols, incident response, and penetration testing to protect organizational assets from cyber threats.",
+        "Questions": [
+            "Describe a recent cybersecurity incident you successfully mitigated.",
+            "How do you stay updated with emerging cyber threats and vulnerabilities?",
+            "What measures do you take to ensure compliance with data protection regulations?"
+        ],
+        "company": "Microsoft",
+        "logo_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQomToXdaITnDNh_gfzvynzTWnrpkleOrZpsdIOTAYPWA&s",
+        "Industry": "Technology",
+        "location": "Redmond, Washington, USA"
     },
     {
-    "Deadline": "April 28, 2023",
-    "Posting Date": "February 23, 2023",
-    "Number of Applicants": 90,
-    "Title": "UI/UX Designer",
-    "Requirements": ["Wireframing", "Prototyping", "User Research"],
-    "Description": "Seeking a UI/UX designer with expertise in wireframing, prototyping, and user research to create intuitive and visually appealing user interfaces for digital products.",
-    "Questions": [
-        "Share a user interface design you created that received positive user feedback.",
-        "How do you conduct user research to inform design decisions?",
-        "What principles do you follow to ensure a seamless user experience?"
-    ],
-    "Company": "Adobe",
-    "Logo": "URL",
-    "Industry": "Technology"
+        "deadline": "April 28, 2023",
+        "posting_date": "February 23, 2023",
+        "applicants": 90,
+        "title": "UI/UX Designer",
+        "Requirements": ["Wireframing", "Prototyping", "User Research"],
+        "Description": "Seeking a UI/UX designer with expertise in wireframing, prototyping, and user research to create intuitive and visually appealing user interfaces for digital products.",
+        "Questions": [
+            "Share a user interface design you created that received positive user feedback.",
+            "How do you conduct user research to inform design decisions?",
+            "What principles do you follow to ensure a seamless user experience?"
+        ],
+        "company": "Adobe",
+        "logo_url": "https://i.pinimg.com/736x/7d/3a/a4/7d3aa450915125e7948175e1123a199a.jpg",
+        "Industry": "Technology",
+        "location": "San Jose, California, USA"
     },
     {
-    "Deadline": "April 29, 2023",
-    "Posting Date": "February 24, 2023",
-    "Number of Applicants": 110,
-    "Title": "Cloud Solutions Architect",
-    "Requirements": ["Cloud Platforms", "Architecture Design", "Scalability"],
-    "Description": "Seeking a cloud solutions architect with expertise in designing and implementing scalable cloud solutions using various cloud platforms.",
-    "Questions": [
-        "Describe a complex cloud architecture you designed.",
-        "How do you ensure scalability and reliability in cloud-based systems?",
-        "What factors do you consider when selecting a cloud platform for a project?"
-    ],
-    "Company": "Amazon Web Services (AWS)",
-    "Logo": "URL",
-    "Industry": "Technology"
+        "deadline": "April 29, 2023",
+        "posting_date": "February 24, 2023",
+        "applicants": 110,
+        "title": "Cloud Solutions Architect",
+        "Requirements": ["Cloud Platforms", "Architecture Design", "Scalability"],
+        "Description": "Seeking a cloud solutions architect with expertise in designing and implementing scalable cloud solutions using various cloud platforms.",
+        "Questions": [
+            "Describe a complex cloud architecture you designed.",
+            "How do you ensure scalability and reliability in cloud-based systems?",
+            "What factors do you consider when selecting a cloud platform for a project?"
+        ],
+        "company": "Amazon Web Services (AWS)",
+        "logo_url": "https://i.pinimg.com/736x/0a/06/60/0a06600cc3cedeb49280b54114c88ce6.jpg",
+        "Industry": "Technology",
+        "location": "Seattle, Washington, USA"
     },
     {
-    "Deadline": "April 27, 2023",
-    "Posting Date": "February 22, 2023",
-    "Number of Applicants": 95,
-    "Title": "Database Administrator",
-    "Requirements": ["Database Management", "Query Optimization", "Backup and Recovery"],
-    "Description": "Seeking a database administrator with expertise in managing and optimizing databases, ensuring data integrity, and implementing backup and recovery solutions.",
-    "Questions": [
-        "How do you ensure database performance and optimize query execution?",
-        "Describe your experience with database backup and recovery procedures.",
-        "What measures do you take to maintain data security and integrity?"
-    ],
-    "Company": "Oracle",
-    "Logo": "URL",
-    "Industry": "Technology"
+        "deadline": "April 27, 2023",
+        "posting_date": "February 22, 2023",
+        "applicants": 95,
+        "title": "Database Administrator",
+        "Requirements": ["Database Management", "Query Optimization", "Backup and Recovery"],
+        "Description": "Seeking a database administrator with expertise in managing and optimizing databases, ensuring data integrity, and implementing backup and recovery solutions.",
+        "Questions": [
+            "How do you ensure database performance and optimize query execution?",
+            "Describe your experience with database backup and recovery procedures.",
+            "What measures do you take to maintain data security and integrity?"
+        ],
+        "company": "Oracle",
+        "logo_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTE3lYzOn0JhGmjUWQAfmzhaWRpUMqlaVTrg2rKP3T-Q&s",
+        "Industry": "Technology",
+        "location": "Redwood City, California, USA"
     },
     {
-    "Deadline": "April 26, 2023",
-    "Posting Date": "February 21, 2023",
-    "Number of Applicants": 100,
-    "Title": "DevOps Engineer",
-    "Requirements": ["Continuous Integration", "Continuous Deployment", "Infrastructure as Code"],
-    "Description": "Seeking a DevOps engineer with expertise in implementing continuous integration, continuous deployment, and infrastructure as code practices to streamline software development and deployment processes.",
-    "Questions": [
-        "Describe your experience with automating deployment pipelines.",
-        "How do you manage infrastructure using configuration management tools?",
-        "What benefits do you see in adopting DevOps practices?"
-    ],
-    "Company": "GitHub",
-    "Logo": "URL",
-    "Industry": "Technology"
-  },
-  {
-    "Deadline": "May 1, 2023",
-    "Posting Date": "March 1, 2023",
-    "Number of Applicants": 129,
-    "Title": "Entry level - Software Engineer",
-    "Requirements": ["Diversity", "Inclusion", "Essay"],
-    "Description": "We are looking for New Grads with internship expertise in C++ Development and DevOps.",
-    "Questions": [
-      "List your most important C++ project so far?",
-      "Why do you believe diversity is important?",
-      "Message to hiring manager?"
-    ],
-    "Company": "Amazon",
-    "Logo": "URL",
-    "Industry": "Technology"
-  },
-  {
-    "Deadline": "April 15, 2023",
-    "Posting Date": "February 15, 2023",
-    "Number of Applicants": 80,
-    "Title": "Environmental Scientist",
-    "Requirements": ["Fieldwork", "Data Analysis", "Report Writing"],
-    "Description": "Seeking an environmental scientist with experience in fieldwork, data analysis, and report writing for a research project on climate change.",
-    "Questions": [
-      "Describe your experience in conducting fieldwork related to environmental science?",
-      "How do you approach data analysis in your research?",
-      "What is the importance of accurate report writing in environmental science?"
-    ],
-    "Company": "National Geographic",
-    "Logo": "URL",
-    "Industry": "Environmental Science"
-  },
-  {
-    "Deadline": "April 30, 2023",
-    "Posting Date": "February 28, 2023",
-    "Number of Applicants": 95,
-    "Title": "Legal Counsel",
-    "Requirements": ["Law Degree", "Litigation Experience", "Contract Drafting"],
-    "Description": "Looking for a legal counsel with expertise in litigation and contract drafting for a corporate law firm.",
-    "Questions": [
-      "Describe a challenging litigation case you handled.",
-      "How do you approach contract drafting to ensure legal clarity?",
-      "Why do you want to work in corporate law?"
-    ],
-    "Company": "Baker McKenzie",
-    "Logo": "URL",
-    "Industry": "Legal"
-  },
-  {
-    "Deadline": "April 20, 2023",
-    "Posting Date": "February 10, 2023",
-    "Number of Applicants": 70,
-    "Title": "Marketing Manager",
-    "Requirements": ["Marketing Strategy", "Brand Management", "Campaign Analysis"],
-    "Description": "Seeking a marketing manager to develop and implement innovative marketing strategies for product promotion.",
-    "Questions": [
-      "Provide an example of a successful marketing campaign you led.",
-      "How do you approach brand management to maintain brand identity?",
-      "What metrics do you use to evaluate the effectiveness of marketing campaigns?"
-    ],
-    "Company": "Nike",
-    "Logo": "URL",
-    "Industry": "Marketing"
-  },
-  {
-    "Deadline": "April 25, 2023",
-    "Posting Date": "February 20, 2023",
-    "Number of Applicants": 85,
-    "Title": "Civil Engineer",
-    "Requirements": ["Structural Design", "Project Management", "AutoCAD"],
-    "Description": "Seeking a civil engineer with expertise in structural design and project management for infrastructure projects.",
-    "Questions": [
-      "Describe a challenging structural design project you worked on.",
-      "How do you manage multiple projects simultaneously?",
-      "Why do you enjoy civil engineering?"
-    ],
-    "Company": "Bechtel Corporation",
-    "Logo": "URL",
-    "Industry": "Engineering"
-  },
-  {
-    "Deadline": "April 28, 2023",
-    "Posting Date": "February 25, 2023",
-    "Number of Applicants": 105,
-    "Title": "Graphic Designer",
-    "Requirements": ["Adobe Creative Suite", "Typography", "Visual Communication"],
-    "Description": "Seeking a graphic designer with expertise in Adobe Creative Suite for creating visually stunning marketing materials.",
-    "Questions": [
-      "Showcase a portfolio piece that demonstrates your design skills.",
-      "How do you stay updated with design trends?",
-      "What role does typography play in effective visual communication?"
-    ],
-    "Company": "Apple Inc.",
-    "Logo": "URL",
-    "Industry": "Design"
-  },
-  {
-    "Deadline": "April 22, 2023",
-    "Posting Date": "February 18, 2023",
-    "Number of Applicants": 90,
-    "Title": "Financial Analyst",
-    "Requirements": ["Financial Modeling", "Risk Assessment", "Market Analysis"],
-    "Description": "Seeking a financial analyst to provide insightful financial analysis and recommendations for investment decisions.",
-    "Questions": [
-      "Describe a complex financial model you developed.",
-      "How do you assess and mitigate financial risks?",
-      "Why are you interested in financial analysis?"
-    ],
-    "Company": "Goldman Sachs",
-    "Logo": "URL",
-    "Industry": "Finance"
-  },
-  {
-    "Deadline": "April 25, 2023",
-    "Posting Date": "February 20, 2023",
-    "Number of Applicants": 100,
-    "Title": "Data Scientist",
-    "Requirements": ["Machine Learning", "Statistical Analysis", "Data Visualization"],
-    "Description": "Seeking a data scientist with expertise in machine learning, statistical analysis, and data visualization for actionable insights.",
-    "Questions": [
-      "Describe a machine learning project you led.",
-      "How do you approach statistical analysis to derive meaningful insights?",
-      "Why is data visualization important in data science?"
-    ],
-    "Company": "Google",
-    "Logo": "URL",
-    "Industry": "Technology"
-  },
-  {
-    "Deadline": "April 30, 2023",
-    "Posting Date": "February 25, 2023",
-    "Number of Applicants": 80,
-    "Title": "Biomedical Engineer",
-    "Requirements": ["Biomaterials", "Medical Devices", "Biomechanics"],
-    "Description": "Seeking a biomedical engineer with expertise in biomaterials, medical devices, and biomechanics for innovative healthcare solutions.",
-    "Questions": [
-      "Describe a challenging project you worked on in the biomedical field.",
-      "How do you ensure the safety and efficacy of medical devices?",
-      "Why are you passionate about biomedical engineering?"
-    ],
-    "Company": "Medtronic",
-    "Logo": "URL",
-    "Industry": "Healthcare"
-  },
-  {
-    "Deadline": "April 20, 2023",
-    "Posting Date": "February 15, 2023",
-    "Number of Applicants": 70,
-    "Title": "Content Writer",
-    "Requirements": ["SEO", "Copywriting", "Content Strategy"],
-    "Description": "Seeking a content writer with expertise in SEO, copywriting, and content strategy to create engaging content for various platforms.",
-    "Questions": [
-      "Share a piece of content you wrote that performed well in search rankings.",
-      "How do you craft compelling copy for different target audiences?",
-      "Why is content strategy essential in content creation?"
-    ],
-    "Company": "HubSpot",
-    "Logo": "URL",
-    "Industry": "Marketing"
-  },
+        "deadline": "April 26, 2023",
+        "posting_date": "February 21, 2023",
+        "applicants": 100,
+        "title": "DevOps Engineer",
+        "Requirements": ["Continuous Integration", "Continuous Deployment", "Infrastructure as Code"],
+        "Description": "Seeking a DevOps engineer with expertise in implementing continuous integration, continuous deployment, and infrastructure as code practices to streamline software development and deployment processes.",
+        "Questions": [
+            "Describe your experience with automating deployment pipelines.",
+            "How do you manage infrastructure using configuration management tools?",
+            "What benefits do you see in adopting DevOps practices?"
+        ],
+        "company": "GitHub",
+        "logo_url": "https://cdn.pixabay.com/photo/2022/01/30/13/33/github-6980894_1280.png",
+        "Industry": "Technology",
+        "location": "San Francisco, California, USA"
+    },
+    {
+        "deadline": "May 1, 2023",
+        "posting_date": "March 1, 2023",
+        "applicants": 129,
+        "title": "Entry level - Software Engineer",
+        "Requirements": ["Diversity", "Inclusion", "Essay"],
+        "Description": "We are looking for New Grads with internship expertise in C++ Development and DevOps.",
+        "Questions": [
+            "List your most important C++ project so far?",
+            "Why do you believe diversity is important?",
+            "Message to hiring manager?"
+        ],
+        "company": "Amazon",
+        "logo_url": "https://i.pinimg.com/736x/0a/06/60/0a06600cc3cedeb49280b54114c88ce6.jpg",
+        "Industry": "Technology",
+        "location": "Seattle, Washington, USA"
+    },
+    {
+        "deadline": "April 15, 2023",
+        "posting_date": "February 15, 2023",
+        "applicants": 80,
+        "title": "Backend Developer",
+        "Requirements": ["Fieldwork", "Data Analysis", "Report Writing"],
+        "Description": "Seeking an environmental scientist with experience in fieldwork, data analysis, and report writing for a research project on climate change.",
+        "Questions": [
+            "Describe your experience in conducting fieldwork related to environmental science?",
+            "How do you approach data analysis in your research?",
+            "What is the importance of accurate report writing in environmental science?"
+        ],
+        "company": "Discord",
+        "logo_url": "https://i.pinimg.com/736x/c8/83/cb/c883cb55b591dc00ecdd30304a5ab52f.jpg",
+        "Industry": "Technology",
+        "location": "Washington, D.C., USA"
+    },
+    {
+        "deadline": "April 22, 2023",
+        "posting_date": "February 18, 2023",
+        "applicants": 90,
+        "title": "Financial Analyst",
+        "Requirements": ["Financial Modeling", "Risk Assessment", "Market Analysis"],
+        "Description": "Seeking a financial analyst to provide insightful financial analysis and recommendations for investment decisions.",
+        "Questions": [
+            "Describe a complex financial model you developed.",
+            "How do you assess and mitigate financial risks?",
+            "Why are you interested in financial analysis?"
+        ],
+        "company": "Goldman Sachs",
+        "logo_url": "https://logowik.com/content/uploads/images/goldman-sachs-group5993.jpg",
+        "Industry": "Finance",
+        "location": "New York City, New York, USA"
+    },
+    {
+        "deadline": "April 25, 2023",
+        "posting_date": "February 20, 2023",
+        "applicants": 100,
+        "title": "Data Scientist",
+        "Requirements": ["Machine Learning", "Statistical Analysis", "Data Visualization"],
+        "Description": "Seeking a data scientist with expertise in machine learning, statistical analysis, and data visualization for actionable insights.",
+        "Questions": [
+            "Describe a machine learning project you led.",
+            "How do you approach statistical analysis to derive meaningful insights?",
+            "Why is data visualization important in data science?"
+        ],
+        "company": "Google",
+        "logo_url": "https://cdn2.hubspot.net/hubfs/53/image8-2.jpg",
+        "Industry": "Technology",
+        "location": "Mountain View, California, USA"
+    },
 ]
+
 
 seekers = [
     {

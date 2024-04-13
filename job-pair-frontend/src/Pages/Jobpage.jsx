@@ -97,15 +97,16 @@ export default function Jobpage() {
     }, [])
 
    const deleteJobFunction = async (jobId) => {
-        try {
-            const response = await Axios.delete("http://localhost:3000/delete_job/" + jobId, {
-            })
-            const newJobs = jobs.filter(job => job.id !== jobId);
-            setJobs(newJobs);
-
-        } catch (error) {
-            console.error("Error in getting resources for job page", error);
-        }
+    try {
+        const response = await Axios.delete('http://127.0.0.1:5002/delete-job', {
+            params: { job_id: jobId }
+        });
+        console.log(response.data);
+        const newJobs = jobs.filter((job) => job.id !== jobId);
+        setJobs(newJobs);
+    } catch (error) {
+        console.error('Error delete: ', error);
+    }
     }
 
 

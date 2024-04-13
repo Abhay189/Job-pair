@@ -31,8 +31,11 @@ const ApplicationReviewPage = () => {
   }, []);
 
   return (
+    // <div>
+    //    {isMobile ? <MobileWarning pageName="Application Review"/> : <ApplicationReview />} {/* Render MobileWarning or AdminPanel based on isMobile state */}
+    // </div>
     <div>
-       {isMobile ? <MobileWarning pageName="Application Review"/> : <ApplicationReview />} {/* Render MobileWarning or AdminPanel based on isMobile state */}
+    {<ApplicationReview />} {/* Render MobileWarning or AdminPanel based on isMobile state */}
     </div>
   );
 };
