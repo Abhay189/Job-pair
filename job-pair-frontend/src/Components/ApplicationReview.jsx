@@ -60,6 +60,7 @@ export default function ApplicationReview() {
       });
   }, [id]);  
 
+
   const handleEditClick = (index) => {
     if (responses && index < responses.length) {
       setEditingIndex(index);
@@ -130,6 +131,9 @@ export default function ApplicationReview() {
       await Axios.post("http://127.0.0.1:5002/submit_application", {
         id:userId,
         job_id: id,
+        job_title: jobName,
+        application_response: responses,
+
       });
       
       redirectToJobs()
