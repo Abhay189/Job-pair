@@ -21,6 +21,11 @@
     margin-bottom: 20px; /* Space between the header and the rest of the content */
   }
 
+.chat-page-header h1{
+  font-size: 2em;
+}
+
+
 .top-right {
     position: absolute;
     top: 20px; /* Adjust the top position as needed */
@@ -33,6 +38,8 @@
   width: 100%; 
   min-height: 100%;
   max-width: 2000px;
+  padding: 0px 10px;
+  gap: 10px;
   height: auto;
   margin-right: 0;
   flex: 1;
@@ -86,9 +93,8 @@
     color: black;
     align-self: flex-end;
     font-weight: bold;
-    padding-right: 20px;
-    /* You can add a different shadow color if you like */
     box-shadow: 0 4px 8px rgba(112, 111, 111, 0.15);
+    margin: 0px;
 }
 
 /* Other user message style */
@@ -96,9 +102,8 @@
     background-color: purple;
     color: white;
     align-self: flex-start;
-    /* Consistent shadow with user messages */
-    margin-left: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    margin: 0px;
 }
 
 /* Message form container */
@@ -140,3 +145,15 @@
     padding: 3px 7px;
     border-radius: 8px;
   }
+
+    /* Media query for smaller screens to ensure wrapping occurs */
+@media (max-width: 768px) {
+  .chat-page {
+    padding-top: 50px;
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+  .chat-page-header h1{
+    font-size: 1em;
+  }
+}

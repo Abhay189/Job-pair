@@ -17,8 +17,28 @@
   font-size: 1.5em;
 }
 
-
-
 .chat-button {
   font-size: 1.5em;
+  width: 200px;
+}
+
+
+
+/* Media query for smaller screens to ensure wrapping occurs */
+@media (max-width: 768px) {
+  .chat-page {
+    padding-top: 50px;
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+  .send-message-container .message-container {
+    width: 100%;
+  }
+  .message-container .form-control{
+    font-size: 1.2em;
+  }
+  .chat-button {
+    font-size: 1.2em;
+  }
+
 }
