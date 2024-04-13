@@ -422,10 +422,16 @@ def submit_application():
         # get company name from job doc
         company = job_doc_ref.get().to_dict().get('company')
 
+
+        application_response = data.get('application_response')
+
+        if isinstance(application_response, str):
+            application_response = [application_response]  # Convert string to list if it's a single answer
+
         # Preparing the document data to be added
         application_data = {
             'application_date': datetime.utcnow().date().isoformat(),
-            'application_response': data.request.form.getlist('application_response'),
+            'application_response': application_response,
             'application_status': 'applied',  # Default status is 'applied
             'company': company,
             'job_id': int(data.get('job_id')),
@@ -605,7 +611,7 @@ def update_job_status():
         # Get data from the request
         data = request.json
         seeker_id = int(data.get('user_id'))
-        application_id = data.get('job_id')
+        application_id = data.get('application_id')
         new_status = data.get('new_status')
 
         seeker_query = db.collection('seekers').where('id', '==', seeker_id).limit(1)
@@ -1002,6 +1008,43 @@ def flag_conversation():
     return {'message': 'Chat flag updated successfully'}, 200
   except Exception as e:
     return {'error': f'Error updating chat flag: {str(e)}'}, 500
+  
+
+
+
+@app.route('/send-interview', methods=['POST'])
+def send_interview():
+    data = request.json
+    user_id = int(data.get('user_id'))
+    job_id = int(data.get('job_id'))
+
+    if not user_id or not job_id:
+        return jsonify({"error": "Missing user_id or job_id"}), 400
+
+    try:
+     
+        seekers_query = db.collection('seekers').where('id', '==', user_id).limit(1)
+        seekers_docs = seekers_query.stream()
+
+        seeker_found = next(seekers_docs, None)
+        if seeker_found is None:
+            return jsonify({"error": "No seeker found with the provided user_id"}), 404
+
+     
+        applied_jobs_ref = seeker_found.reference.collection('applied_jobs')
+        job_query = applied_jobs_ref.where('job_id', '==', job_id).limit(1)
+        job_docs = job_query.stream()
+
+       
+        job_found = next(job_docs, None)
+        if job_found:
+            job_found.reference.update({'application_status': 'interview'})
+            return jsonify({"success": "Application status updated to interview"}), 200
+        else:
+            return jsonify({"error": "No application found for the provided job_id"}), 404
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 # @app.route('/test', methods=['GET'])
