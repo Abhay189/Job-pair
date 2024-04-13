@@ -11,15 +11,9 @@ const API_BASE_URL = 'http://127.0.0.1:5002';
 const TrackingPage = () => {
 
   let navigate = useNavigate();
+  const [userId, setUserId] = useState(0);
 
-  useEffect(()=> {
-    const temp_id = localStorage.getItem('id');
 
-    if (temp_id == null) {
-        console.error('User not signed in, redirecting to login..');
-        navigate('/');
-    }
-  },[]);
 
 
   const [applications, setApplications] = useState({
@@ -35,7 +29,7 @@ const TrackingPage = () => {
     // Reloads the current page
     window.location.reload();
     // Redirects to the main page
-    window.location.href = "http://localhost:3000/applicationReview/1";
+    window.location.href = "http://localhost:3000/";
   };
 
   const Get_Title_Name = (given_name) => {
@@ -56,35 +50,45 @@ const TrackingPage = () => {
   };
 
   useEffect(() => {
-    // Fetch scholarship applications from the backend
-    axios.get(`${API_BASE_URL}/get_all_applied_jobs`, {
-      params: {
-        'id' : 1
+    debugger;
+    const fetchData = async () => {
+      const tempId = localStorage.getItem('id');
+      
+      if (tempId == null) {
+        console.error('User not signed in, redirecting to login..');
+        navigate('/');
+        return;
       }
-    })
-      .then((response) => {
-        const categorizedApplications = {
-          applied: [],
-          in_progress: [],
-          interview: [],
-          accepted: [],
-          rejected: [],
-        };
+      
+      setUserId(tempId);
 
-        console.log( response.data);
-
-        // Categorize applications based on the 'status' key in the response
-        response.data['applied_jobs'].forEach((application) => {
-          const Status  = application.application_status;
-          categorizedApplications[Status].push(application);
+      try {
+        const response = await axios.get(`${API_BASE_URL}/get_all_applied_jobs`, {
+          params: { 'id': tempId }
         });
 
-        // Set the categorized applications to the state
+        const categorizedApplications = {
+          "applied": [],
+          "in_progress": [],
+          "interview": [],
+          "accepted": [],
+          "rejected": [],
+        };
+
+        response.data['applied_jobs'].forEach((application) => {
+      
+          const status = application.application_status;
+          console.log(application);
+          categorizedApplications[status].push(application);
+        });
+
         setApplications(categorizedApplications);
-      })
-      .catch((error) => {
-        console.error('Error fetching Job applications:', error);
-      });
+      } catch (error) {
+        console.error('Error fetching job applications:', error);
+      }
+    };
+
+    fetchData();
   }, []);
 
   const onDragEnd = async (result) => {
@@ -99,7 +103,7 @@ const TrackingPage = () => {
       const sourceColumn = updatedApplications[source.droppableId];
       const destinationColumn = updatedApplications[destination.droppableId];
       const movedApplication = sourceColumn.find(
-        (app) => app.job_id === draggableId
+        (app) => app.id === draggableId
       );
 
       sourceColumn.splice(source.index, 1);
@@ -109,8 +113,8 @@ const TrackingPage = () => {
       try {
         console.log(destination);
         await axios.post(`${API_BASE_URL}/update_job_status`, {
-          user_id: 1,
-          job_id: movedApplication.job_id,
+          user_id: userId,
+          application_id: movedApplication.id,
           new_status: destination.droppableId,
         });
       }
@@ -138,8 +142,8 @@ const TrackingPage = () => {
                     <h2 className={`${styles.SubHeader}`} style={{ fontSize: '3em', textAlign: 'center', paddingTop: `15px`, paddingBottom:`10px`, fontWeight:`bolder`, color:`white`}}>{Get_Title_Name(column)}</h2>
                     {applications[column].map((application, index) => (
                       <Draggable
-                        key={application.job_id}
-                        draggableId={application.job_id}
+                        key={application.id}
+                        draggableId={application.id}
                         index={index}
                       >
                         {(provided) => (
