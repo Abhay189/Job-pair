@@ -1054,7 +1054,9 @@ def get_chats_admin():
                 'date': chat_dict.get('date'),
                 'id': chat.id,
                 'deleted': chat_dict.get('deleted'),
-                'flagged': chat_dict.get('flagged')
+                'flagged': chat_dict.get('flagged'),
+                'flagged_reason': chat_dict.get('flagged_reason')
+
             })
 
         return jsonify(chats), 200
@@ -1120,6 +1122,7 @@ def resolve_conversation(conversation_id):
 def flag_conversation():
   chatId = request.json.get('chatId')
   flagged = request.json.get('flagged')
+  flagged_reason = request.json.get('flagged_reason')
 
   if chatId is None or flagged is None:
     return {'error': 'Missing required fields in request'}, 400
@@ -1127,6 +1130,7 @@ def flag_conversation():
   try:
     doc_ref = db.collection('chats').document(chatId)
     doc_ref.update({'flagged': flagged})
+    doc_ref.update({'flagged_reason': flagged_reason})
     return {'message': 'Chat flag updated successfully'}, 200
   except Exception as e:
     return {'error': f'Error updating chat flag: {str(e)}'}, 500

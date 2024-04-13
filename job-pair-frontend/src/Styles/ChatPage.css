@@ -87,20 +87,19 @@
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* stronger shadow on hover */
 }
 
-/* User message style */
-.message.user {
-    background-color: #ccc;
-    color: black;
+.message.other {
+  background-color: #575DFB;
+
+    color: white;
     align-self: flex-end;
     font-weight: bold;
     box-shadow: 0 4px 8px rgba(112, 111, 111, 0.15);
     margin: 0px;
 }
 
-/* Other user message style */
-.message.other {
-    background-color: purple;
-    color: white;
+.message.user {
+  background-color: #ccc;
+    color: black;
     align-self: flex-start;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
     margin: 0px;
