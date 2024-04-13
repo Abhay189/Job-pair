@@ -315,8 +315,8 @@ def update_job_answer():
         print("Reached endpoint!")
         # Get data from the request
         data = request.json
-        seeker_id = data.get('user_id')
-        job_id = data.get('job_id')
+        seeker_id = int(data.get('user_id'))
+        job_id = int(data.get('job_id'))
         index = data.get('index')
         updated_answer = data.get('updated_answer')
 
