@@ -913,6 +913,7 @@ def get_chats_admin():
             sender = chat_dict.get('seeker_name') if 'recruiter_id' in chat_dict else chat_dict.get('recruiter_name')
             chats.append({
                 'recruiter_id': chat_dict.get('recruiter_id'),
+                'recruiter_company': chat_dict.get('recruiter_company'),
                 'seeker_id': chat_dict.get('seeker_id'),
                 'lastMessage': last_message,
                 'sender': sender,
@@ -969,7 +970,8 @@ def add_message():
 def delete_conversation(conversation_id):
     try:
         conversation_ref = db.collection('chats').document(conversation_id)
-        conversation_ref.delete()
+        conversation_ref.update({'deleted': True})
+        conversation_ref.update({'flagged': False})
         return jsonify({"success": "Conversation deleted successfully"}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
