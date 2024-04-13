@@ -9,7 +9,6 @@
 
 /* Container for the image section, taking up the left 50% */
 .signup-image-section {
-  order: -1;
   width: 50%; /* Explicitly set the width to 50% */
   display: flex;
   justify-content: center; /* Center the content horizontally */
@@ -295,5 +294,8 @@
 
   .signup-footer p {
     padding-top: 1rem; 
+  }
+  .signup-image-section {
+    order: -1;
   }
 }
