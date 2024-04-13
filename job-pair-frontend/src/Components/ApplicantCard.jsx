@@ -20,7 +20,7 @@ function ApplicantCard({ applicant }) {
       console.log("recruiter id: ", localStorage.getItem('id'));
       console.log("seeker id: ", applicant.id);
       console.log(response.data);
-      navigate(`/chat/${response.data.chat_id}`);
+      navigate(`/chats`);
     } catch (error) {
       console.error('Error creating chat:', error);
     }
