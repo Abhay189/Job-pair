@@ -3,16 +3,42 @@ import '../Styles/jobpage.css';
 import { useNavigate } from 'react-router-dom';
 import { useState,useEffect } from 'react';
 import { Button } from 'react-bootstrap';
+import axios from 'axios';
+
 function JobCard({ job, userType,deleteJobFunction }) {
+
+  const [userId, setUserId] = useState('');
   const navigate = useNavigate();
-  
+
+  useEffect(() => {
+      const tempId = localStorage.getItem('id');
+      if (tempId) {
+          setUserId(tempId);
+          console.log('current user id: ', tempId);
+      }
+  }, []);
+
   const sendToApplication = () => {
-    if(userType === 'seekers'){
-    navigate('/applicationReview/' + job.id)
+      if (userType === 'seekers' && userId && job) {
+          const requestData = {
+              id: userId,
+              job_id: job.id,
+              company: job.company,
+              job_title: job.title
+          };
 
-      
-
-    }
+          axios.post('http://127.0.0.1:5002/create_application', requestData)
+              .then(response => {
+                  console.log(response.data);
+                  navigate('/applicationReview/' + job.id);
+              })
+              .catch(error => {
+                  console.error(error);
+                  // Handle error - redirect to an error page or show an error message
+              });
+      } else {
+          console.error('Missing user ID, job data, or user type is not "seekers"');
+      }
   }
 
   const closeJob = () => {
