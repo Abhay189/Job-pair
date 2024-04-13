@@ -299,7 +299,7 @@ def get_all_applied_jobs():
         # Iterate through the applied jobs and add their data to the list
         for job_doc in applied_jobs_docs:
             job_data = job_doc.to_dict()
-            job_data['job_id'] = job_doc.id  # Include the job document ID
+            job_data['id'] = job_doc.id  # Include the job document ID
             applied_jobs.append(job_data)
 
     if applied_jobs:
@@ -407,26 +407,39 @@ def submit_application():
 
         if not seeker_id:
             return jsonify({'error': 'Missing seeker ID'}), 400
-
-        # Preparing the document data to be added
-        application_data = {
-            'application_date': data.get('application_date'),
-            'application_response': data.get('application_response'),
-            'application_status': data.get('application_status'),
-            'company': data.get('company'),
-            'job_id': int(data.get('job_id')),
-            'job_title': data.get('job_title')
-        }
-
         
+
+
         job_id = int(data.get('job_id'))
         job_query = db.collection('jobs').where('id', '==', job_id).limit(1).get()
         if not job_query: 
             return jsonify({'error': 'Job not found'}), 404
         job_doc_ref = job_query[0].reference 
         job_doc_ref.update({'applicants': firestore.Increment(1)})
-        # add seeker id to job applicant_ids array
+       
         job_doc_ref.update({'applicant_ids': ArrayUnion([seeker_id])})
+
+        # get company name from job doc
+        company = job_doc_ref.get().to_dict().get('company')
+
+
+        application_response = data.get('application_response')
+
+        if isinstance(application_response, str):
+            application_response = [application_response]  # Convert string to list if it's a single answer
+
+        # Preparing the document data to be added
+        application_data = {
+            'application_date': datetime.utcnow().date().isoformat(),
+            'application_response': application_response,
+            'application_status': 'applied',  # Default status is 'applied
+            'company': company,
+            'job_id': int(data.get('job_id')),
+            'job_title': data.get('job_title')
+        }
+
+        
+      
 
 
         # Find the seeker using his id since it's not the key of his document but is unique
@@ -444,7 +457,6 @@ def submit_application():
             return jsonify({'error': 'Seeker not found'}), 404
 
     except Exception as e:
-        # It's a good practice to log the exception here for debugging purposes
         return jsonify({'error': str(e)}), 500
 
 
@@ -598,23 +610,23 @@ def update_job_status():
     try:
         # Get data from the request
         data = request.json
-        seeker_id = data.get('user_id')
-        job_id = data.get('job_id')
+        seeker_id = int(data.get('user_id'))
+        application_id = data.get('application_id')
         new_status = data.get('new_status')
 
         seeker_query = db.collection('seekers').where('id', '==', seeker_id).limit(1)
         seeker_docs = seeker_query.get()
 
         if not seeker_docs:  
-            return jsonify({'message': 'No applied jobs found for the given user ID, job ID.'}), 404
+            return jsonify({'message': 'No applied jobs found for the given user ID, application ID.'}), 404
 
         seeker_doc_ref = seeker_docs[0].reference  
 
-        applied_jobs_ref  = seeker_doc_ref.collection('applied_jobs').document(job_id)
+        applied_jobs_ref  = seeker_doc_ref.collection('applied_jobs').document(application_id)
         applied_job = applied_jobs_ref.get()
 
         if not applied_job.exists:
-            return jsonify({'message': 'Applied job not found for the given job ID.'}), 404
+            return jsonify({'message': 'Applied job not found for the given application ID.'}), 404
 
         applied_jobs_ref.update({'application_status': new_status})
         
@@ -998,6 +1010,43 @@ def flag_conversation():
     return {'message': 'Chat flag updated successfully'}, 200
   except Exception as e:
     return {'error': f'Error updating chat flag: {str(e)}'}, 500
+  
+
+
+
+@app.route('/send-interview', methods=['POST'])
+def send_interview():
+    data = request.json
+    user_id = int(data.get('user_id'))
+    job_id = int(data.get('job_id'))
+
+    if not user_id or not job_id:
+        return jsonify({"error": "Missing user_id or job_id"}), 400
+
+    try:
+     
+        seekers_query = db.collection('seekers').where('id', '==', user_id).limit(1)
+        seekers_docs = seekers_query.stream()
+
+        seeker_found = next(seekers_docs, None)
+        if seeker_found is None:
+            return jsonify({"error": "No seeker found with the provided user_id"}), 404
+
+     
+        applied_jobs_ref = seeker_found.reference.collection('applied_jobs')
+        job_query = applied_jobs_ref.where('job_id', '==', job_id).limit(1)
+        job_docs = job_query.stream()
+
+       
+        job_found = next(job_docs, None)
+        if job_found:
+            job_found.reference.update({'application_status': 'interview'})
+            return jsonify({"success": "Application status updated to interview"}), 200
+        else:
+            return jsonify({"error": "No application found for the provided job_id"}), 404
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 # @app.route('/test', methods=['GET'])

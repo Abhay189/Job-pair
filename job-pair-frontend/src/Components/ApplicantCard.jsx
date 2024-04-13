@@ -7,27 +7,38 @@ import { faStar as farStar } from '@fortawesome/free-regular-svg-icons';
 import { faStar as fasStar } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-function ApplicantCard({ applicant }) {
+function ApplicantCard({ applicant,jobId }) {
   const navigate = useNavigate();
   const [isStarFilled, setIsStarFilled] = useState(false);
+  const apiBaseUrl = 'http://127.0.0.1:5002'
+
 
   const chatNow = async () => {
     try {
-      const response = await axios.post('http://127.0.0.1:5002/create-chat', {
+      const response = await axios.post( `${apiBaseUrl}/create-chat`, {
         user_id: localStorage.getItem('id'),
         recipient_id: applicant.id,
       });
       console.log("recruiter id: ", localStorage.getItem('id'));
       console.log("seeker id: ", applicant.id);
       console.log(response.data);
-      navigate(`/chat/${response.data.chat_id}`);
+      navigate(`/chats`);
     } catch (error) {
       console.error('Error creating chat:', error);
     }
 };
 
-  const sendInterview = () => {
-    console.log('Interview Sent')
+  const sendInterview = async() => {
+    try {
+      const response = await axios.post(`${apiBaseUrl }/send-interview`, {
+          user_id: applicant.id,
+          job_id: jobId
+      });
+
+      console.log('Response:', response.data);
+  } catch (error) {
+      console.error('Error updating application status:', error.response.data);
+  }
 
   }
   return (
