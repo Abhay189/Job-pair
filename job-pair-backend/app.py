@@ -400,61 +400,85 @@ def get_job_answer():
 
 @app.route('/submit_application', methods=['POST'])
 def submit_application():
+    data = request.json
+    user_id = int(data.get('id'))
+    job_id = int(data.get('job_id'))
+
+    if not user_id or not job_id:
+        return jsonify({"error": "Missing user_id or job_id"}), 400
+
     try:
-        # Extracting the application information and the seeker's ID from the request
-        data = request.json
-        seeker_id = int(data.get('id'))  # This is the field 'id' inside the document.
-        print("seeker id: ", seeker_id)
+     
+        seekers_query = db.collection('seekers').where('id', '==', user_id).limit(1)
+        seekers_docs = seekers_query.stream()
 
-        if not seeker_id:
-            return jsonify({'error': 'Missing seeker ID'}), 400
-        
+        seeker_found = next(seekers_docs, None)
+        if seeker_found is None:
+            return jsonify({"error": "No seeker found with the provided user_id"}), 404
 
+     
+        applied_jobs_ref = seeker_found.reference.collection('applied_jobs')
+        job_query = applied_jobs_ref.where('job_id', '==', job_id).limit(1)
+        job_docs = job_query.stream()
 
-        job_id = int(data.get('job_id'))
-        job_query = db.collection('jobs').where('id', '==', job_id).limit(1).get()
-        if not job_query: 
-            return jsonify({'error': 'Job not found'}), 404
-        job_doc_ref = job_query[0].reference 
-        job_doc_ref.update({'applicants': firestore.Increment(1)})
        
-        job_doc_ref.update({'applicant_ids': ArrayUnion([seeker_id])})
-
-        # get company name from job doc
-        company = job_doc_ref.get().to_dict().get('company')
-
-
-        application_response = data.get('application_response')
-
-        if isinstance(application_response, str):
-            application_response = [application_response]  # Convert string to list if it's a single answer
-
-        # Preparing the document data to be added
-        application_data = {
-            'application_date': datetime.utcnow().date().isoformat(),
-            'application_response': application_response,
-            'application_status': 'applied',  # Default status is 'applied
-            'company': company,
-            'job_id': int(data.get('job_id')),
-            'job_title': data.get('job_title')
-        }
-
-        # Find the seeker using his id since it's not the key of his document but is unique
-        seeker_query = db.collection('seekers').where('id', '==', seeker_id).limit(1).get()
-
-        seeker_doc_ref = None
-        for doc in seeker_query:
-            seeker_doc_ref = doc.reference  # Get the document reference for the found seeker
-
-        if seeker_doc_ref:
-            # Adding the application information to the seeker's 'applied_jobs' subcollection
-            seeker_doc_ref.collection('applied_jobs').add(application_data)
-            return jsonify({'success': True, 'message': 'Application submitted successfully.'}), 200
+        job_found = next(job_docs, None)
+        if job_found:
+            job_found.reference.update({'application_status': 'applied'})
+            return jsonify({"success": "Application status updated to interview"}), 200
         else:
-            return jsonify({'error': 'Seeker not found'}), 404
+            return jsonify({"error": "No application found for the provided job_id"}), 404
 
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        return jsonify({"error": str(e)}), 500
+
+# @app.route('/submit_application', methods=['POST'])
+# def submit_application():
+#     try:
+#         # Extracting the application information and the seeker's ID from the request
+#         data = request.json
+#         seeker_id = int(data.get('id'))  # This is the field 'id' inside the document.
+#         print("seeker id: ", seeker_id)
+
+#         if not seeker_id:
+#             return jsonify({'error': 'Missing seeker ID'}), 400
+
+#         job_id = int(data.get('job_id'))
+#         job_query = db.collection('jobs').where('id', '==', job_id).limit(1).get()
+#         if not job_query:
+#             return jsonify({'error': 'Job not found'}), 404
+#         job_doc_ref = job_query[0].reference
+#         job_doc_ref.update({'applicants': firestore.Increment(1)})
+#         job_doc_ref.update({'applicant_ids': ArrayUnion([seeker_id])})
+
+#         # get company name from job doc
+#         company = job_doc_ref.get().to_dict().get('company')
+
+#         # Preparing the document data to be added
+#         application_data = {
+#             'application_date': datetime.utcnow().date().isoformat(),
+#             'application_status': 'applied',  # Setting application status to 'applied'
+#             'company': company,
+#             'job_id': int(data.get('job_id')),
+#             'job_title': data.get('job_title')
+#         }
+
+#         # Find the seeker using his id since it's not the key of his document but is unique
+#         seeker_query = db.collection('seekers').where('id', '==', seeker_id).limit(1).get()
+
+#         seeker_doc_ref = None
+#         for doc in seeker_query:
+#             seeker_doc_ref = doc.reference  # Get the document reference for the found seeker
+
+#         if seeker_doc_ref:
+#             # Adding the application information to the seeker's 'applied_jobs' subcollection
+#             seeker_doc_ref.collection('applied_jobs').add(application_data)
+#             return jsonify({'success': True, 'message': 'Application submitted successfully.'}), 200
+#         else:
+#             return jsonify({'error': 'Seeker not found'}), 404
+
+#     except Exception as e:
+#         return jsonify({'error': str(e)}), 500
 
 
 def get_personal_setup_info(user_id):
@@ -1030,9 +1054,7 @@ def get_chats_admin():
                 'date': chat_dict.get('date'),
                 'id': chat.id,
                 'deleted': chat_dict.get('deleted'),
-                'flagged': chat_dict.get('flagged'),
-                'flagged_reason': chat_dict.get('flagged_reason')
-
+                'flagged': chat_dict.get('flagged')
             })
 
         return jsonify(chats), 200
@@ -1094,12 +1116,10 @@ def resolve_conversation(conversation_id):
         return jsonify({"success": "Conversation resolved successfully"}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-    
 @app.route('/flagChat', methods=['POST'])
 def flag_conversation():
   chatId = request.json.get('chatId')
   flagged = request.json.get('flagged')
-  flagged_reason = request.json.get('flagged_reason')
 
   if chatId is None or flagged is None:
     return {'error': 'Missing required fields in request'}, 400
@@ -1107,7 +1127,6 @@ def flag_conversation():
   try:
     doc_ref = db.collection('chats').document(chatId)
     doc_ref.update({'flagged': flagged})
-    doc_ref.update({'flagged_reason': flagged_reason})
     return {'message': 'Chat flag updated successfully'}, 200
   except Exception as e:
     return {'error': f'Error updating chat flag: {str(e)}'}, 500
