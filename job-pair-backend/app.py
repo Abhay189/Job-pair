@@ -862,7 +862,7 @@ def get_chats():
             
             print("Chats dict: ", chat_dict)
             last_message = chat_dict['messages'][-1]['message'] if chat_dict.get('messages') else ""
-            sender = chat_dict.get('seeker_name') if user_type == 'recruiters' else chat_dict.get('seeker_name')
+            sender = chat_dict.get('seeker_name') if user_type == 'recruiters' else chat_dict.get('recruiter_name')
             chats.append({
                 'recruiter_id': chat_dict.get('recruiter_id'),
                 'seeker_id': chat_dict.get('seeker_id'),
