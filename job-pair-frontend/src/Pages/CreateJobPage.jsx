@@ -30,7 +30,7 @@ function CreateJobPage() {
     questionsCount: '1',
     questions: ['']
   });
-  debugger;
+  // debugger;
   const { id } = useParams();
   console.log("id is",id);
 
