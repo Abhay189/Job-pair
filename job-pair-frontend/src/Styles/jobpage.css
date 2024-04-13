@@ -58,6 +58,7 @@
 
 
 .create-job-button-wrapper {
+  margin-bottom: 40px;
   display: flex;
   justify-content: center;
   margin-top: 1em;
@@ -95,8 +96,10 @@
 .job-right-div {
   flex: 1;
   min-height: 50vh;
+  min-width: 500px;
   height: auto;
-  margin-right: 20px;
+  justify-content: space-between;
+  gap: 20px;
   background-color: #D9D9D9;
   display: flex;
   flex-direction: column;
@@ -160,4 +163,47 @@
   display: flex;
   margin-top: 1em;
   gap: 1em;
+}
+
+.dropdown {
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+}
+
+.dropdown-toggle {
+  text-align: center;
+  background-color: #f8f9fa; /* Light gray background for visibility */
+  color: #333; /* Default dark text for contrast */
+  border: 1px solid #ccc; /* Light border for definition */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for background and text color */
+}
+
+.dropdown-toggle:hover {
+  background-color: #575DFB; /* Dark blue background on hover */
+  color: #FFFFFF; /* White text on hover for better visibility */
+}
+
+.dropdown-menu {
+  
+  width: 100%; /* Ensure menu uses the full width of the toggle */
+}
+
+.dropdown-item button {
+  width: 100%; /* Buttons fill the dropdown item space */
+  background-color: transparent; /* Transparent buttons within the dropdown */
+  border: none; /* No borders on the buttons to keep it clean */
+  color: #007bff; /* Bootstrap primary blue for text to stand out */
+  text-align: left; /* Align text to the left for a standard dropdown look */
+}
+
+.dropdown-item:hover button {
+  color: #FFFFFF; /* White text color on hover for better visibility inside dropdown items */
+  background-color: #575DFB; /* Background color change on hover for dropdown items */
+}
+
+.dropdown-toggle:focus {
+  color: #FFFFFF; /* White text color on hover for better visibility inside dropdown items */
+  background-color: #575DFB; /* Background color change on hover for dropdown items */
 }
