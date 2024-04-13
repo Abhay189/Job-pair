@@ -35,7 +35,6 @@
 
 .job-card:hover {
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); /* Shadow effect on hover */
-  transform: translateY(-5px); /* Slight lift effect on hover */
 }
 
 .job-card-body img {
@@ -141,6 +140,10 @@
 
   .jobs-container {
     padding-top: 50px;
+  }
+
+  .job-card{
+    width: 90%;
   }
 } 
 
