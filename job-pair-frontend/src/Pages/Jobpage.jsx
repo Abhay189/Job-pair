@@ -74,7 +74,6 @@ export default function Jobpage() {
         <>
         <div className="jobs-container">
 
-            <h1>Jobs</h1>
             <div className="job-main-content-wrapper">
 
 

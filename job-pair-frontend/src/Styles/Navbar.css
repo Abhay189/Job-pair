@@ -22,3 +22,9 @@
   font-weight: bold; /* Makes the text bold */
   border-radius: 5px; /* Adds rounded corners for a button-like appearance */
 }
+
+.me-auto {
+  flex: 1;
+  justify-content: center;
+  gap: 20px;
+}

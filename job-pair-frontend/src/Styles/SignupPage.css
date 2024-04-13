@@ -2,13 +2,14 @@
 
 .signup-page-container {
   display: flex;
-  height: 100vh;
+  min-height: 100vh;
+  height: auto;
   background-color: #051622;
-  overflow: hidden;
 }
 
 /* Container for the image section, taking up the left 50% */
 .signup-image-section {
+  order: -1;
   width: 50%; /* Explicitly set the width to 50% */
   display: flex;
   justify-content: center; /* Center the content horizontally */
@@ -44,7 +45,7 @@
   align-items: center;
   padding: 20px; /* Add padding as needed */
   background-color: rgba(87, 93, 251, 0.5);
-
+  height: auto;
 }
 
 /* Styles for the form card */

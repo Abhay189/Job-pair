@@ -160,6 +160,7 @@
   display: flex;
   margin-top: 1em;
   gap: 1em;
+  justify-content: space-between;
 }
 
 .dropdown {

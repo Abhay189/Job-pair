@@ -8,7 +8,6 @@ function Filter({ onFilterChange }) {
 
     <>
 
-    <Button onClick={()=> {setShow(!show)} } className="filter-button">Show Filter </Button>
     <div className="filter-sidebar desktop">
       <div className="filter-header">
         Filter
