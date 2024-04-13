@@ -40,51 +40,7 @@ export default function Jobpage() {
             } catch (error) {
                 console.error("Error in getting resources for job page", error);
                 setJobs([
-                    {
-                        id: 1,
-                        logo_url: 'https://banner2.cleanpng.com/20180324/sww/kisspng-google-logo-g-suite-chrome-5ab6e618b3b2c3.5810634915219358967361.jpg', 
-                        title: 'Entry Level - Software Developer',
-                        location: 'Calgary, Alberta / Remote',
-                        applicants: 129,
-                        posting_date: '2024-01-10',
-                        applicantsList: [],
-                        companyName: 'Google'
-
-                    },
-                    {
-                        id: 2,
-                        logoUrl: 'https://banner2.cleanpng.com/20180324/sww/kisspng-google-logo-g-suite-chrome-5ab6e618b3b2c3.5810634915219358967361.jpg', 
-                        title: 'Senior Software Developer',
-                        location: 'Calgary, Alberta / Remote',
-                        applicants: 129,
-                        posting_date: '2024-01-10',
-                        applicantsList: [],
-                        companyName: 'Google'
-
-                    },
-                    {
-                        id: 1,
-                        logoUrl: 'https://banner2.cleanpng.com/20180324/sww/kisspng-google-logo-g-suite-chrome-5ab6e618b3b2c3.5810634915219358967361.jpg', 
-                        title: 'Entry Level - Software Developer',
-                        location: 'Calgary, Alberta / Remote',
-                        applicants: 129,
-                        posting_date: '2024-01-10',
-                        applicantsList: [],
-                        companyName: 'Google'
-
-                    },
-                    {
-                        id: 1,
-                        logoUrl: 'https://banner2.cleanpng.com/20180324/sww/kisspng-google-logo-g-suite-chrome-5ab6e618b3b2c3.5810634915219358967361.jpg', 
-                        title: 'Entry Level - Software Developer',
-                        location: 'Calgary, Alberta / Remote',
-                        applicants: 129,
-                        posting_date: '2024-01-10',
-                        applicantsList: [],
-                        companyName: 'Google'
-
-                    },
-                    
+                   
                 ])
             }
         };

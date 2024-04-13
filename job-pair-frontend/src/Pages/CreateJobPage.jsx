@@ -27,9 +27,12 @@ function CreateJobPage() {
     technicalSkills: '',
     deadline: '',
     jobDescription: '',
-    questionsCount: '1'
+    questionsCount: '1',
+    questions: ['']
   });
+  debugger;
   const { id } = useParams();
+  console.log("id is",id);
 
   const [additionalQuestions, setAdditionalQuestions] = useState(['']);
 
@@ -57,17 +60,20 @@ function CreateJobPage() {
         if (!id) {
           return;
         }
-        const response = await Axios.post('http://127.0.0.1:5002/get-job', { id: 3});
+        const response = await Axios.post('http://127.0.0.1:5002/get-job', { id: id});
         const responseObject = response.data;
         setJobDetails( {
-          jobTitle: responseObject.job_title,
-          jobLocation: responseObject.job_location,
+          jobTitle: responseObject.title,
+          jobLocation: responseObject.location,
           salary: responseObject.salary,
           company: responseObject.company,
           technicalSkills: responseObject.technical_skills,
           deadline: responseObject.deadline,
-          jobDescription: responseObject.job_description
+          jobDescription: responseObject.Description,
+          questionsCount: responseObject.Questions.length,
+
         });
+        setAdditionalQuestions(responseObject.Questions);
       } catch (error) {
         console.error(error);
         setError(true);
@@ -86,14 +92,16 @@ function CreateJobPage() {
     try{
     const formObj = {
       
-      job_title: jobDetails.jobTitle,
-    job_location: jobDetails.jobLocation,
+      title: jobDetails.jobTitle,
+    location: jobDetails.jobLocation,
     salary: jobDetails.salary,
     company: jobDetails.company,
     technical_skills: jobDetails.technicalSkills,
     deadline: jobDetails.deadline,
-    job_description: jobDetails.jobDescription,
+    description: jobDetails.jobDescription,
     recruiter_id: localStorage.getItem('id'),
+    questions: additionalQuestions.map((question, index) => question ),
+    questions_count: jobDetails.questionsCount,
   
   }
     if(id) {
@@ -111,15 +119,18 @@ function CreateJobPage() {
 
       });
       setSuccess(true);
+      const responseObject = response.data;
       setJobDetails({
-        jobTitle: '',
-        jobLocation: '',
-        salary: '',
-        company: '',
-        technicalSkills: '',
-        deadline: '',
-        jobDescription: '',
+        jobTitle: responseObject.title,
+          jobLocation: responseObject.location,
+          salary: responseObject.salary,
+          company: responseObject.company,
+          technicalSkills: responseObject.technical_skills,
+          deadline: responseObject.deadline,
+          jobDescription: responseObject.Description,
+          questionsCount: responseObject.Questions.length,
       });
+      setAdditionalQuestions(['']);
     } else {
       const response = await Axios.post('http://127.0.0.1:5002/create_job', {...formObj},  {
         headers: {
