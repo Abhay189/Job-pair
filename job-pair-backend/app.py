@@ -397,7 +397,6 @@ def get_job_answer():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-
 @app.route('/submit_application', methods=['POST'])
 def submit_application():
     data = request.json
@@ -408,7 +407,6 @@ def submit_application():
         return jsonify({"error": "Missing user_id or job_id"}), 400
 
     try:
-     
         seekers_query = db.collection('seekers').where('id', '==', user_id).limit(1)
         seekers_docs = seekers_query.stream()
 
@@ -416,21 +414,68 @@ def submit_application():
         if seeker_found is None:
             return jsonify({"error": "No seeker found with the provided user_id"}), 404
 
-     
-        applied_jobs_ref = seeker_found.reference.collection('applied_jobs')
-        job_query = applied_jobs_ref.where('job_id', '==', job_id).limit(1)
+        # Get job document reference from jobs collection
+        job_query = db.collection('jobs').where('id', '==', job_id).limit(1)
         job_docs = job_query.stream()
+        job_doc = next(job_docs, None)
 
-       
-        job_found = next(job_docs, None)
-        if job_found:
-            job_found.reference.update({'application_status': 'applied'})
-            return jsonify({"success": "Application status updated to interview"}), 200
+        if job_doc:
+            job_doc_ref = job_doc.reference
+            job_doc_ref.update({'applicants': firestore.Increment(1)})
+            job_doc_ref.update({'applicant_ids': firestore.ArrayUnion([user_id])})
+        else:
+            return jsonify({"error": "Job not found"}), 404
+
+        applied_jobs_ref = seeker_found.reference.collection('applied_jobs')
+        application_query = applied_jobs_ref.where('job_id', '==', job_id).limit(1)
+        application_docs = application_query.stream()
+
+        application_found = next(application_docs, None)
+        if application_found:
+            application_found.reference.update({'application_status': 'applied'})
+            return jsonify({"success": "Application status updated to applied"}), 200
         else:
             return jsonify({"error": "No application found for the provided job_id"}), 404
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+
+
+
+# @app.route('/submit_application', methods=['POST'])
+# def submit_application():
+#     data = request.json
+#     user_id = int(data.get('id'))
+#     job_id = int(data.get('job_id'))
+
+#     if not user_id or not job_id:
+#         return jsonify({"error": "Missing user_id or job_id"}), 400
+
+#     try:
+     
+#         seekers_query = db.collection('seekers').where('id', '==', user_id).limit(1)
+#         seekers_docs = seekers_query.stream()
+
+#         seeker_found = next(seekers_docs, None)
+#         if seeker_found is None:
+#             return jsonify({"error": "No seeker found with the provided user_id"}), 404
+
+     
+#         applied_jobs_ref = seeker_found.reference.collection('applied_jobs')
+#         job_query = applied_jobs_ref.where('job_id', '==', job_id).limit(1)
+#         job_docs = job_query.stream()
+
+       
+#         job_found = next(job_docs, None)
+#         if job_found:
+#             job_found.reference.update({'application_status': 'applied'})
+#             return jsonify({"success": "Application status updated to interview"}), 200
+#         else:
+#             return jsonify({"error": "No application found for the provided job_id"}), 404
+
+#     except Exception as e:
+#         return jsonify({"error": str(e)}), 500
 
 # @app.route('/submit_application', methods=['POST'])
 # def submit_application():
@@ -1277,7 +1322,7 @@ def process_video_and_get_feedback(video_file_path):
     transcribed_text = transcribe_audio("output_audio.wav")
     print(transcribed_text)
     # Prepare the conversation for AI feedback
-    question = "Tell Us About The Biggest Challenge Youve Ever Faced"
+    question = "Talk about your experience with C++."
     answer = transcribed_text
     conversations = [
         {

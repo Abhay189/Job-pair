@@ -5,7 +5,7 @@ services:
       dockerfile: Dockerfile-Backend
     container_name: backend
     ports:
-      - "5000:5000"
+      - "5002:5002"
     volumes:
       - ./job-pair-backend:/app
   frontend:

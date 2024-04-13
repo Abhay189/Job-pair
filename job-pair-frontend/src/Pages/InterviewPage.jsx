@@ -237,7 +237,7 @@ render() {
         <div className="interview-section">
           <h1 className="heroHeadText">Interview Prep</h1>
           <div className="question-box">
-            <p><strong>Question: Tell us about the biggest challenge you've ever faced</strong></p>
+            <p><strong>Question: Talk about your experience with C++.</strong></p>
           </div>
           {/* Permanent AI Feedback Section */}
           <div className="feedback-section">

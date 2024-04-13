@@ -66,7 +66,7 @@ function ApplicantCard({ applicant,jobId }) {
         </div>
         <div className='applicant-bottom-row'>
           <div className='applicant-summary-box'>
-            {applicant.career_aspirations}
+            {applicant.personal_setup_info}
           </div>
           <div className='applicant-buttons-column'>
             <Button size="sm" variant="primary" onClick={sendInterview} >
