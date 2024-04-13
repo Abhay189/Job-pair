@@ -9,6 +9,9 @@ function JobCard({ job, userType,deleteJobFunction }) {
   const sendToApplication = () => {
     if(userType === 'seekers'){
     navigate('/applicationReview/' + job.id)
+
+      
+
     }
   }
 

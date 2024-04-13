@@ -13,6 +13,7 @@ import firebase_admin
 from firebase_admin import auth, credentials, firestore
 from openai import OpenAI
 from google.cloud.firestore_v1 import ArrayUnion
+import requests
 # import bcrypt
 
 app = Flask(__name__)
@@ -432,10 +433,6 @@ def submit_application():
             'job_title': data.get('job_title')
         }
 
-        
-      
-
-
         # Find the seeker using his id since it's not the key of his document but is unique
         seeker_query = db.collection('seekers').where('id', '==', seeker_id).limit(1).get()
 
@@ -453,6 +450,128 @@ def submit_application():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+
+def get_personal_setup_info(user_id):
+    try:
+        # Assuming you have a database connection and 'seekers' collection
+        # Replace 'db' and 'seekers' with your actual database reference
+        query_ref = db.collection('seekers').where('id', '==', user_id).limit(1)
+        docs = list(query_ref.stream())
+
+        if docs:
+            personal_setup_info = None
+            for doc in docs:
+                personal_setup_info = doc.get('personal_setup_info')
+                break
+
+            if personal_setup_info:
+                return personal_setup_info
+            else:
+                return "No personal setup info found for the provided user ID"
+        else:
+            return "No seeker found with the provided user ID"
+
+    except Exception as e:
+        return str(e)
+
+
+@app.route('/create_application', methods=['POST'])
+def create_application():
+    try:
+        # Extracting the application information and the seeker's ID from the request
+        data = request.json
+        seeker_id = int(data.get('id'))  # This is the field 'id' inside the document.
+
+        if not seeker_id:
+            return jsonify({'error': 'Missing seeker ID'}), 400
+        
+        personal_setup_info = get_personal_setup_info(seeker_id)
+
+        job_id = int(data.get('job_id'))
+        
+        # Find the seeker using his id since it's not the key of his document but is unique
+        seeker_query = db.collection('seekers').where('id', '==', seeker_id).limit(1).get()
+
+        seeker_doc_ref = None
+        for doc in seeker_query:
+            seeker_doc_ref = doc.reference  # Get the document reference for the found seeker
+
+        if seeker_doc_ref:
+            # Check if the job_id already exists in applied_jobs subcollection
+            job_ref = seeker_doc_ref.collection('applied_jobs').where('job_id', '==', job_id).limit(1).get()
+            if job_ref:
+                # If the job_id already exists, return success message indicating the application was already submitted
+                return jsonify({'success': True, 'message': 'Application already submitted for this job.'}), 200
+            else:
+                # If the job_id doesn't exist, proceed with the application creation process
+                job_questions = get_job_questions(job_id)
+
+                print("job_questions: ", job_questions)
+
+                application_responses = []
+                
+                for i in range(len(job_questions)):
+                    application_responses.append(get_enhanced_essay_helper(job_questions[i], personal_setup_info))
+                
+                # Preparing the document data to be added
+                application_data = {
+                    'application_date': datetime.utcnow().date().isoformat(),
+                    'application_status': 'in_progress',  # Default status is 'in_progress'
+                    'company': data.get('company'),
+                    'job_id': job_id,
+                    'job_title': data.get('job_title'),
+                    'application_response': application_responses,
+                }
+
+                # Add the application information to the subcollection
+                seeker_doc_ref.collection('applied_jobs').add(application_data)
+                return jsonify({'success': True, 'message': 'Application created successfully.'}), 200
+        else:
+            return jsonify({'error': 'Seeker not found'}), 404
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+def get_enhanced_essay_helper(question, answer):
+    # Define the initial conversation
+    conversations = [{"role": "system", "content": "You are a helpful assistant who specializes in enhancing users' job essays"}]
+
+    # Format user's request message
+    request_message = f"The question asked in my job application is this: {question} My Response is: {answer} Provide just the improved essay in about 100 words, not this essay can include negative aspects like me being jobless to show character development)"
+    request_message_formatted = {'content': request_message, 'role': 'user'}
+
+    # Add user's request to the conversation
+    conversations.append(request_message_formatted)
+
+    # Generate a response using OpenAI GPT-3.5-turbo
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=conversations
+    )
+
+    # Get the AI's response from the choices
+    ai_response = response.choices[0].message.content
+
+    return ai_response
+
+def get_job_questions(job_id):
+    try:
+        print("Hello")
+
+        job_id = int(job_id)
+        job_ref = db.collection('jobs').where('id', '==', job_id).limit(1).get()
+
+        if not job_ref:
+            return []
+
+        job_data = [doc.to_dict() for doc in job_ref]
+        questions = [job.get('Questions') for job in job_data if 'Questions' in job]
+        return questions[0] if questions else []
+
+    except Exception as e:
+        print(f"Error: {e}")
+        return []
 
 @app.route('/get_enhanced_essay', methods=['POST'])
 def get_enhanced_essay():
@@ -675,28 +794,6 @@ def seeker_profile_setup():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-
-
-@app.route('/get-personal-setup-info/<int:user_id>', methods=['GET'])
-def get_personal_setup_info(user_id):
-    try:
-        # Assuming you have a database connection and 'seekers' collection
-        # Replace 'db' and 'seekers' with your actual database reference
-        query_ref = db.collection('seekers').where('id', '==', user_id).limit(1)
-        docs = list(query_ref.stream())
-        
-        if docs:
-            personal_setup_info = docs[0].get('personal_setup_info')  # Remove extra argument
-            if personal_setup_info:
-                return jsonify({"personal_setup_info": personal_setup_info}), 200
-            else:
-                return jsonify({"error": "No personal setup info found for the provided user ID"}), 404
-        else:
-            return jsonify({"error": "No seeker found with the provided user ID"}), 404
-
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
 
 
 @app.route('/update-job', methods=['GET','PUT'])
