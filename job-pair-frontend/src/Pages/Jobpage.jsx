@@ -34,7 +34,7 @@ export default function Jobpage() {
                     id,userType
                     }
                   }  )
-                console.log(response);
+                console.log("this is the response",response);
                 setJobs(response.data);
 
             } catch (error) {

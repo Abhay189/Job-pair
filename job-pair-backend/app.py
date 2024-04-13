@@ -241,30 +241,28 @@ def get_all_jobs():
         return jsonify(result), 200
 
     elif userType == 'recruiters':
-        # For recruiters, find jobs posted by their company using a 'username' or similar identifier
         if not identifier:
             return jsonify({'error': 'Invalid request. Missing identifier for recruiter.'}), 400
-        
-        # Assuming 'identifier' represents a unique field akin to a username for recruiters
-        # Adapted the search to use a 'where' clause as suggested
 
-        identifier_int = int(identifier)
-        recruiters = db.collection('recruiters').where('id', '==', identifier_int).limit(1).get()
+        recruiters = db.collection('recruiters').where('id', '==', identifier).limit(1).get()
         job_ids_chunks = []
         for recruiter in recruiters:
             job_ids = recruiter.to_dict().get('my_job_ids', [])
             job_ids_chunks = list(divide_into_chunks_of_10(job_ids))
-        jobs = []
+            print("job ids chunks: ", job_ids_chunks)  # Debug print
+
+        all_jobs = []
         for chunk in job_ids_chunks:
             jobs_query = db.collection('jobs').where('id', 'in', chunk).stream()
             for job in jobs_query:
-                jobs.append(job.to_dict())
-                
-            
-            return jsonify(jobs), 200
+                all_jobs.append(job.to_dict())
+            print("jobs collected from chunk: ", all_jobs)  # Debug print
 
-        # If no recruiters were found or loop didn't return, indicate recruiter was not found
-        return jsonify({'error': 'No job found for recruiter.'}), 403
+        if all_jobs:
+            return jsonify(all_jobs), 200
+        else:
+            return jsonify({'error': 'No job found for recruiter.'}), 403
+        
     elif userType == 'admins':
         # For admins, return all jobs
         jobs = db.collection('jobs').get()
@@ -323,10 +321,6 @@ def update_job_answer():
         print(data)
 
         # Validate required fields
-        # if not seeker_id or not job_title or index is None or updated_answer is None:
-        #     return jsonify({'error': 'Invalid request. Missing required fields.'}), 400
-
-        # Start by querying the 'seekers' collection for the document with the matching 'id'
         seeker_query = db.collection('seekers').where('id', '==', seeker_id).limit(1)
         seeker_docs = seeker_query.get()
 
@@ -441,95 +435,9 @@ def submit_application():
         return jsonify({"error": str(e)}), 500
 
 
-
-
-# @app.route('/submit_application', methods=['POST'])
-# def submit_application():
-#     data = request.json
-#     user_id = int(data.get('id'))
-#     job_id = int(data.get('job_id'))
-
-#     if not user_id or not job_id:
-#         return jsonify({"error": "Missing user_id or job_id"}), 400
-
-#     try:
-     
-#         seekers_query = db.collection('seekers').where('id', '==', user_id).limit(1)
-#         seekers_docs = seekers_query.stream()
-
-#         seeker_found = next(seekers_docs, None)
-#         if seeker_found is None:
-#             return jsonify({"error": "No seeker found with the provided user_id"}), 404
-
-     
-#         applied_jobs_ref = seeker_found.reference.collection('applied_jobs')
-#         job_query = applied_jobs_ref.where('job_id', '==', job_id).limit(1)
-#         job_docs = job_query.stream()
-
-       
-#         job_found = next(job_docs, None)
-#         if job_found:
-#             job_found.reference.update({'application_status': 'applied'})
-#             return jsonify({"success": "Application status updated to interview"}), 200
-#         else:
-#             return jsonify({"error": "No application found for the provided job_id"}), 404
-
-#     except Exception as e:
-#         return jsonify({"error": str(e)}), 500
-
-# @app.route('/submit_application', methods=['POST'])
-# def submit_application():
-#     try:
-#         # Extracting the application information and the seeker's ID from the request
-#         data = request.json
-#         seeker_id = int(data.get('id'))  # This is the field 'id' inside the document.
-#         print("seeker id: ", seeker_id)
-
-#         if not seeker_id:
-#             return jsonify({'error': 'Missing seeker ID'}), 400
-
-#         job_id = int(data.get('job_id'))
-#         job_query = db.collection('jobs').where('id', '==', job_id).limit(1).get()
-#         if not job_query:
-#             return jsonify({'error': 'Job not found'}), 404
-#         job_doc_ref = job_query[0].reference
-#         job_doc_ref.update({'applicants': firestore.Increment(1)})
-#         job_doc_ref.update({'applicant_ids': ArrayUnion([seeker_id])})
-
-#         # get company name from job doc
-#         company = job_doc_ref.get().to_dict().get('company')
-
-#         # Preparing the document data to be added
-#         application_data = {
-#             'application_date': datetime.utcnow().date().isoformat(),
-#             'application_status': 'applied',  # Setting application status to 'applied'
-#             'company': company,
-#             'job_id': int(data.get('job_id')),
-#             'job_title': data.get('job_title')
-#         }
-
-#         # Find the seeker using his id since it's not the key of his document but is unique
-#         seeker_query = db.collection('seekers').where('id', '==', seeker_id).limit(1).get()
-
-#         seeker_doc_ref = None
-#         for doc in seeker_query:
-#             seeker_doc_ref = doc.reference  # Get the document reference for the found seeker
-
-#         if seeker_doc_ref:
-#             # Adding the application information to the seeker's 'applied_jobs' subcollection
-#             seeker_doc_ref.collection('applied_jobs').add(application_data)
-#             return jsonify({'success': True, 'message': 'Application submitted successfully.'}), 200
-#         else:
-#             return jsonify({'error': 'Seeker not found'}), 404
-
-#     except Exception as e:
-#         return jsonify({'error': str(e)}), 500
-
-
 def get_personal_setup_info(user_id):
     try:
         # Assuming you have a database connection and 'seekers' collection
-        # Replace 'db' and 'seekers' with your actual database reference
         query_ref = db.collection('seekers').where('id', '==', user_id).limit(1)
         docs = list(query_ref.stream())
 
@@ -682,35 +590,6 @@ def get_enhanced_essay():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-
-# @app.route('/get_interview_feedback', methods=['POST'])
-# def get_interview_feedback():
-#     try:
-#         # Get question and answer from the request JSON
-#         question = request.json.get('question')
-#         answer = request.json.get('answer')
-
-#         conversations =[{"role": "system", "content": "You are an expert interview preparation assistant. Your goal is to provide constructive feedback and suggestions for improvement when given interview questions and a user's transcribed audio response. Emphasize clarity, relevance, and professionalism in your feedback."}] 
-
-#         request_message = "The question asked in the interview is this: "+str(question)+" The transcribed response is: "+str(answer)+" Provide feedback to imrpove my response to ace the interview."
-#         request_message_formatted = {'content': request_message, 'role': 'user'}
-
-#         conversations.append(request_message_formatted)
-
-#         # Generate a response using OpenAI GPT-3.5-turbo
-#         response = client.chat.completions.create(
-#             model="gpt-3.5-turbo",
-#             messages=conversations
-#         )
-
-#         # Get the AI's response from the choices
-#         ai_response = response.choices[0].message.content
-
-#         return jsonify({'success': True, 'response': ai_response})
-
-#     except Exception as e:
-#         return jsonify({'error': str(e)}), 500
-
 #Fixed
 @app.route('/update_user_profile', methods=['POST'])
 def update_user_profile():
@@ -740,8 +619,6 @@ def update_user_profile():
         # Define allowed fields based on userType
         allowed_fields = {'seekers': {'name', 'password', 'username', 'email', 'phoneNumber', 'techSkills', 'expectedSalary', 'institution','gender','pronouns','location','preferredJobTitle'},
                           'recruiters': {'name', 'password', 'username', 'email', 'location', 'companyDescription','phoneNumber'}}
-        #if updated_data['password'] is not None and updated_data['password'] != '':
-            #updated_data['password'] = bcrypt.hashpw(updated_data['password'].encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
         if updated_data['password'] is not None and updated_data['password'] == '':
             updated_data.pop('password')
         # Filter the updated_info to include only allowed fields
@@ -1078,10 +955,6 @@ def get_chats():
 def get_chats_admin():
     user_type = request.args.get('user_type')
 
-    # Check if the user is an admin
-    # if user_type != 'admin':
-    #     return jsonify({"error": "Unauthorized access"}), 403
-
     try:
         chats_query = db.collection('chats').where('flagged', '==', True).stream()
 
@@ -1283,18 +1156,6 @@ def get_job():
             return jsonify({"error": "No records found matching id"}), 404
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-# @app.route('/test', methods=['GET'])
-# def test():
-#     conversations = [{"role": "system", "content": "You are a helpful assistant "}]
-
-#     response = client.chat.completions.create(
-#         model="gpt-3.5-turbo",
-#         messages=conversations
-#     )
-
-#     return jsonify({}), 200 
-
-
 
 @app.route('/upload_video', methods=['POST'])
 def upload_video():
@@ -1355,13 +1216,6 @@ def process_video(video_path):
     # Extract audio from video
     extract_audio(video_path=video_path, audio_path="output_audio.wav")
     text = transcribe_audio("output_audio.wav")
-    
-
-    # Transcribe audio
-    # transcription = transcribe_audio(audio_path)  # Implement this function based on your transcription logic
-    
-    # Additional processing...
-
 
 
 @app.route('/write_chat', methods=['POST'])
