@@ -787,6 +787,7 @@ def create_chat():
         recruiter_name, seeker_name = None, None
         for recruiter in recruiters_query:
             recruiter_name = recruiter.to_dict().get('name')
+            recruiter_company = recruiter.to_dict().get('company')
         for seeker in seekers_query:
             seeker_name = seeker.to_dict().get('name')
 
@@ -801,6 +802,7 @@ def create_chat():
             'recruiter_id': recruiter_id,
             'seeker_id': seeker_id,
             'recruiter_name': recruiter_name,
+            'recruiter_company': recruiter_company,
             'seeker_name': seeker_name,
             'messages': [],
             'date': datetime.utcnow().date().isoformat()
