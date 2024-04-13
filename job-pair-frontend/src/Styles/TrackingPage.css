@@ -1,6 +1,16 @@
 /* TrackingPage.css */
 
 
+.notification-dot {
+  height: 20px;
+  width: 20px;
+  background-color: red;
+  border-radius: 50%;
+  position: absolute;
+  right: 5px;
+  top: 5px;
+}
+
 .TrackingPage {
     display: flex;
     flex-direction: column;

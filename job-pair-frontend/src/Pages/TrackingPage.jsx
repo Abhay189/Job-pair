@@ -146,51 +146,48 @@ const TrackingPage = () => {
   };
 
   return (
-
-      <DragDropContext onDragEnd={onDragEnd}>
-        <div className="TrackingPage">
-          <h1>Application Tracking</h1>
-          <div className="columns-container ">
-            {Object.keys(applications).map((column) => (
-              
-              <Droppable droppableId={column} key={column}>
-                {(provided) => (
-                  <div
-                    {...provided.droppableProps}
-                    ref={provided.innerRef}
-                    className="column"
-                  >
-                    <h2 className={`${styles.SubHeader}`} style={{ fontSize: '3em', textAlign: 'center', paddingTop: `15px`, paddingBottom:`10px`, fontWeight:`bolder`, color:`white`}}>{Get_Title_Name(column)}</h2>
-                    {applications[column].map((application, index) => (
-                      <Draggable
-                        key={application.id}
-                        draggableId={application.id}
-                        index={index}
-                      >
-                        {(provided) => (
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            className="card"
-                            onClick={() => redirectToApplicationReview(application.job_title,application.job_id)}
-                          >
-                            <p>{application.job_title}</p>
-                          </div>
-                        )}
-                      </Draggable>
-                    ))}
-                    {provided.placeholder}
-                  </div>
-                )}
-              </Droppable>
-            ))}
-          </div>
+    <DragDropContext onDragEnd={onDragEnd}>
+      <div className="TrackingPage">
+        <h1>Application Tracking</h1>
+        <div className="columns-container">
+          {Object.keys(applications).map((column) => (
+            <Droppable droppableId={column} key={column}>
+              {(provided) => (
+                <div
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                  className="column"
+                >
+                  <h2 className={`${styles.SubHeader}`} style={{ fontSize: '3em', textAlign: 'center', paddingTop: `15px`, paddingBottom:`10px`, fontWeight:`bolder`, color:`white`}}>{Get_Title_Name(column)}</h2>
+                  {applications[column].map((application, index) => (
+                    <Draggable
+                      key={application.id}
+                      draggableId={application.id}
+                      index={index}
+                    >
+                      {(provided) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          className="card"
+                          onClick={() => redirectToApplicationReview(application.job_title,application.job_id)}
+                        >
+                          {Get_Title_Name(column) === "Interview" && <div className="notification-dot"></div>}
+                          <p>{application.job_title}</p>
+                        </div>
+                      )}
+                    </Draggable>
+                  ))}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          ))}
         </div>
-      </DragDropContext>
-
+      </div>
+    </DragDropContext>
   );
-  
 };
 
 export default TrackingPage;

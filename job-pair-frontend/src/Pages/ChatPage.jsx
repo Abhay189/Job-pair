@@ -159,13 +159,13 @@ const ChatPage = () => {
   return (
     <div className="chat-page">
       <div className="chat-page-header">
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+        <div style={{ display: 'flex', gap: '20px' ,alignItems: 'center', justifyContent: 'center', width: '100%' }}>
           <h1 style={{ margin: 0 }}> 
             <span style={{ margin: '0 auto' }}>{otherUsername}</span> 
           </h1>
           
           <Button variant="link" onClick={handleFlagConversation} className="flag-button">
-            <BiFlag size={24} />
+            <BiFlag size={60} />
           </Button>
         </div>
       </div>
