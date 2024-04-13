@@ -1144,7 +1144,49 @@ def send_interview():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route('/get_my_job_applicants', methods=['GET'])
+def get_my_job_applicants():
+    try:
+        print("Hello")
+        # Extract job_id from the request args and ensure it's an integer
+        job_id_str = request.args.get('job_id')
+        if not job_id_str or not job_id_str.isdigit():
+            return jsonify({'error': 'Missing or invalid job_id parameter'}), 400
 
+        job_id = int(job_id_str)  # Convert to int safely after isdigit check
+        print(job_id)
+
+        # Find the job document by 'id' field
+        jobs_query = db.collection('jobs').where('id', '==', job_id).limit(1)
+        jobs_docs = jobs_query.stream()
+
+        job_doc = next(jobs_docs, None)
+        if not job_doc:
+            return jsonify({'error': 'Job not found'}), 404
+        
+        job_data = job_doc.to_dict()
+        print(job_data)
+        applicant_ids = job_data.get('applicant_ids', [])
+        
+        print(applicant_ids)
+
+        # Retrieve details for each applicant
+        applicants_info = []
+        for applicant_id in applicant_ids:
+            # Query the 'seekers' collection for documents where 'applicant_id' field matches
+            seekers_query = db.collection('seekers').where('id', '==', applicant_id).limit(1)
+            seekers_docs = seekers_query.stream()
+
+            seeker_doc = next(seekers_docs, None)
+            if seeker_doc:
+                print(seeker_doc.to_dict())
+                applicants_info.append(seeker_doc.to_dict())
+
+        print(applicants_info)
+        return jsonify(applicants_info), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 # @app.route('/test', methods=['GET'])
 # def test():
 #     conversations = [{"role": "system", "content": "You are a helpful assistant "}]
