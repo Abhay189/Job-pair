@@ -626,17 +626,17 @@ def update_job_status():
 @app.route('/seeker-profile-setup', methods=['PUT'])
 def seeker_profile_setup():
     # Extract user ID from the request data
-    user_id = int(request.form.get('id'))
+    user_id = int(request.json.get('seekerId'))
 
     # Extract user information from the form data
-    industry = request.form.get('industry')
-    gpa = request.form.get('gpa')
-    graduated = request.form.get('graduated')
-    university_name = request.form.get('universityName')
-    last_company = request.form.get('lastCompany')
-    aspirations = request.form.get('aspirations')
-    strengths = request.form.get('strengths')
-    leadership = request.form.get('leadership')
+    industry = request.json.get('industry')
+    gpa = request.json.get('gpa')
+    graduated = request.json.get('graduated')
+    university_name = request.json.get('universityName')
+    last_company = request.json.get('lastCompany')
+    aspirations = request.json.get('aspirations')
+    strengths = request.json.get('strengths')
+    leadership = request.json.get('leadership')
 
     # Check if user ID is provided
     if not user_id:

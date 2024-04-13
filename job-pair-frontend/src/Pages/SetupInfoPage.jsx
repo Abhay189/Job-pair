@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import '../Styles/CreateJobPage.css';
 import { Alert } from 'react-bootstrap';
-import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios'; // Import Axios
+import axios from 'axios';
 
 const SetupInfoPage = () => {
   const [industry, setIndustry] = useState('');
@@ -13,15 +12,22 @@ const SetupInfoPage = () => {
   const [aspirations, setAspirations] = useState('');
   const [strengths, setStrengths] = useState('');
   const [leadership, setLeadership] = useState('');
-  const [error, setError] = useState(null); // State for handling errors
-  const navigate = useNavigate();
+  const [error, setError] = useState(null);
+  const [seekerId, setSeekerId] = useState('');
 
-  // Function to handle form submission
+  useEffect(() => {
+    const temp_id = localStorage.getItem('id');
+    setSeekerId(temp_id);
+    console.log('current user id: ', temp_id);
+  }, []);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // Create an object to hold the form data
+    console.log('sent user id: ', seekerId);
+
     const formData = {
+      seekerId, // Include the id here
       industry,
       gpa,
       graduated,
@@ -32,15 +38,14 @@ const SetupInfoPage = () => {
       leadership,
     };
 
+    console.log(formData)
+
     try {
-      // Make the Axios POST request to send the form data
-      const response = await axios.post('/api/setupInfo', formData);
+      const response = await axios.put('http://127.0.0.1:5002/seeker-profile-setup', formData);
       console.log('Response:', response.data);
 
-      // Redirect to the viewJobs page upon successful submission
-      navigate('/viewJobs');
+      // Redirect or perform other actions upon successful submission
     } catch (error) {
-      // Handle errors
       setError(error.message);
     }
   };
@@ -52,11 +57,9 @@ const SetupInfoPage = () => {
       <div className="ce-job-form-container">
         <form onSubmit={handleSubmit}>
           {/* Form fields */}
-          {/* Industry */}
           <div className="ce-job-form-twos">
             <label>Dropbox for your industry</label>
             <select value={industry} onChange={(e) => setIndustry(e.target.value)}>
-              {/* Options for industries */}
               {/* Options for industries */}
               <option value="Tech">Tech</option>
               <option value="Law">Law</option>
