@@ -2,7 +2,7 @@ import React from 'react';
 import '../Styles/jobpage.css';
 import { useNavigate } from 'react-router-dom';
 import { useState,useEffect } from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, Dropdown } from 'react-bootstrap';
 function JobCard({ job, userType,deleteJobFunction }) {
   const navigate = useNavigate();
   
@@ -35,20 +35,24 @@ function JobCard({ job, userType,deleteJobFunction }) {
     
     <div className="job-card" onClick={sendToApplication }>
       <div className="job-card-body">
-        {(userType === 'recruiters' || userType === 'admins') &&
-          <div className='job-card-buttons'>
-            <Button size="lg" variant="primary" onClick={closeJob} >
-              Close
-            </Button>
-            <Button size="lg" variant="primary" onClick={editJob}>
-              Edit
-            </Button>
-            <Button size="lg" variant="primary" onClick={viewApplicants}>
-              Applicants
-            </Button>
-
-          </div>
-        }
+      {userType === 'recruiters' || userType === 'admins' ? (
+            <Dropdown>
+              <Dropdown.Toggle variant="success" id="dropdown-basic">
+                Actions
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                <Dropdown.Item as="button">
+                  <Button size="lg" variant="primary" onClick={(e) => { e.stopPropagation(); closeJob(); }}>Close</Button>
+                </Dropdown.Item>
+                <Dropdown.Item as="button">
+                  <Button size="lg" variant="primary" onClick={(e) => { e.stopPropagation(); editJob(); }}>Edit</Button>
+                </Dropdown.Item>
+                <Dropdown.Item as="button">
+                  <Button size="lg" variant="primary" onClick={(e) => { e.stopPropagation(); viewApplicants(); }}>Applicants</Button>
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+          ) : null}
 
         
         <div className='job-card-body-flex'>
