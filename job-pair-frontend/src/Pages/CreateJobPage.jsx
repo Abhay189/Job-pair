@@ -119,18 +119,8 @@ function CreateJobPage() {
 
       });
       setSuccess(true);
-      const responseObject = response.data;
-      setJobDetails({
-        jobTitle: responseObject.title,
-          jobLocation: responseObject.location,
-          salary: responseObject.salary,
-          company: responseObject.company,
-          technicalSkills: responseObject.technical_skills,
-          deadline: responseObject.deadline,
-          jobDescription: responseObject.Description,
-          questionsCount: responseObject.Questions.length,
-      });
-      setAdditionalQuestions(['']);
+      return;
+     
     } else {
       const response = await Axios.post('http://127.0.0.1:5002/create_job', {...formObj},  {
         headers: {
