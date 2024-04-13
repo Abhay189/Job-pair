@@ -623,73 +623,53 @@ def update_job_status():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-@app.route('/get_my_job_applicants', methods=['GET'])
-def get_my_job_applicants():
+@app.route('/seeker-profile-setup', methods=['PUT'])
+def seeker_profile_setup():
+    # Extract user ID from the request data
+    user_id = int(request.form.get('id'))
+
+    # Extract user information from the form data
+    industry = request.form.get('industry')
+    gpa = request.form.get('gpa')
+    graduated = request.form.get('graduated')
+    university_name = request.form.get('universityName')
+    last_company = request.form.get('lastCompany')
+    aspirations = request.form.get('aspirations')
+    strengths = request.form.get('strengths')
+    leadership = request.form.get('leadership')
+
+    # Check if user ID is provided
+    if not user_id:
+        return jsonify({"error": "Missing user ID"}), 400
+
+    # Construct the personal setup info
+    personal_setup_info = f"{aspirations} {strengths} {leadership}"
+
+    # Construct the update data
+    update_data = {}
+    if industry: update_data['industry'] = industry
+    if gpa: update_data['GPA'] = gpa
+    if graduated: update_data['graduated'] = graduated
+    if university_name: update_data['university'] = university_name
+    if last_company: update_data['lastCompany'] = last_company
+    if personal_setup_info: update_data['personal_setup_info'] = personal_setup_info
+
+    # Update user information in the database
     try:
-        print("Hello")
-        # Extract job_id from the request args and ensure it's an integer
-        job_id_str = request.args.get('job_id')
-        if not job_id_str or not job_id_str.isdigit():
-            return jsonify({'error': 'Missing or invalid job_id parameter'}), 400
-
-        job_id = int(job_id_str)  # Convert to int safely after isdigit check
-        print(job_id)
-
-        # Find the job document by 'id' field
-        jobs_query = db.collection('jobs').where('id', '==', job_id).limit(1)
-        jobs_docs = jobs_query.stream()
-
-        job_doc = next(jobs_docs, None)
-        if not job_doc:
-            return jsonify({'error': 'Job not found'}), 404
-        
-        job_data = job_doc.to_dict()
-        print(job_data)
-        applicant_ids = job_data.get('applicant_ids', [])
-        
-        print(applicant_ids)
-
-        # Retrieve details for each applicant
-        applicants_info = []
-        for applicant_id in applicant_ids:
-            # Query the 'seekers' collection for documents where 'applicant_id' field matches
-            seekers_query = db.collection('seekers').where('id', '==', applicant_id).limit(1)
-            seekers_docs = seekers_query.stream()
-
-            seeker_doc = next(seekers_docs, None)
-            if seeker_doc:
-                print(seeker_doc.to_dict())
-                applicants_info.append(seeker_doc.to_dict())
-
-        print(applicants_info)
-        return jsonify(applicants_info), 200
-
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-    
-
-@app.route('/get-job', methods=['GET', 'POST'])
-def get_job():
-    data = request.json
-    id  = int(data.get('id'))
-    
-    if id is None:
-        return jsonify({"error": "Missing id"}), 400
-
-    try:
-        query_ref = db.collection('jobs').where('id', '==', id)
-        docs = query_ref.stream()
-
-        results = [doc.to_dict() for doc in docs]
-        
-        if results:
-            print(results)
-            return jsonify(results[0]), 200
+        # Assuming you have a database connection and 'users' collection
+        # Replace 'db' and 'users' with your actual database reference
+        query_ref =  db.collection('seekers').where('id', '==', user_id).limit(1)
+        docs = list(query_ref.stream())
+        if docs:
+            doc = docs[0]
+            doc.reference.update(update_data)
+            return jsonify({"success": "User information updated successfully"}), 200
         else:
-            return jsonify({"error": "No records found matching id"}), 404
+            return jsonify({"error": "No seeker found with the provided user ID"}), 404
+
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-    
+
 
 
 @app.route('/update-job', methods=['GET','PUT'])
