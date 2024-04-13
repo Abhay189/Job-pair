@@ -26,6 +26,9 @@ export default function ApplicationReview() {
 
 
   useEffect(() => {
+
+    const user_id = localStorage.getItem('id');
+
     const jobUrl = `http://127.0.0.1:5002/get_all_jobs?id=${id}&userType=seekers`;
   
     Axios.get(jobUrl, {})
@@ -40,7 +43,7 @@ export default function ApplicationReview() {
             setQuestions(jobData.Questions);
   
             // Fetch responses for the job using another endpoint
-            const answersUrl = `http://127.0.0.1:5002/get_job_answer?job_id=${id}&user_id=1`;  // Include user ID as needed
+            const answersUrl = `http://127.0.0.1:5002/get_job_answer?job_id=${id}&user_id=${user_id}`;  // Include user ID as needed
             return Axios.get(answersUrl);  // Return the promise for chaining
           } else {
             console.error(`Job with id ${id} not found in jsonData`);
