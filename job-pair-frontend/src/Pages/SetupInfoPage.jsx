@@ -1,6 +1,7 @@
 import React, { useState,useEffect } from 'react';
 import '../Styles/CreateJobPage.css';
 import { Alert } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import axios from 'axios';
 
 const SetupInfoPage = () => {
@@ -14,6 +15,8 @@ const SetupInfoPage = () => {
   const [leadership, setLeadership] = useState('');
   const [error, setError] = useState(null);
   const [seekerId, setSeekerId] = useState('');
+
+  let navigate = useNavigate();
 
   useEffect(() => {
     const temp_id = localStorage.getItem('id');
@@ -44,7 +47,8 @@ const SetupInfoPage = () => {
       const response = await axios.put('http://127.0.0.1:5002/seeker-profile-setup', formData);
       console.log('Response:', response.data);
 
-      // Redirect or perform other actions upon successful submission
+      // Navigate to '/viewJobs' upon successful submission
+      navigate('/viewJobs');
     } catch (error) {
       setError(error.message);
     }
