@@ -1187,6 +1187,29 @@ def get_my_job_applicants():
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+
+@app.route('/get-job', methods=['GET', 'POST'])
+def get_job():
+    data = request.json
+    id  = int(data.get('id'))
+    
+    if id is None:
+        return jsonify({"error": "Missing id"}), 400
+
+    try:
+        query_ref = db.collection('jobs').where('id', '==', id)
+        docs = query_ref.stream()
+
+        results = [doc.to_dict() for doc in docs]
+        
+        if results:
+            print(results)
+            return jsonify(results[0]), 200
+        else:
+            return jsonify({"error": "No records found matching id"}), 404
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 # @app.route('/test', methods=['GET'])
 # def test():
 #     conversations = [{"role": "system", "content": "You are a helpful assistant "}]
@@ -1266,21 +1289,7 @@ def process_video(video_path):
     
     # Additional processing...
 
-@app.route('/request_chatgpt', methods=['POST'])
-def chatgpt():
 
-    request_message_formatted = {'content': request_message, 'role': 'user'}
-    messages_to_send = read_chat(username) + [request_message_formatted]
-
-    response = client.chat.completions.create(
-        model="gpt-3.5-turbo",
-        messages=messages_to_send
-    )
-
-    response_message_formatted = {'content': response.choices[0].message.content, 'role': 'assistant'}
-    messages = [request_message_formatted]+[response_message_formatted]
-
-    write_chat(username, messages)
 
 @app.route('/write_chat', methods=['POST'])
 def write_chat():
