@@ -1030,7 +1030,9 @@ def get_chats_admin():
                 'date': chat_dict.get('date'),
                 'id': chat.id,
                 'deleted': chat_dict.get('deleted'),
-                'flagged': chat_dict.get('flagged')
+                'flagged': chat_dict.get('flagged'),
+                'flagged_reason': chat_dict.get('flagged_reason')
+
             })
 
         return jsonify(chats), 200

@@ -89,7 +89,7 @@ class AdminPanel extends Component {
                     {conversation.recruiter_company}
                   </td>
                   <td>{conversation.sender}</td>
-                  <td>{conversation.flaggedReason}</td>
+                  <td>{conversation.flagged_reason}</td>
                   <td>{conversation.date}</td>
                   <td className="options" style={{ position: 'relative' }}>
                     <Dropdown>
