@@ -120,18 +120,20 @@ def signin():
 def create_job():
     try:
         # Extract job and recruiter details from the form data
-        job_title = request.form.get('job_title')
-        job_location = request.form.get('job_location')
+        job_title = request.form.get('title')
+        job_location = request.form.get('location')
         salary = request.form.get('salary')
         technical_skills = request.form.get('technical_skills')
         company = request.form.get('company')
         deadline = request.form.get('deadline')
-        job_description = request.form.get('job_description')
-        company_logo_url = request.form.get('company_logo_url')
+        job_description = request.form.get('description')
+        company_logo_url = request.form.get('logo_url')
         recruiter_id = int(request.form.get('recruiter_id'))
-        questions_csv = request.form.get('questions')
-        questions = questions_csv.split(',') if questions_csv else []
+        questions = request.form.getlist('questions[]') 
+        questions_count = int(request.form.get('questions_count'))
         posting_date = datetime.utcnow().date().isoformat()
+
+        #convert questions to list
 
         # Create a new job document in the 'jobs' collection
         job_data = {
@@ -146,7 +148,9 @@ def create_job():
             "applicant_ids": [],
             'Questions': questions,
             'posting_date': posting_date,
-            'applicants': 0
+            'applicants': 0,
+            "logo_url":"https://i.pinimg.com/originals/b7/86/79/b786795a5bfba85a9d0422b015d2a460.jpg",
+            'question_count': questions_count
         }
 
         # Retrieve all jobs to determine the new job's ID
@@ -154,7 +158,7 @@ def create_job():
         num_jobs = len(list(total_jobs))
 
         # Assign an auto-incremented ID to the new job
-        job_id = str(num_jobs + 1)
+        job_id = int(num_jobs + 1)
         job_data['id'] = job_id  # Append the calculated ID to the job_data dictionary
         new_job_ref = db.collection('jobs').add(job_data)  # Use add for auto-generated document ID
 
@@ -667,7 +671,7 @@ def get_my_job_applicants():
 @app.route('/get-job', methods=['GET', 'POST'])
 def get_job():
     data = request.json
-    id  = data.get('id')
+    id  = int(data.get('id'))
     
     if id is None:
         return jsonify({"error": "Missing id"}), 400
@@ -690,28 +694,35 @@ def get_job():
 
 @app.route('/update-job', methods=['GET','PUT'])
 def update_job():
-    job_id = request.form.get('id')
-    job_title = request.form.get('job_title')
-    job_location = request.form.get('job_location')
+    job_id = int(request.form.get('id'))
+    # Extract job and recruiter details from the form data
+    job_title = request.form.get('title')
+    job_location = request.form.get('location')
     salary = request.form.get('salary')
     technical_skills = request.form.get('technical_skills')
     company = request.form.get('company')
     deadline = request.form.get('deadline')
-    job_description = request.form.get('job_description')
-    questions_csv = request.form.get('questions')
+    job_description = request.form.get('description')
+    company_logo_url = request.form.get('logo_url')
+    questions = request.form.getlist('questions[]') 
+    questions_count = int(request.form.get('questions_count'))
+
 
     if not job_id:
         return jsonify({"error": "Missing job ID"}), 400
 
     update_data = {}
-    if job_title: update_data['job_title'] = job_title
-    if job_location: update_data['job_location'] = job_location
+    if job_title: update_data['title'] = job_title
+    if job_location: update_data['location'] = job_location
     if salary: update_data['salary'] = salary
     if technical_skills: update_data['technical_skills'] = technical_skills
     if company: update_data['company'] = company
     if deadline: update_data['deadline'] = deadline
-    if job_description: update_data['job_description'] = job_description
-    if questions_csv: update_data['questions_csv'] = questions_csv
+    if job_description: update_data['description'] = job_description
+    if company_logo_url: update_data['logo_url'] = company_logo_url
+    if questions: update_data['questions'] = questions
+    if questions_count: update_data['questions_count'] = questions_count
+
     update_data['id'] = job_id
 
     try:
