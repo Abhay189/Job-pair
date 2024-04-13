@@ -884,30 +884,33 @@ def create_chat():
     data = request.json
     recruiter_id = int(data.get('user_id'))
     seeker_id = int(data.get('recipient_id'))
-    print("recruiter: ", recruiter_id)
-    print("seeker: ", seeker_id)
 
     if not recruiter_id or not seeker_id:
         return jsonify({"error": "Missing user ID or recipient ID"}), 400
 
     try:
-        recruiters_query = db.collection('recruiters').where('id', '==', recruiter_id).limit(1).stream()
-        seekers_query = db.collection('seekers').where('id', '==', seeker_id).limit(1).stream()
+        # Check if a chat already exists between the recruiter and seeker
+        chat_query = db.collection('chats').where('recruiter_id', '==', recruiter_id).where('seeker_id', '==', seeker_id).limit(1).stream()
+        existing_chat = None
+        for chat in chat_query:
+            existing_chat = chat.to_dict()
+            break
 
-        recruiter_name, seeker_name = None, None
-        for recruiter in recruiters_query:
-            recruiter_name = recruiter.to_dict().get('name')
-            recruiter_company = recruiter.to_dict().get('company')
-        for seeker in seekers_query:
-            seeker_name = seeker.to_dict().get('name')
+        if existing_chat:
+            # If a chat already exists, return its ID and success message
+            return jsonify({"success": "Chat already exists", "chat_id": chat.id}), 200
 
-        print(seeker_name)
-        print(recruiter_name)
+        # Retrieve recruiter and seeker information
+        recruiter_doc = db.collection('recruiters').document(str(recruiter_id)).get()
+        seeker_doc = db.collection('seekers').document(str(seeker_id)).get()
 
-        if not recruiter_name or not seeker_name:
+        if not recruiter_doc.exists or not seeker_doc.exists:
             return jsonify({"error": "Recruiter or Seeker not found"}), 404
 
-        
+        recruiter_name = recruiter_doc.to_dict().get('name')
+        recruiter_company = recruiter_doc.to_dict().get('company')
+        seeker_name = seeker_doc.to_dict().get('name')
+
         chat_data = {
             'recruiter_id': recruiter_id,
             'seeker_id': seeker_id,
@@ -921,9 +924,9 @@ def create_chat():
         chat_ref = db.collection('chats').add(chat_data)
 
     except Exception as e:
-        return jsonify({"error": str(e)}), 500    
+        return jsonify({"error": str(e)}), 500
 
-    return jsonify({"success": "Chat created successfully", "chat_id": chat_ref[1].id}), 201
+    return jsonify({"success": "Chat created successfully", "chat_id": chat_ref.id}), 201
 
 
 @app.route('/get-messages', methods=['GET'])
